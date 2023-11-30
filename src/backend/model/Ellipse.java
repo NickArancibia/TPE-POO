@@ -1,7 +1,6 @@
 package backend.model;
 
 public class Ellipse implements Figure {
-
     protected final Point centerPoint;
     protected final double sMayorAxis, sMinorAxis;
 
@@ -27,5 +26,4 @@ public class Ellipse implements Figure {
     public double getsMinorAxis() {
         return sMinorAxis;
     }
-
 }

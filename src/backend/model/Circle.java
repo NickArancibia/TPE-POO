@@ -1,7 +1,6 @@
 package backend.model;
 
 public class Circle implements Figure {
-
     protected final Point centerPoint;
     protected final double radius;
 
@@ -22,5 +21,4 @@ public class Circle implements Figure {
     public double getRadius() {
         return radius;
     }
-
 }

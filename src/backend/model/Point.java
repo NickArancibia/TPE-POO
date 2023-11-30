@@ -1,7 +1,6 @@
 package backend.model;
 
 public class Point {
-
     public double x, y;
 
     public Point(double x, double y) {
@@ -21,5 +20,4 @@ public class Point {
     public String toString() {
         return String.format("{%.2f , %.2f}", x, y);
     }
-
 }

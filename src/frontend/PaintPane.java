@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PaintPane extends BorderPane {
-
 	// BackEnd
 	CanvasState canvasState;
 

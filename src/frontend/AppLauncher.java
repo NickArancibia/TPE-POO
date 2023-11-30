@@ -6,7 +6,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class AppLauncher extends Application {
-
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -21,5 +20,4 @@ public class AppLauncher extends Application {
 		primaryStage.show();
 		primaryStage.setOnCloseRequest(event -> System.exit(0));
 	}
-
 }

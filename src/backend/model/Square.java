@@ -1,7 +1,6 @@
 package backend.model;
 
 public class Square implements Figure {
-
     private final Point topLeft, bottomRight;
 
     public Square(Point topLeft, double size) {
@@ -21,5 +20,4 @@ public class Square implements Figure {
     public String toString() {
         return String.format("Cuadrado [ %s , %s ]", topLeft, bottomRight);
     }
-
 }
