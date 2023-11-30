@@ -20,4 +20,16 @@ public class Rectangle implements Figure {
     public String toString() {
         return String.format("Rectángulo [ %s , %s ]", topLeft, bottomRight);
     }
+
+    @Override
+    public boolean pointInFigure(Point p) {
+        return p.getX() > topLeft.getX() && p.getX() < bottomRight.getX() &&
+			   p.getY() > topLeft.getY() && p.getY() < bottomRight.getY();
+    }
+
+    @Override
+    public void move(double deltaX, double deltaY) {
+        topLeft.move(deltaX, deltaY);
+        bottomRight.move(deltaX, deltaY);
+    }
 }
