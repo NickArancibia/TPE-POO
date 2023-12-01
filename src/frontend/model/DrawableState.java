@@ -15,24 +15,24 @@ public class DrawableState {
         return color;
     }
 
-    void toggleGradient() {
-        gradientToggled = !gradientToggled;
+    void setGradientToggled(boolean toggle) {
+        gradientToggled = toggle;
     }
 
     boolean isGradientToggled() {
         return gradientToggled;
     }
 
-    void toggleShadow() {
-        shadowToggled = !shadowToggled;
+    void setShadowToggled(boolean toggle) {
+        shadowToggled = toggle;
     }
 
     boolean isShadowToggled() {
         return shadowToggled;
     }
 
-    void toggleBevel() {
-        bevelToggled = !bevelToggled;
+    void setBevelToggled(boolean toggle) {
+        bevelToggled = toggle;
     }
 
     boolean isBevelToggled() {
