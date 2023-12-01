@@ -8,40 +8,44 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 
-public class DrawableRectangle extends Rectangle implements DrawableFigure {
-    private DrawableState drawableState = new DrawableState();
-
+public class DrawableRectangle extends DrawableFigure<Rectangle> {
     public DrawableRectangle(Point topLeft, Point bottomRight, Color color) {
-        super(topLeft, bottomRight);
-        drawableState.setColor(color);
+        super(new Rectangle(topLeft, bottomRight), color);
+    }
+
+    public DrawableRectangle(Rectangle rectangle, Color color) {
+        super(rectangle, color);
     }
 
     private void handleShadow(GraphicsContext gc) {
-        if (drawableState.isShadowToggled()) {
+        if (isShadowToggled()) {
             gc.setFill(Color.GRAY);
-            gc.fillRect(getTopLeft().getX() + 10.0,
-                    getTopLeft().getY() + 10.0,
-                    Math.abs(getTopLeft().getX() - getBottomRight().getX()),
-                    Math.abs(getTopLeft().getY() - getBottomRight().getY()));
+            gc.fillRect(baseFigure.getTopLeft().getX() + 10.0,
+                    baseFigure.getTopLeft().getY() + 10.0,
+                    Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()),
+                    Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
         }
     }
 
     private void handleGradient(GraphicsContext gc) {
-        if (drawableState.isGradientToggled()) {
+        if (isGradientToggled()) {
             LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, true,
                     CycleMethod.NO_CYCLE,
-                    new Stop(0, drawableState.getColor()),
-                    new Stop(1, drawableState.getColor().invert()));
+                    new Stop(0, color),
+                    new Stop(1, color.invert()));
             gc.setFill(linearGradient);
+            return;
         }
+
+        gc.setFill(color);
     }
 
     private void handleBevel(GraphicsContext gc) {
-        if (drawableState.isBevelToggled()) {
-            double x = getTopLeft().getX();
-            double y = getTopLeft().getY();
-            double width = Math.abs(x - getBottomRight().getX());
-            double height = Math.abs(y - getBottomRight().getY());
+        if (isBevelToggled()) {
+            double x = baseFigure.getTopLeft().getX();
+            double y = baseFigure.getTopLeft().getY();
+            double width = Math.abs(x - baseFigure.getBottomRight().getX());
+            double height = Math.abs(y - baseFigure.getBottomRight().getY());
             gc.setLineWidth(10);
             gc.setStroke(Color.LIGHTGRAY);
             gc.strokeLine(x, y, x + width, y);
@@ -57,18 +61,12 @@ public class DrawableRectangle extends Rectangle implements DrawableFigure {
     public void draw(GraphicsContext gc) {
         handleShadow(gc);
         handleGradient(gc);
-        if (!drawableState.isGradientToggled()) gc.setFill(drawableState.getColor());
 
-        gc.fillRect(getTopLeft().getX(),getTopLeft().getY(),
-                Math.abs(getTopLeft().getX() - getBottomRight().getX()), Math.abs(getTopLeft().getY() - getBottomRight().getY()));
-        gc.strokeRect(getTopLeft().getX(), getTopLeft().getY(),
-                Math.abs(getTopLeft().getX() - getBottomRight().getX()), Math.abs(getTopLeft().getY() - getBottomRight().getY()));
+        gc.fillRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
+                Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()), Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
+        gc.strokeRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
+                Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()), Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
 
         handleBevel(gc);
-    }
-
-    @Override
-    public DrawableState getDrawableState() {
-        return drawableState;
     }
 }

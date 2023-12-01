@@ -1,6 +1,5 @@
 package frontend;
 
-import frontend.model.DrawableState;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
@@ -35,10 +34,10 @@ public class ShapeDrawPropertiesPane extends BorderPane {
         setCenter(checksBox);
     }
 
-    public void setState(DrawableState state) {
-        shadowCheckBox.setSelected(state.isShadowToggled());
-        gradientCheckBox.setSelected(state.isGradientToggled());
-        bevelCheckBox.setSelected(state.isBevelToggled());
+    public void setState(boolean isShadowToggled, boolean isGradientToggled, boolean isBevelToggled) {
+        shadowCheckBox.setSelected(isShadowToggled);
+        gradientCheckBox.setSelected(isGradientToggled);
+        bevelCheckBox.setSelected(isBevelToggled);
     }
 
     public CheckBox getShadowCheckBox() {
