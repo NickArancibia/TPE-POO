@@ -47,9 +47,6 @@ public class PaintPane extends BorderPane {
 	// StatusBar
 	StatusPane statusPane;
 
-	// Colores de relleno de cada figura
-	Map<DrawableFigure, Color> figureColorMap = new HashMap<>();
-
 	public PaintPane(CanvasState<DrawableFigure> canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
@@ -82,23 +79,22 @@ public class PaintPane extends BorderPane {
 			}
 			DrawableFigure newFigure = null;
 			if(rectangleButton.isSelected()) {
-				newFigure = new DrawableRectangle(startPoint, endPoint);
+				newFigure = new DrawableRectangle(startPoint, endPoint, fillColorPicker.getValue());
 			}
 			else if(circleButton.isSelected()) {
 				double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
-				newFigure = new DrawableCircle(startPoint, circleRadius);
+				newFigure = new DrawableCircle(startPoint, circleRadius, fillColorPicker.getValue());
 			} else if(squareButton.isSelected()) {
 				double size = Math.abs(endPoint.getX() - startPoint.getX());
-				newFigure = new DrawableSquare(startPoint, size);
+				newFigure = new DrawableSquare(startPoint, size, fillColorPicker.getValue());
 			} else if(ellipseButton.isSelected()) {
 				Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
 				double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
 				double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
-				newFigure = new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis);
+				newFigure = new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue());
 			} else {
 				return ;
 			}
-			figureColorMap.put(newFigure, fillColorPicker.getValue());
 			canvasState.addFigure(newFigure);
 			startPoint = null;
 			redrawCanvas();
@@ -175,7 +171,6 @@ public class PaintPane extends BorderPane {
 			} else {
 				gc.setStroke(lineColor);
 			}
-			gc.setFill(figureColorMap.get(figure));
 			figure.draw(gc);
 		}
 	}
