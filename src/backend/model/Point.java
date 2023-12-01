@@ -21,6 +21,10 @@ public class Point {
         y += deltaY;
     }
 
+    public boolean isPointInRectangle(Point startPoint, Point endPoint){
+        return x >= startPoint.x && x <= endPoint.x && y <= startPoint.y && y >= endPoint.y;
+    }
+
     @Override
     public String toString() {
         return String.format("{%.2f , %.2f}", x, y);
