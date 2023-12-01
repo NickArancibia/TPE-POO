@@ -1,6 +1,7 @@
 package frontend;
 
 import frontend.model.DrawableState;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -15,6 +16,7 @@ public class ShapeDrawPropertiesPane extends BorderPane {
     public ShapeDrawPropertiesPane() {
         setStyle("-fx-background-color: #999");
         HBox checksBox = new HBox(4);  
+        checksBox.setPadding(new Insets(5));
 
         Label effectsLabel = new Label("Efectos: ");
         checksBox.getChildren().add(effectsLabel);
@@ -37,12 +39,6 @@ public class ShapeDrawPropertiesPane extends BorderPane {
         shadowCheckBox.setSelected(state.isShadowToggled());
         gradientCheckBox.setSelected(state.isGradientToggled());
         bevelCheckBox.setSelected(state.isBevelToggled());
-    }
-
-    public void reset() {
-        shadowCheckBox.setSelected(false);
-        gradientCheckBox.setSelected(false);
-        bevelCheckBox.setSelected(false);
     }
 
     public CheckBox getShadowCheckBox() {
