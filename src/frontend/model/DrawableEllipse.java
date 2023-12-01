@@ -4,6 +4,10 @@ import backend.model.Ellipse;
 import backend.model.Point;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.RadialGradient;
+import javafx.scene.paint.Stop;
+import javafx.scene.shape.ArcType;
 
 public class DrawableEllipse extends Ellipse implements DrawableFigure {
     private DrawableState drawableState = new DrawableState();
@@ -32,8 +36,8 @@ public class DrawableEllipse extends Ellipse implements DrawableFigure {
 
     private void handleBevel(GraphicsContext gc) {
         if (drawableState.isBevelToggled()) {
-            double arcX = getCenterPoint().getX();
-            double arcY = getCenterPoint().getY();
+            double arcX = getCenterPoint().getX() - getsMinorAxis();
+            double arcY = getCenterPoint().getY() - getsMayorAxis();
             gc.setLineWidth(10);
             gc.setStroke(Color.LIGHTGRAY);
             gc.strokeArc(arcX, arcY, getsMayorAxis(), getsMinorAxis(), 45, 180, ArcType.OPEN);
@@ -44,13 +48,18 @@ public class DrawableEllipse extends Ellipse implements DrawableFigure {
 
     @Override
     public void draw(GraphicsContext gc) {
-        handleShadow();
-        handleGradient();
+        handleShadow(gc);
+        handleGradient(gc);
         if (!drawableState.isGradientToggled()) gc.setFill(drawableState.getColor());
 
         gc.strokeOval(getCenterPoint().getX() - (getsMayorAxis() / 2), getCenterPoint().getY() - (getsMinorAxis() / 2), getsMayorAxis(), getsMinorAxis());
         gc.fillOval(getCenterPoint().getX() - (getsMayorAxis() / 2), getCenterPoint().getY() - (getsMinorAxis() / 2), getsMayorAxis(), getsMinorAxis());
 
-        handleBevel();
+        handleBevel(gc);
+    }
+
+    @Override
+    public DrawableState getDrawableState() {
+        return drawableState;
     }
 }

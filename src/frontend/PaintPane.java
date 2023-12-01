@@ -47,7 +47,7 @@ public class PaintPane extends BorderPane {
 	// StatusBar
 	StatusPane statusPane;
 
-	public PaintPane(CanvasState<DrawableFigure> canvasState, StatusPane statusPane) {
+	public PaintPane(CanvasState<DrawableFigure> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
 		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton};
@@ -64,6 +64,24 @@ public class PaintPane extends BorderPane {
 		buttonsBox.setStyle("-fx-background-color: #999");
 		buttonsBox.setPrefWidth(100);
 		gc.setLineWidth(1);
+
+        drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
+            if (selectedFigure != null)
+                selectedFigure.getDrawableState().setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
+			redrawCanvas();
+        });
+
+        drawPropertiesPane.getGradientCheckBox().setOnAction(e -> {
+            if (selectedFigure != null)
+                selectedFigure.getDrawableState().setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
+			redrawCanvas();
+        });
+
+        drawPropertiesPane.getBevelCheckBox().setOnAction(e -> {
+            if (selectedFigure != null)
+                selectedFigure.getDrawableState().setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
+			redrawCanvas();
+        });
 
 		canvas.setOnMousePressed(event -> {
 			startPoint = new Point(event.getX(), event.getY());
@@ -119,6 +137,7 @@ public class PaintPane extends BorderPane {
 
 		canvas.setOnMouseClicked(event -> {
 			if(selectionButton.isSelected()) {
+				drawPropertiesPane.reset();
 				Point eventPoint = new Point(event.getX(), event.getY());
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
@@ -126,6 +145,7 @@ public class PaintPane extends BorderPane {
 					if(figure.pointInFigure(eventPoint)) {
 						found = true;
 						selectedFigure = figure;
+						drawPropertiesPane.setState(figure.getDrawableState());
 						label.append(figure.toString());
 					}
 				}

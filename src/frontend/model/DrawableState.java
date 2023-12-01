@@ -7,35 +7,35 @@ public class DrawableState {
     private boolean shadowToggled = false;
     private boolean bevelToggled = false;
 
-    void setColor(Color color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
-    Color getColor() {
+    public Color getColor() {
         return color;
     }
 
-    void setGradientToggled(boolean toggle) {
+    public void setGradientToggled(boolean toggle) {
         gradientToggled = toggle;
     }
 
-    boolean isGradientToggled() {
+    public boolean isGradientToggled() {
         return gradientToggled;
     }
 
-    void setShadowToggled(boolean toggle) {
+    public void setShadowToggled(boolean toggle) {
         shadowToggled = toggle;
     }
 
-    boolean isShadowToggled() {
+    public boolean isShadowToggled() {
         return shadowToggled;
     }
 
-    void setBevelToggled(boolean toggle) {
+    public void setBevelToggled(boolean toggle) {
         bevelToggled = toggle;
     }
 
-    boolean isBevelToggled() {
+    public boolean isBevelToggled() {
         return bevelToggled;
     }
 }

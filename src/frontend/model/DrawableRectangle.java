@@ -4,6 +4,9 @@ import backend.model.Point;
 import backend.model.Rectangle;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 
 public class DrawableRectangle extends Rectangle implements DrawableFigure {
     private DrawableState drawableState = new DrawableState();
@@ -16,8 +19,8 @@ public class DrawableRectangle extends Rectangle implements DrawableFigure {
     private void handleShadow(GraphicsContext gc) {
         if (drawableState.isShadowToggled()) {
             gc.setFill(Color.GRAY);
-            gc.fillRect(rectangle.getTopLeft().getX() + 10.0,
-                    rectangle.getTopLeft().getY() + 10.0,
+            gc.fillRect(getTopLeft().getX() + 10.0,
+                    getTopLeft().getY() + 10.0,
                     Math.abs(getTopLeft().getX() - getBottomRight().getX()),
                     Math.abs(getTopLeft().getY() - getBottomRight().getY()));
         }
@@ -51,8 +54,8 @@ public class DrawableRectangle extends Rectangle implements DrawableFigure {
 
     @Override
     public void draw(GraphicsContext gc) {
-        handleShadow();
-        handleGradient();
+        handleShadow(gc);
+        handleGradient(gc);
         if (!drawableState.isGradientToggled()) gc.setFill(drawableState.getColor());
 
         gc.fillRect(getTopLeft().getX(),getTopLeft().getY(),
@@ -60,7 +63,7 @@ public class DrawableRectangle extends Rectangle implements DrawableFigure {
         gc.strokeRect(getTopLeft().getX(), getTopLeft().getY(),
                 Math.abs(getTopLeft().getX() - getBottomRight().getX()), Math.abs(getTopLeft().getY() - getBottomRight().getY()));
 
-        handleBevel();
+        handleBevel(gc);
     }
 
     @Override
