@@ -2,9 +2,6 @@ package backend.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import frontend.model.DrawableFigure;
-import frontend.model.DrawableState;
-import javafx.scene.canvas.GraphicsContext;
 
 public class FigureGroup<T extends Figure> implements Figure{
     private final List<T> figureList = new ArrayList<>();
