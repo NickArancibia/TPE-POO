@@ -2,6 +2,7 @@ package frontend;
 
 import backend.CanvasState;
 import backend.model.*;
+import frontend.model.DrawableFigure;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
@@ -18,7 +19,7 @@ import java.util.Map;
 
 public class PaintPane extends BorderPane {
 	// BackEnd
-	CanvasState canvasState;
+	CanvasState<DrawableFigure> canvasState;
 
 	// Canvas y relacionados
 	Canvas canvas = new Canvas(800, 600);
@@ -41,15 +42,15 @@ public class PaintPane extends BorderPane {
 	Point startPoint;
 
 	// Seleccionar una figura
-	Figure selectedFigure;
+	DrawableFigure selectedFigure;
 
 	// StatusBar
 	StatusPane statusPane;
 
 	// Colores de relleno de cada figura
-	Map<Figure, Color> figureColorMap = new HashMap<>();
+	Map<DrawableFigure, Color> figureColorMap = new HashMap<>();
 
-	public PaintPane(CanvasState canvasState, StatusPane statusPane) {
+	public PaintPane(CanvasState<DrawableFigure> canvasState, StatusPane statusPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
 		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton};
@@ -79,7 +80,7 @@ public class PaintPane extends BorderPane {
 			if(endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
 				return ;
 			}
-			Figure newFigure = null;
+			DrawableFigure newFigure = null;
 			if(rectangleButton.isSelected()) {
 				newFigure = new Rectangle(startPoint, endPoint);
 			}
@@ -107,7 +108,7 @@ public class PaintPane extends BorderPane {
 			Point eventPoint = new Point(event.getX(), event.getY());
 			boolean found = false;
 			StringBuilder label = new StringBuilder();
-			for(Figure figure : canvasState.figures()) {
+			for(DrawableFigure figure : canvasState.figures()) {
 				if(figure.pointInFigure(eventPoint)) {
 					found = true;
 					label.append(figure.toString());
@@ -125,7 +126,7 @@ public class PaintPane extends BorderPane {
 				Point eventPoint = new Point(event.getX(), event.getY());
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
-				for (Figure figure : canvasState.figures()) {
+				for (DrawableFigure figure : canvasState.figures()) {
 					if(figure.pointInFigure(eventPoint)) {
 						found = true;
 						selectedFigure = figure;
@@ -168,7 +169,7 @@ public class PaintPane extends BorderPane {
 
 	void redrawCanvas() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		for(Figure figure : canvasState.figures()) {
+		for(DrawableFigure figure : canvasState.figures()) {
 			if(figure == selectedFigure) {
 				gc.setStroke(Color.RED);
 			} else {
