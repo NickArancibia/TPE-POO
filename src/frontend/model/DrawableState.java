@@ -20,11 +20,7 @@ public class DrawableState {
         gradientToggled = toggle;
     }
 
-    void toggleShadow() {
-        shadowToggled = !shadowToggled;
-    }
-
-    boolean isGradientToggled() {
+    public boolean isGradientToggled() {
         return gradientToggled;
     }
 

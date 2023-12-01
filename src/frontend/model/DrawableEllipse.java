@@ -48,8 +48,8 @@ public class DrawableEllipse extends Ellipse implements DrawableFigure {
 
     @Override
     public void draw(GraphicsContext gc) {
-        handleShadow();
-        handleGradient();
+        handleShadow(gc);
+        handleGradient(gc);
         if (!drawableState.isGradientToggled()) gc.setFill(drawableState.getColor());
 
         gc.strokeOval(getCenterPoint().getX() - (getsMayorAxis() / 2), getCenterPoint().getY() - (getsMinorAxis() / 2), getsMayorAxis(), getsMinorAxis());
