@@ -64,19 +64,19 @@ public class PaintPane extends BorderPane {
 
         drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
             if (selectedFigure != null)
-                selectedFigure.getDrawableState().setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
+                selectedFigure.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
 			redrawCanvas();
         });
 
         drawPropertiesPane.getGradientCheckBox().setOnAction(e -> {
             if (selectedFigure != null)
-                selectedFigure.getDrawableState().setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
+                selectedFigure.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
 			redrawCanvas();
         });
 
         drawPropertiesPane.getBevelCheckBox().setOnAction(e -> {
             if (selectedFigure != null)
-                selectedFigure.getDrawableState().setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
+                selectedFigure.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
 			redrawCanvas();
         });
 
@@ -141,7 +141,7 @@ public class PaintPane extends BorderPane {
 					if(figure.pointInFigure(eventPoint)) {
 						found = true;
 						selectedFigure = figure;
-						drawPropertiesPane.setState(figure.getDrawableState());
+						drawPropertiesPane.setState(figure.isShadowToggled(), figure.isGradientToggled(), figure.isBevelToggled());
 						label.append(figure.toString());
 					}
 				}

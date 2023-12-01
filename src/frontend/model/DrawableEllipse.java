@@ -9,40 +9,44 @@ import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.ArcType;
 
-public class DrawableEllipse extends Ellipse implements DrawableFigure {
-    private DrawableState drawableState = new DrawableState();
-
+public class DrawableEllipse extends DrawableFigure<Ellipse> {
     public DrawableEllipse(Point centerPoint, double sMayorAxis, double sMinorAxis, Color color) {
-        super(centerPoint, sMayorAxis, sMinorAxis);
-        drawableState.setColor(color);
+        super(new Ellipse(centerPoint, sMayorAxis, sMayorAxis), color);
+    }
+
+    public DrawableEllipse(Ellipse ellipse, Color color) {
+        super(ellipse, color);
     }
 
     private void handleShadow(GraphicsContext gc) {
-        if (drawableState.isShadowToggled()) {
+        if (isShadowToggled()) {
             gc.setFill(Color.GRAY);
-            gc.fillOval(getCenterPoint().getX() - (getsMayorAxis() / 2) + 10.0, getCenterPoint().getY() - (getsMinorAxis() / 2) + 10.0, getsMayorAxis(), getsMinorAxis());
+            gc.fillOval(baseFigure.getCenterPoint().getX() - (baseFigure.getsMayorAxis() / 2) + 10.0, baseFigure.getCenterPoint().getY() - (baseFigure.getsMinorAxis() / 2) + 10.0, baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis());
         }
     }
 
     private void handleGradient(GraphicsContext gc) {
-        if (drawableState.isGradientToggled()) {
+        if (isGradientToggled()) {
             RadialGradient radialGradient = new RadialGradient(0, 0, 0.5, 0.5, 0.5, true,
                     CycleMethod.NO_CYCLE,
-                    new Stop(0, drawableState.getColor()),
-                    new Stop(1, drawableState.getColor().invert()));
+                    new Stop(0, color),
+                    new Stop(1, color.invert()));
             gc.setFill(radialGradient);
-        }
+            return;
+        } 
+
+        gc.setFill(color);
     }
 
     private void handleBevel(GraphicsContext gc) {
-        if (drawableState.isBevelToggled()) {
-            double arcX = getCenterPoint().getX() - (getsMayorAxis() / 2);
-            double arcY = getCenterPoint().getY() - (getsMinorAxis() / 2);
+        if (isBevelToggled()) {
+            double arcX = baseFigure.getCenterPoint().getX() - (baseFigure.getsMayorAxis() / 2);
+            double arcY = baseFigure.getCenterPoint().getY() - (baseFigure.getsMinorAxis() / 2);
             gc.setLineWidth(10);
             gc.setStroke(Color.LIGHTGRAY);
-            gc.strokeArc(arcX, arcY, getsMayorAxis(), getsMinorAxis(), 45, 180, ArcType.OPEN);
+            gc.strokeArc(arcX, arcY, baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis(), 45, 180, ArcType.OPEN);
             gc.setStroke(Color.BLACK);
-            gc.strokeArc(arcX, arcY, getsMayorAxis(), getsMinorAxis(), 225, 180, ArcType.OPEN);
+            gc.strokeArc(arcX, arcY, baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis(), 225, 180, ArcType.OPEN);
             gc.setLineWidth(1);
         }
     }
@@ -51,16 +55,10 @@ public class DrawableEllipse extends Ellipse implements DrawableFigure {
     public void draw(GraphicsContext gc) {
         handleShadow(gc);
         handleGradient(gc);
-        if (!drawableState.isGradientToggled()) gc.setFill(drawableState.getColor());
 
-        gc.strokeOval(getCenterPoint().getX() - (getsMayorAxis() / 2), getCenterPoint().getY() - (getsMinorAxis() / 2), getsMayorAxis(), getsMinorAxis());
-        gc.fillOval(getCenterPoint().getX() - (getsMayorAxis() / 2), getCenterPoint().getY() - (getsMinorAxis() / 2), getsMayorAxis(), getsMinorAxis());
+        gc.strokeOval(baseFigure.getCenterPoint().getX() - (baseFigure.getsMayorAxis() / 2), baseFigure.getCenterPoint().getY() - (baseFigure.getsMinorAxis() / 2), baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis());
+        gc.fillOval(baseFigure.getCenterPoint().getX() - (baseFigure.getsMayorAxis() / 2), baseFigure.getCenterPoint().getY() - (baseFigure.getsMinorAxis() / 2), baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis());
 
         handleBevel(gc);
-    }
-
-    @Override
-    public DrawableState getDrawableState() {
-        return drawableState;
     }
 }
