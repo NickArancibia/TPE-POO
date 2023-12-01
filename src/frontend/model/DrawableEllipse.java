@@ -11,7 +11,7 @@ import javafx.scene.shape.ArcType;
 
 public class DrawableEllipse extends DrawableFigure<Ellipse> {
     public DrawableEllipse(Point centerPoint, double sMayorAxis, double sMinorAxis, Color color) {
-        super(new Ellipse(centerPoint, sMayorAxis, sMayorAxis), color);
+        super(new Ellipse(centerPoint, sMayorAxis, sMinorAxis), color);
     }
 
     public DrawableEllipse(Ellipse ellipse, Color color) {
