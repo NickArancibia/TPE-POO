@@ -5,4 +5,5 @@ import javafx.scene.canvas.GraphicsContext;
 
 public interface DrawableFigure extends Figure {
     void draw(GraphicsContext gc);
+    DrawableState getDrawableState();
 }

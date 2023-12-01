@@ -16,15 +16,32 @@ public class DrawableState {
         gc.setFill(color);
     }
 
-    void toggleGradient() {
-        gradientToggled = !gradientToggled;
+    void setGradientToggled(boolean toggle) {
+        gradientToggled = toggle;
     }
 
+<<<<<<< HEAD
     void toggleShadow() {
         shadowToggled = !shadowToggled;
     }
 
     void toggleBevel() {
         bevelToggled = !bevelToggled;
+=======
+    boolean isGradientToggled() {
+        return gradientToggled;
+    }
+
+    void setShadowToggled(boolean toggle) {
+        shadowToggled = toggle;
+    }
+
+    boolean isShadowToggled() {
+        return shadowToggled;
+    }
+
+    void setBevelToggled(boolean toggle) {
+        bevelToggled = toggle;
+>>>>>>> 695a69b06aaac97a227dc4403800c56d68c9f867
     }
 }
