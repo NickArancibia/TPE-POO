@@ -1,5 +1,6 @@
 package frontend.model;
 import javafx.scene.paint.Color;
+import javafx.scene.canvas.GraphicsContext;
 
 public class DrawableState {
     private Color color;
@@ -11,31 +12,19 @@ public class DrawableState {
         this.color = color;
     }
 
-    Color getColor() {
-        return color;
+    void setDrawProperties(GraphicsContext gc) {
+        gc.setFill(color);
     }
 
     void toggleGradient() {
         gradientToggled = !gradientToggled;
     }
 
-    boolean isGradientToggled() {
-        return gradientToggled;
-    }
-
     void toggleShadow() {
         shadowToggled = !shadowToggled;
     }
 
-    boolean isShadowToggled() {
-        return shadowToggled;
-    }
-
     void toggleBevel() {
         bevelToggled = !bevelToggled;
-    }
-
-    boolean isBevelToggled() {
-        return bevelToggled;
     }
 }
