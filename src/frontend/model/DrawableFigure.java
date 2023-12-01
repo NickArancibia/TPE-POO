@@ -55,6 +55,11 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
     }
 
     @Override
+    public boolean isFigureInRectangle(Point topLeft, Point bottomRight) {
+        return baseFigure.isFigureInRectangle(topLeft, bottomRight);
+    }
+
+    @Override
     public String toString() {
         return baseFigure.toString();
     }
