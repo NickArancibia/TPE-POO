@@ -14,9 +14,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class PaintPane extends BorderPane {
 	// BackEnd
 	CanvasState<DrawableFigure> canvasState;
