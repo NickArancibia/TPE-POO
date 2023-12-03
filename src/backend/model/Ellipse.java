@@ -2,7 +2,7 @@ package backend.model;
 
 public class Ellipse implements Figure {
     private final Point centerPoint;
-    private final double sMayorAxis, sMinorAxis;
+    private double sMayorAxis, sMinorAxis;
 
     public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis) {
         this.centerPoint = centerPoint;
@@ -42,5 +42,29 @@ public class Ellipse implements Figure {
         return centerPoint.isPointInRectangle(topLeft, bottomRight) &&
                 Math.abs(topLeft.getX() - bottomRight.getX()) >= sMayorAxis &&
                 Math.abs(topLeft.getY() - bottomRight.getY()) >= sMinorAxis;
+    }
+    @Override
+    public void scaleGrowth() {
+        sMayorAxis = sMayorAxis*1.25;
+        sMinorAxis = sMinorAxis*1.25;
+    }
+    @Override
+    public void scaleReduce() {
+        sMayorAxis = sMayorAxis*0.75;
+        sMinorAxis = sMinorAxis*0.75;
+    }
+    @Override
+    public void turnAroundV(){
+        centerPoint.move(0,sMinorAxis);
+    }
+    @Override
+    public void turnAroundH(){
+        centerPoint.move(sMayorAxis,0);
+    }
+    @Override
+    public void spin(){
+        double auxiliarAxis = sMayorAxis;
+        sMayorAxis = sMinorAxis;
+        sMinorAxis = auxiliarAxis;
     }
 }

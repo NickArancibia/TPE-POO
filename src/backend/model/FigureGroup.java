@@ -39,6 +39,41 @@ public class FigureGroup<T extends Figure> extends ArrayList<T> implements Figur
     }
 
     @Override
+    public void scaleGrowth() {
+        for(Figure figure : this){
+            figure.scaleGrowth();
+        }
+    }
+
+    @Override
+    public void scaleReduce() {
+        for(Figure figure : this){
+            figure.scaleReduce();
+        }
+    }
+
+    @Override
+    public void turnAroundH() {
+        for(Figure figure : this){
+            figure.turnAroundH();
+        }
+    }
+
+    @Override
+    public void turnAroundV() {
+        for(Figure figure : this){
+            figure.turnAroundV();
+        }
+    }
+
+    @Override
+    public void spin() {
+        for(Figure figure : this){
+            figure.spin();
+        }
+    }
+
+    @Override
     public String toString(){
         StringBuilder s = new StringBuilder();
         for(T figure : this) {
