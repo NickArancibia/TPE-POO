@@ -32,4 +32,9 @@ public class Rectangle implements Figure {
         topLeft.move(deltaX, deltaY);
         bottomRight.move(deltaX, deltaY);
     }
+
+    @Override
+    public boolean isFigureInRectangle(Point topLeft, Point bottomRight){
+        return this.topLeft.isPointInRectangle(topLeft, bottomRight) && this.bottomRight.isPointInRectangle(topLeft, bottomRight);
+    }
 }
