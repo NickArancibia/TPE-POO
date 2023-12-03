@@ -2,7 +2,6 @@ package frontend.model;
 
 import backend.model.Figure;
 import backend.model.FigureGroup;
-import backend.model.Point;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
