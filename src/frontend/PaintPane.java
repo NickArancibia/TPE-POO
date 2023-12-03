@@ -16,7 +16,7 @@ import javafx.scene.paint.Color;
 
 public class PaintPane extends BorderPane {
 	// BackEnd
-	CanvasState<DrawableFigure> canvasState;
+	CanvasState<DrawableGroup> canvasState;
 
 	// Canvas y relacionados
 	Canvas canvas = new Canvas(800, 600);
@@ -39,12 +39,12 @@ public class PaintPane extends BorderPane {
 	Point startPoint;
 
 	// Seleccionar una figura
-	DrawableFigure selectedFigure;
+	DrawableGroup selectedFigure;
 
 	// StatusBar
 	StatusPane statusPane;
 
-	public PaintPane(CanvasState<DrawableFigure> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane) {
+	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
 		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton};
@@ -62,23 +62,23 @@ public class PaintPane extends BorderPane {
 		buttonsBox.setPrefWidth(100);
 		gc.setLineWidth(1);
 
-        drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
-            if (selectedFigure != null)
-                selectedFigure.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
+		drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
+			if (selectedFigure != null)
+				selectedFigure.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
 			redrawCanvas();
-        });
+		});
 
-        drawPropertiesPane.getGradientCheckBox().setOnAction(e -> {
-            if (selectedFigure != null)
-                selectedFigure.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
+		drawPropertiesPane.getGradientCheckBox().setOnAction(e -> {
+			if (selectedFigure != null)
+				selectedFigure.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
 			redrawCanvas();
-        });
+		});
 
-        drawPropertiesPane.getBevelCheckBox().setOnAction(e -> {
-            if (selectedFigure != null)
-                selectedFigure.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
+		drawPropertiesPane.getBevelCheckBox().setOnAction(e -> {
+			if (selectedFigure != null)
+				selectedFigure.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
 			redrawCanvas();
-        });
+		});
 
 		canvas.setOnMousePressed(event -> {
 			startPoint = new Point(event.getX(), event.getY());
@@ -86,31 +86,27 @@ public class PaintPane extends BorderPane {
 
 		canvas.setOnMouseReleased(event -> {
 			Point endPoint = new Point(event.getX(), event.getY());
-			if(startPoint == null) {
-				return ;
+			if (startPoint == null) {
+				return;
 			}
-			if(endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
-				return ;
+			if (endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
+				return;
 			}
 			DrawableFigure newFigure = null;
-			if(rectangleButton.isSelected()) {
+			if (rectangleButton.isSelected()) {
 				newFigure = new DrawableRectangle(startPoint, endPoint, fillColorPicker.getValue());
-			}
-			else if(circleButton.isSelected()) {
+			} else if (circleButton.isSelected()) {
 				double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
 				newFigure = new DrawableCircle(startPoint, circleRadius, fillColorPicker.getValue());
-			} else if(squareButton.isSelected()) {
+			} else if (squareButton.isSelected()) {
 				double size = Math.abs(endPoint.getX() - startPoint.getX());
 				newFigure = new DrawableSquare(startPoint, size, fillColorPicker.getValue());
-			} else if(ellipseButton.isSelected()) {
-				Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
-				double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
-				double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
-				newFigure = new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue());
 			} else {
 				return ;
 			}
-			canvasState.addFigure(newFigure);
+			DrawableGroup newGroup = new DrawableGroup(fillColorPicker.getValue());
+			newGroup.add(newFigure);
+			canvasState.addFigure(newGroup);
 			startPoint = null;
 			redrawCanvas();
 		});
@@ -119,7 +115,7 @@ public class PaintPane extends BorderPane {
 			Point eventPoint = new Point(event.getX(), event.getY());
 			boolean found = false;
 			StringBuilder label = new StringBuilder();
-			for(DrawableFigure figure : canvasState.figures()) {
+			for(DrawableGroup figure : canvasState.figures()) {
 				if(figure.pointInFigure(eventPoint)) {
 					found = true;
 					label.append(figure.toString());
@@ -137,7 +133,7 @@ public class PaintPane extends BorderPane {
 				Point eventPoint = new Point(event.getX(), event.getY());
 				boolean found = false;
 				StringBuilder label = new StringBuilder("Se seleccionó: ");
-				for (DrawableFigure figure : canvasState.figures()) {
+				for (DrawableGroup figure : canvasState.figures()) {
 					if(figure.pointInFigure(eventPoint)) {
 						found = true;
 						selectedFigure = figure;
@@ -160,7 +156,7 @@ public class PaintPane extends BorderPane {
 				Point eventPoint = new Point(event.getX(), event.getY());
 				double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
 				double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
-                if (selectedFigure != null){
+				if (selectedFigure != null){
 					selectedFigure.move(diffX, diffY);
 				}
 				redrawCanvas();
@@ -181,7 +177,7 @@ public class PaintPane extends BorderPane {
 
 	void redrawCanvas() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-		for(DrawableFigure figure : canvasState.figures()) {
+		for(DrawableGroup figure : canvasState.figures()) {
 			if(figure == selectedFigure) {
 				gc.setStroke(Color.RED);
 			} else {
