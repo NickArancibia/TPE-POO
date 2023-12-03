@@ -36,4 +36,11 @@ public class Ellipse implements Figure {
     public void move(double deltaX, double deltaY) {
         centerPoint.move(deltaX, deltaY);
     }
+
+    @Override
+    public boolean isFigureInRectangle(Point topLeft, Point bottomRight){
+        return centerPoint.isPointInRectangle(topLeft, bottomRight) &&
+                Math.abs(topLeft.getX() - bottomRight.getX()) >= sMayorAxis &&
+                Math.abs(topLeft.getY() - bottomRight.getY()) >= sMinorAxis;
+    }
 }
