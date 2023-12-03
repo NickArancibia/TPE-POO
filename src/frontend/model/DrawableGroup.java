@@ -21,13 +21,13 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
 
     @Override
     public void draw(GraphicsContext gc) {
-        for(DrawableFigure<? extends Figure> figure : baseFigure.getFigures()){
+        for(DrawableFigure<? extends Figure> figure : baseFigure){
             figure.draw(gc);
         }
     }
     @Override
     public void setGradientToggled(boolean toggle) {
-        for(DrawableFigure<? extends Figure> figure : baseFigure.getFigures()){
+        for(DrawableFigure<? extends Figure> figure : baseFigure){
             figure.setGradientToggled(toggle);
         }
         super.setGradientToggled(toggle);
@@ -36,7 +36,7 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     @Override
     public void setShadowToggled(boolean toggle) {
 
-        for(DrawableFigure<? extends Figure> figure : baseFigure.getFigures()){
+        for(DrawableFigure<? extends Figure> figure : baseFigure){
             figure.setShadowToggled(toggle);
         }
         super.setShadowToggled(toggle);
@@ -45,7 +45,7 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     @Override
     public void setBevelToggled(boolean toggle) {
 
-        for(DrawableFigure<? extends Figure> figure : baseFigure.getFigures()){
+        for(DrawableFigure<? extends Figure> figure : baseFigure){
             figure.setBevelToggled(toggle);
         }
         super.setBevelToggled(toggle);

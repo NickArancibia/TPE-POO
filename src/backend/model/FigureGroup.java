@@ -1,17 +1,8 @@
 package backend.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FigureGroup<T extends Figure> extends ArrayList<T> implements Figure{
-    
-    public FigureGroup(){
-        super();
-    }
-
-    public List<T> getFigures(){
-        return new ArrayList<>(this);
-    }
 
     @Override
     public boolean pointInFigure(Point p){
