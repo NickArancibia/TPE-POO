@@ -5,7 +5,7 @@ import frontend.model.DrawableFigure;
 import javafx.scene.layout.VBox;
 
 public class MainFrame extends VBox {
-    public MainFrame(CanvasState<DrawableFigure> canvasState) {
+    public MainFrame(CanvasState<DrawableGroup> canvasState) {
         getChildren().add(new AppMenuBar());
         StatusPane statusPane = new StatusPane();
         ShapeDrawPropertiesPane drawPropertiesPane = new ShapeDrawPropertiesPane();
