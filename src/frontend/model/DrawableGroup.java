@@ -11,7 +11,7 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
          super(new FigureGroup<DrawableFigure<? extends Figure>>(), color);
     }
 
-    public void add(DrawableFigure<Figure> figure){
+    public void add(DrawableFigure<? extends Figure> figure){
         baseFigure.add(figure);
     }
 
