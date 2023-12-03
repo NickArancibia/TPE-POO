@@ -3,32 +3,19 @@ package backend.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FigureGroup<T extends Figure> implements Figure{
-    private final List<T> figureList = new ArrayList<>();
-
+public class FigureGroup<T extends Figure> extends ArrayList<T> implements Figure{
+    
     public FigureGroup(){
-
-    }
-
-    public void addFigure(T figure){
-        figureList.add(figure);
-    }
-
-    public boolean containsFigure(T figure){
-        return figureList.contains(figure);
-    }
-
-    public void removeFigure(T figure){
-        figureList.remove(figure);
+        super();
     }
 
     public List<T> getFigures(){
-        return new ArrayList<>(figureList);
+        return new ArrayList<>(this);
     }
 
     @Override
     public boolean pointInFigure(Point p){
-        for(Figure figure : figureList){
+        for(T figure : this){
             if(figure.pointInFigure(p))
                 return true;
         }
@@ -37,14 +24,14 @@ public class FigureGroup<T extends Figure> implements Figure{
 
     @Override
     public void move(double deltaX, double deltaY){
-        for(Figure figure : figureList){
+        for(T figure : this){
             figure.move(deltaX, deltaY);
         }
     }
 
     @Override
     public boolean isFigureInRectangle(Point topLeft, Point bottomRight){
-        for(Figure figure : figureList){
+        for(Figure figure : this){
             if(figure.isFigureInRectangle(topLeft, bottomRight))
                 return true;
         }
@@ -54,8 +41,9 @@ public class FigureGroup<T extends Figure> implements Figure{
     @Override
     public String toString(){
         StringBuilder s = new StringBuilder();
-        for(T figure : figureList)
+        for(T figure : this) {
             s.append(figure.toString());
+        }
         return s.toString();
     }
 }
