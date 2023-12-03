@@ -31,6 +31,13 @@ public class PaintPane extends BorderPane {
 	ToggleButton squareButton = new ToggleButton("Cuadrado");
 	ToggleButton ellipseButton = new ToggleButton("Elipse");
 	ToggleButton deleteButton = new ToggleButton("Borrar");
+	ToggleButton spinButton = new ToggleButton("Girar D");
+	ToggleButton turnAroundVButton = new ToggleButton("Voltear V");
+	ToggleButton turnAroundHButton = new ToggleButton("Voltear H");
+	ToggleButton scaleGrowButton = new ToggleButton("Escalar +");
+	ToggleButton scaleReduceButton = new ToggleButton("Escalar -");
+
+
 
 	// Selector de color de relleno
 	ColorPicker fillColorPicker = new ColorPicker(defaultFillColor);
@@ -47,7 +54,7 @@ public class PaintPane extends BorderPane {
 	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
-		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, deleteButton};
+		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, spinButton, turnAroundVButton, turnAroundHButton, scaleGrowButton, scaleReduceButton, deleteButton};
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
 			tool.setMinWidth(90);
@@ -102,7 +109,7 @@ public class PaintPane extends BorderPane {
 				double size = Math.abs(endPoint.getX() - startPoint.getX());
 				newFigure = new DrawableSquare(startPoint, size, fillColorPicker.getValue());
 			} else {
-				return ;
+				return;
 			}
 			DrawableGroup newGroup = new DrawableGroup(fillColorPicker.getValue());
 			newGroup.add(newFigure);
@@ -166,6 +173,46 @@ public class PaintPane extends BorderPane {
 		deleteButton.setOnAction(event -> {
 			if (selectedFigure != null) {
 				canvasState.deleteFigure(selectedFigure);
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+
+		scaleGrowButton.setOnAction(event -> {
+			if (selectedFigure != null) {
+				selectedFigure.scaleGrowth();
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+
+		scaleReduceButton.setOnAction(event -> {
+			if (selectedFigure != null) {
+				selectedFigure.scaleReduce();
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+
+		turnAroundHButton.setOnAction(event -> {
+			if (selectedFigure != null) {
+				selectedFigure.turnAroundH();
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+
+		turnAroundVButton.setOnAction(event ->{
+			if (selectedFigure !=null){
+				selectedFigure.turnAroundV();
+				selectedFigure = null;
+				redrawCanvas();
+			}
+		});
+
+		spinButton.setOnAction(event ->{
+			if (selectedFigure !=null){
+				selectedFigure.spin();
 				selectedFigure = null;
 				redrawCanvas();
 			}
