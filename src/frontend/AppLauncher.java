@@ -13,7 +13,7 @@ public class AppLauncher extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		CanvasState<DrawableFigure> canvasState = new CanvasState<>(); // BackEnd
+		CanvasState<DrawableGroup> canvasState = new CanvasState<>(); // BackEnd
 		MainFrame frame = new MainFrame(canvasState);
 		Scene scene = new Scene(frame);
 		primaryStage.setResizable(false);
