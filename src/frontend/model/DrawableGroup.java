@@ -9,13 +9,21 @@ import backend.model.FigureGroup;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? extends Figure>>>{
+public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? extends Figure>>> {
+    public DrawableGroup(Color color) {
+        super(new FigureGroup<DrawableFigure<? extends Figure>>(), color);
+    }
+
     public DrawableGroup() {
         super(new FigureGroup<DrawableFigure<? extends Figure>>(), Color.YELLOW);
     }
 
-    public DrawableGroup(Color color){
-         super(new FigureGroup<DrawableFigure<? extends Figure>>(), color);
+    DrawableGroup(DrawableFigure<? extends Figure> figure) {
+        super(new FigureGroup<DrawableFigure<? extends Figure>>(), figure.getColor());
+        setShadowToggled(true);
+        setGradientToggled(true);
+        setBevelToggled(true);
+        add(figure);
     }
 
     private void updateProperties(DrawableFigure<? extends Figure> figure) {
@@ -46,11 +54,8 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     public Collection<DrawableGroup> ungroup() {
         List<DrawableGroup> out = new ArrayList<>();
 
-        for(DrawableFigure<? extends Figure> figure : getFigures()) {
-            DrawableGroup group = new DrawableGroup();
-            group.add(figure);
-            out.add(group);
-        }
+        for(DrawableFigure<? extends Figure> figure : getFigures()) 
+            out.add(new DrawableGroup(figure));
 
         return out;
     }
@@ -83,7 +88,6 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
 
     @Override
     public void setBevelToggled(boolean toggle) {
-
         for(DrawableFigure<? extends Figure> figure : baseFigure){
             figure.setBevelToggled(toggle);
         }

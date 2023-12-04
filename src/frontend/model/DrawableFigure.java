@@ -20,6 +20,10 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
 
     public abstract void draw(GraphicsContext gc);
 
+    public Color getColor() {
+        return color;
+    }
+
     public void setGradientToggled(boolean toggle) {
         gradientToggled = toggle;
     }
@@ -55,16 +59,30 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
     }
 
     @Override
-    public void scaleUp(){baseFigure.scaleUp();}
+    public void scaleUp() {
+        baseFigure.scaleUp();
+    }
 
     @Override
-    public void scaleDown(){baseFigure.scaleDown();}
+    public void scaleDown() {
+        baseFigure.scaleDown();
+    }
+
     @Override
-    public void rotate(){baseFigure.rotate();}
+    public void rotate() {
+        baseFigure.rotate();
+    }
+
     @Override
-    public void flipV(){baseFigure.flipV();}
+    public void flipV() {
+        baseFigure.flipV();
+    }
+
     @Override
-    public void flipH(){baseFigure.flipH();}
+    public void flipH() {
+        baseFigure.flipH();
+    }
+
     @Override
     public boolean isFigureInRectangle(Point topLeft, Point bottomRight) {
         return baseFigure.isFigureInRectangle(topLeft, bottomRight);
