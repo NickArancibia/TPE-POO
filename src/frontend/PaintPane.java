@@ -166,6 +166,7 @@ public class PaintPane extends BorderPane {
             newGroup.add(newFigure);
             canvasState.addFigure(newGroup);
             startPoint = null;
+            selectionManager.clearSelection();
             redrawCanvas();
         });
 
