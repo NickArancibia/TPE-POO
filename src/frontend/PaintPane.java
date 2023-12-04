@@ -108,6 +108,11 @@ public class PaintPane extends BorderPane {
 			} else if (squareButton.isSelected()) {
 				double size = Math.abs(endPoint.getX() - startPoint.getX());
 				newFigure = new DrawableSquare(startPoint, size, fillColorPicker.getValue());
+			} else if(ellipseButton.isSelected()) {
+				Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
+				double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
+				double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
+				newFigure = new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue());
 			} else {
 				return;
 			}
