@@ -82,13 +82,14 @@ public class PaintPane extends BorderPane {
 			tool.setToggleGroup(tools);
 			tool.setCursor(Cursor.HAND);
 		}
+		tagsArea.setMaxHeight(50);
 		ToggleGroup showTagsGroup = new ToggleGroup();
 		showAllButton.setToggleGroup(showTagsGroup);
 		filterTagButton.setToggleGroup(showTagsGroup);
 		saveTagsButton.setCursor(Cursor.HAND);
 		showAllButton.setCursor(Cursor.HAND);
 		filterTagButton.setCursor(Cursor.HAND);
-		VBox buttonsBox = new VBox(10);
+		VBox buttonsBox = new VBox(5);
 		buttonsBox.getChildren().addAll(toolsArr);
 		buttonsBox.getChildren().add(fillColorPicker);
 		buttonsBox.getChildren().add(tagsLabel);
