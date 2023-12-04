@@ -3,7 +3,6 @@ package backend.model;
 import java.util.ArrayList;
 
 public class FigureGroup<T extends Figure> extends ArrayList<T> implements Figure{
-
     @Override
     public boolean pointInFigure(Point p){
         for(T figure : this){

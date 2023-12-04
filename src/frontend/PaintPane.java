@@ -67,7 +67,7 @@ public class PaintPane extends BorderPane {
     Point startPoint;
 
     // Seleccionar una figura
-    List<DrawableGroup> selectedGroups = new ArrayList<>();
+    SelectionManager selectionManager = new SelectionManager();
 
     // StatusBar
     StatusPane statusPane;
@@ -109,20 +109,17 @@ public class PaintPane extends BorderPane {
         gc.setLineWidth(1);
 
         drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
-            for (DrawableGroup group : selectedGroups)
-                group.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
+            selectionManager.applyActionToSelection((group) -> group.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected()));
             redrawCanvas();
         });
 
         drawPropertiesPane.getGradientCheckBox().setOnAction(e -> {
-            for (DrawableGroup group : selectedGroups)
-                group.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
+            selectionManager.applyActionToSelection((group) -> group.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected()));
             redrawCanvas();
         });
 
         drawPropertiesPane.getBevelCheckBox().setOnAction(e -> {
-            for (DrawableGroup group : selectedGroups)
-                group.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
+            selectionManager.applyActionToSelection((group) -> group.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected()));
             redrawCanvas();
         });
 
@@ -153,10 +150,7 @@ public class PaintPane extends BorderPane {
                 double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
                 newFigure = new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue());
             } else if (selectionButton.isSelected() && !canvasState.figures().isEmpty()){
-                for(DrawableGroup group : canvasState.figures()){
-                    if(group.isFigureInRectangle(startPoint, endPoint))
-                        selectedGroups.add(group);
-                }
+                selectionManager.addToSelectionIfFigureInSelection(canvasState.figures(), startPoint, endPoint);
                 redrawCanvas();
                 return;
             } else {
@@ -194,9 +188,7 @@ public class PaintPane extends BorderPane {
                 for (DrawableGroup figure : canvasState.figures()) {
                     if(figure.pointInFigure(eventPoint)) {
                         found = true;
-                        // Decidir si este clear deberia ocurrir o no
-                        //selectedGroups.clear(); 
-                        selectedGroups.add(figure);
+                        selectionManager.add(figure);
                         drawPropertiesPane.setState(figure.isShadowToggled(), figure.isGradientToggled(), figure.isBevelToggled());
                         label.append(figure.toString());
                     }
@@ -204,7 +196,7 @@ public class PaintPane extends BorderPane {
                 if (found) {
                     statusPane.updateStatus(label.toString());
                 } else {
-                    selectedGroups.clear();
+                    selectionManager.clearSelection();
                     statusPane.updateStatus("Ninguna figura encontrada");
                 }
                 redrawCanvas();
@@ -216,98 +208,69 @@ public class PaintPane extends BorderPane {
                 Point eventPoint = new Point(event.getX(), event.getY());
                 double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
                 double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
-                for (DrawableGroup group : selectedGroups){
-                    group.move(diffX, diffY);
-                }
+                selectionManager.applyActionToSelection((group) -> group.move(diffX, diffY));
                 redrawCanvas();
             }
         });
 
         deleteButton.setOnAction(event -> {
-            for (DrawableGroup group : selectedGroups)
+            for (DrawableGroup group : selectionManager.getSelection())
                 canvasState.deleteFigure(group);
-            selectedGroups.clear();
-            // performAction(() -> canvasState.deleteFigure(selectedFigure));
+            selectionManager.clearSelection();
+            redrawCanvas();
         });
 
         scaleUpButton.setOnAction(event -> {
-            for (DrawableGroup group : selectedGroups)
-                group.scaleUp();
-            selectedGroups.clear();
-
-            //	performAction(selectedFigure::scaleUp);
+            selectionManager.applyActionToSelection((group) -> group.scaleUp());
+            selectionManager.clearSelection();
+            redrawCanvas();
         });
 
         scaleDownButton.setOnAction(event -> {
-            for (DrawableGroup group : selectedGroups)
-                group.scaleDown();
-            selectedGroups.clear();
-            // performAction(selectedFigure::scaleDown);
+            selectionManager.applyActionToSelection((group) -> group.scaleDown());
+            selectionManager.clearSelection();
+            redrawCanvas();
         });
 
         flipHButton.setOnAction(event -> {
-            for (DrawableGroup group : selectedGroups)
-                group.flipH();
-            selectedGroups.clear();
-
-            // performAction(selectedFigure::flipH);
+            selectionManager.applyActionToSelection((group) -> group.flipH());
+            selectionManager.clearSelection();
+            redrawCanvas();
         });
 
         flipVButton.setOnAction(event -> {
-            for (DrawableGroup group : selectedGroups)
-                group.flipV();
-            selectedGroups.clear();
-
-            // performAction(selectedFigure::flipV);
+            selectionManager.applyActionToSelection((group) -> group.flipV());
+            selectionManager.clearSelection();
+            redrawCanvas();
         });
 
         rotateButton.setOnAction(event -> {
-            for (DrawableGroup group : selectedGroups)
-                group.rotate();
-            selectedGroups.clear();
+            selectionManager.applyActionToSelection((group) -> group.rotate());
+            selectionManager.clearSelection();
             redrawCanvas();
-
-            // performAction(selectedFigure::rotate);
         });
 
         groupButton.setOnAction(event -> {
-            if(selectedGroups.size() == 1)
-                statusPane.updateStatus("No se puede agrupar un unico grupo");
-            else if(selectedGroups.isEmpty())
-                statusPane.updateStatus("Para agrupar es necesario seleccionar 2 o mas grupos");
+            if(!selectionManager.canGroup())
+                statusPane.updateStatus("Para agrupar es necesario seleccionar 2 o más grupos");
             else{
-                DrawableGroup newGroup = new DrawableGroup(fillColorPicker.getValue());
-                List<DrawableGroup> toRemove = new ArrayList<>();
-                for(DrawableGroup group : canvasState.figures()){
-                    if(selectedGroups.contains(group)){
-                        newGroup.addAll(group);
-                        toRemove.add(group);
-                    }
-                }
-                canvasState.addFigure(newGroup);
-                canvasState.figures().removeAll(toRemove);
+                canvasState.addFigure(selectionManager.groupSelection());
+                canvasState.deleteFigures(selectionManager.getSelection());
             }
-            selectedGroups.clear();
+
+            selectionManager.clearSelection();
             redrawCanvas();
         });
 
         ungroupButton.setOnAction(event -> {
-            if(selectedGroups.isEmpty())
+            if(!selectionManager.canUngroup())
                 statusPane.updateStatus("Para desagrupar primero seleccione un grupo");
             else{
-                for(DrawableGroup group : selectedGroups){
-                    if(group.size() != 1){
-                        for(DrawableFigure<? extends Figure> figure : group.getFigures()){
-                            DrawableGroup groupToAdd = new DrawableGroup(fillColorPicker.getValue());
-                            groupToAdd.add(figure);
-                            canvasState.addFigure(groupToAdd);
-                        }
-                        canvasState.deleteFigure(group);
-                    }
-                }
-
+                canvasState.addAllFigures(selectionManager.ungroupSelection());
+                canvasState.deleteFigures(selectionManager.getSelection());
             }
-            selectedGroups.clear();
+
+            selectionManager.clearSelection();
             redrawCanvas();
         });
 
@@ -316,24 +279,11 @@ public class PaintPane extends BorderPane {
         setBottom(tagsBox);
     }
 
-    /*
-       private void performAction(Runnable action){
-       if (selectedFigure !=null){
-       action.run();
-       selectedFigure = null;
-       redrawCanvas();
-       }
-       }*/
-
     void redrawCanvas() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for(DrawableGroup figure : canvasState.figures()) {
-            if(selectedGroups.contains(figure)) {
-                gc.setStroke(Color.RED);
-            } else {
-                gc.setStroke(lineColor);
-            }
-            figure.draw(gc);
+        for(DrawableGroup group : canvasState.figures()) {
+            gc.setStroke(selectionManager.isSelected(group) ? Color.RED : lineColor);
+            group.draw(gc);
         }
     }
 }
