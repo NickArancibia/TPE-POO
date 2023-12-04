@@ -1,8 +1,5 @@
 package frontend;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import backend.CanvasState;
 import backend.model.*;
 import frontend.model.*;
