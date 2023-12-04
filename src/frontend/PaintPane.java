@@ -177,6 +177,8 @@ public class PaintPane extends BorderPane {
             StringBuilder label = new StringBuilder();
             for(DrawableGroup figure : canvasState.figures()) {
                 if(figure.pointInFigure(eventPoint)) {
+			if(!addedFigureToSelection)
+                            selectionManager.clearSelection();
                     found = true;
                     label.append(figure.toString());
                 }
@@ -186,6 +188,7 @@ public class PaintPane extends BorderPane {
             } else {
                 statusPane.updateStatus(eventPoint.toString());
             }
+		addedFigureToSelection = false;
         });
 
         canvas.setOnMouseClicked(event -> {
