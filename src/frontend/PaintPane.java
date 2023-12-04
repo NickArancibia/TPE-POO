@@ -38,6 +38,8 @@ public class PaintPane extends BorderPane {
 	ToggleButton squareButton = new ToggleButton("Cuadrado");
 	ToggleButton ellipseButton = new ToggleButton("Elipse");
 	ToggleButton deleteButton = new ToggleButton("Borrar");
+	ToggleButton groupButton = new ToggleButton("Agrupar");
+	ToggleButton ungroupButton = new ToggleButton("Desagrupar");
 	ToggleButton rotateButton = new ToggleButton("Girar D");
 	ToggleButton flipVButton = new ToggleButton("Voltear V");
 	ToggleButton flipHButton = new ToggleButton("Voltear H");
@@ -62,7 +64,7 @@ public class PaintPane extends BorderPane {
 	Point startPoint;
 
 	// Seleccionar una figura
-	DrawableGroup selectedFigure;
+	List<DrawableGroup> selectedGroups = new ArrayList<>();
 
 	// StatusBar
 	StatusPane statusPane;
@@ -70,7 +72,7 @@ public class PaintPane extends BorderPane {
 	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
-		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, rotateButton, flipVButton, flipHButton, scaleUpButton, scaleDownButton, deleteButton};
+		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, groupButton, ungroupButton, rotateButton, flipVButton, flipHButton, scaleUpButton, scaleDownButton, deleteButton};
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
 			tool.setMinWidth(90);
@@ -103,20 +105,20 @@ public class PaintPane extends BorderPane {
 		gc.setLineWidth(1);
 
 		drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
-			if (selectedFigure != null)
-				selectedFigure.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
+			for (DrawableGroup group : selectedGroups)
+				group.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
 			redrawCanvas();
 		});
 
 		drawPropertiesPane.getGradientCheckBox().setOnAction(e -> {
-			if (selectedFigure != null)
-				selectedFigure.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
+			for (DrawableGroup group : selectedGroups)
+				group.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
 			redrawCanvas();
 		});
 
 		drawPropertiesPane.getBevelCheckBox().setOnAction(e -> {
-			if (selectedFigure != null)
-				selectedFigure.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
+			for (DrawableGroup group : selectedGroups)
+				group.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
 			redrawCanvas();
 		});
 
@@ -146,6 +148,13 @@ public class PaintPane extends BorderPane {
 				double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
 				double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
 				newFigure = new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue());
+			} else if (selectionButton.isSelected() && !canvasState.figures().isEmpty()){
+				for(DrawableGroup group : canvasState.figures()){
+					if(group.isInRectangle(startPoint, endPoint))
+						selectedGroups.add(group);
+				}
+				redrawCanvas();
+				return;
 			} else {
 				return;
 			}
@@ -181,7 +190,9 @@ public class PaintPane extends BorderPane {
 				for (DrawableGroup figure : canvasState.figures()) {
 					if(figure.pointInFigure(eventPoint)) {
 						found = true;
-						selectedFigure = figure;
+						// Decidir si este clear deberia ocurrir o no
+						//selectedGroups.clear(); 
+						selectedGroups.add(figure);
 						drawPropertiesPane.setState(figure.isShadowToggled(), figure.isGradientToggled(), figure.isBevelToggled());
 						label.append(figure.toString());
 					}
@@ -189,7 +200,7 @@ public class PaintPane extends BorderPane {
 				if (found) {
 					statusPane.updateStatus(label.toString());
 				} else {
-					selectedFigure = null;
+					selectedGroups.clear();
 					statusPane.updateStatus("Ninguna figura encontrada");
 				}
 				redrawCanvas();
@@ -201,42 +212,98 @@ public class PaintPane extends BorderPane {
 				Point eventPoint = new Point(event.getX(), event.getY());
 				double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
 				double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
-				if (selectedFigure != null){
-					selectedFigure.move(diffX, diffY);
+				for (DrawableGroup group : selectedGroups){
+					group.move(diffX, diffY);
 				}
 				redrawCanvas();
 			}
 		});
 
 		deleteButton.setOnAction(event -> {
-			if(selectedFigure != null)
-				performAction(() -> canvasState.deleteFigure(selectedFigure));
+			for (DrawableGroup group : selectedGroups)
+				canvasState.deleteFigure(group);
+			selectedGroups.clear();
+				 // performAction(() -> canvasState.deleteFigure(selectedFigure));
 		});
 
 		scaleUpButton.setOnAction(event -> {
-			if(selectedFigure != null)
-				performAction(selectedFigure::scaleUp);
+			for (DrawableGroup group : selectedGroups)
+				group.scaleUp();
+			selectedGroups.clear();
+			
+			//	performAction(selectedFigure::scaleUp);
 		});
 
 		scaleDownButton.setOnAction(event -> {
-			if (selectedFigure != null)
-				performAction(selectedFigure::scaleDown);
+			for (DrawableGroup group : selectedGroups)
+				group.scaleDown();
+			selectedGroups.clear();
+				// performAction(selectedFigure::scaleDown);
 		});
 
 		flipHButton.setOnAction(event -> {
-			if (selectedFigure != null)
-				performAction(selectedFigure::flipH);
+			for (DrawableGroup group : selectedGroups)
+				group.flipH;
+			selectedGroups.clear();
+				
+			// performAction(selectedFigure::flipH);
 		});
 
 		flipVButton.setOnAction(event -> {
-			if (selectedFigure != null)
-				performAction(selectedFigure::flipV);
+			for (DrawableGroup group : selectedGroups)
+				group.flipV();
+			selectedGroups.clear();
+
+			// performAction(selectedFigure::flipV);
 		});
 
 		rotateButton.setOnAction(event -> {
-			if (selectedFigure != null)
-				performAction(selectedFigure::rotate);
+			for (DrawableGroup group : selectedGroups)
+				group.rotate();
+			selectedGroups.clear();
+			redrawCanvas();
+
+			// performAction(selectedFigure::rotate);
 		});
+
+	groupButton.setOnAction(event -> {
+		if(selectedGroups.size() == 1)
+			statusPane.updateStatus("No se puede agrupar un unico grupo");
+		else if(selectedGroups.isEmpty())
+			statusPane.updateStatus("Para agrupar es necesario seleccionar 2 o mas grupos");
+		else{
+			DrawableGroup newGroup = new DrawableGroup(fillColorPicker.getValue());
+			List<DrawableGroup> toRemove = new ArrayList<>();
+			for(DrawableGroup group : canvasState.figures()){
+				if(selectedGroups.contains(group)){
+					newGroup.addAll(group);
+					toRemove.add(group);
+				}
+			}
+			canvasState.addFigure(newGroup);
+			canvasState.figures().removeAll(toRemove);
+		}
+		selectedGroups.clear();
+		redrawCanvas();
+	});
+
+	ungroupButton.setOnAction(event -> {
+		if(selectedGroups.isEmpty())
+			statusPane.updateStatus("Para desagrupar primero seleccione un grupo");
+		else{
+			for(DrawableGroup group : selectedGroups){
+				if(group.size() != 1){
+					for(DrawableFigure figure : group.getFigures()){
+						canvasState.addFigure(new DrawableGroup(fillColorPicker.getValue()).add(figure));
+					}
+					canvasState.deleteFigure(group);
+				}
+			}
+	
+		}
+		selectedGroups.clear();
+		redrawCanvas();
+	});
 
 		setLeft(buttonsBox);
 		setRight(canvas);
@@ -254,7 +321,7 @@ public class PaintPane extends BorderPane {
 	void redrawCanvas() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 		for(DrawableGroup figure : canvasState.figures()) {
-			if(figure == selectedFigure) {
+			if(selectedGroups.contains(figure)) {
 				gc.setStroke(Color.RED);
 			} else {
 				gc.setStroke(lineColor);
