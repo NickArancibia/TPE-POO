@@ -16,6 +16,9 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
 
     public DrawableGroup() {
         super(new FigureGroup<DrawableFigure<? extends Figure>>(), Color.YELLOW);
+        setShadowToggled(true);
+        setGradientToggled(true);
+        setBevelToggled(true);
     }
 
     DrawableGroup(DrawableFigure<? extends Figure> figure) {
@@ -27,9 +30,9 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     }
 
     private void updateProperties(DrawableFigure<? extends Figure> figure) {
-        setShadowToggled(isShadowToggled() & figure.isShadowToggled());
-        setGradientToggled(isGradientToggled() & figure.isGradientToggled());
-        setBevelToggled(isBevelToggled() & figure.isBevelToggled());
+        super.setShadowToggled(isShadowToggled() & figure.isShadowToggled());
+        super.setGradientToggled(isGradientToggled() & figure.isGradientToggled());
+        super.setBevelToggled(isBevelToggled() & figure.isBevelToggled());
     }
 
     public void add(DrawableFigure<? extends Figure> figure){
