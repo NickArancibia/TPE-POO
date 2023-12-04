@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import backend.model.Point;
 import frontend.model.DrawableGroup;
@@ -13,10 +14,17 @@ import frontend.model.DrawableGroup;
 public class SelectionManager {
     Set<DrawableGroup> selectedGroups = new HashSet<>();
 
-    public void addToSelectionIfFigureInSelection(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight) {
-        for(DrawableGroup group : figures)
-            if(group.isFigureInRectangle(topLeft, bottomRight))
+    public boolean addToSelectionIfFigureInSelection(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight) {
+        boolean addedFigures = false;
+
+        for(DrawableGroup group : figures) {
+            if(group.isFigureInRectangle(topLeft, bottomRight)) {
                 selectedGroups.add(group);
+                addedFigures = true;
+            }
+        }
+
+        return addedFigures;
     }
 
     public void add(DrawableGroup group) {
@@ -66,5 +74,46 @@ public class SelectionManager {
     public void applyActionToSelection(Consumer<DrawableGroup> consumer) {
         for (DrawableGroup group : selectedGroups) 
             consumer.accept(group);
+    }
+
+    private boolean isToggled(Function<DrawableGroup, Boolean> toggled) {
+        for (DrawableGroup group : selectedGroups)
+            if (!toggled.apply(group))
+                return false;
+
+        return true;
+    }
+
+    private boolean someToggled(Function<DrawableGroup, Boolean> toggled) {
+        int count = 0;
+        for (DrawableGroup group: selectedGroups)
+            if (toggled.apply(group))
+                count++;
+
+        return count != 0 && count != selectedGroups.size();
+    }
+
+    public boolean isShadowToggled() {
+        return isToggled((figure) -> figure.isShadowToggled());
+    }
+
+    public boolean someShadowToggled() {
+        return someToggled((figure) -> figure.isShadowToggled());
+    }
+
+    public boolean isGradientToggled() {
+        return isToggled((figure) -> figure.isGradientToggled());
+    }
+
+    public boolean someGradientToggled() {
+        return someToggled((figure) -> figure.isGradientToggled());
+    }
+
+    public boolean isBevelToggled() {
+        return isToggled((figure) -> figure.isBevelToggled());
+    }
+
+    public boolean someBevelToggled() {
+        return someToggled((figure) -> figure.isBevelToggled());
     }
 }

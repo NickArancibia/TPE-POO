@@ -3,6 +3,8 @@ package frontend.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import backend.model.Figure;
 import backend.model.FigureGroup;
@@ -16,33 +18,19 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
 
     public DrawableGroup() {
         super(new FigureGroup<DrawableFigure<? extends Figure>>(), Color.YELLOW);
-        setShadowToggled(true);
-        setGradientToggled(true);
-        setBevelToggled(true);
     }
 
     DrawableGroup(DrawableFigure<? extends Figure> figure) {
         super(new FigureGroup<DrawableFigure<? extends Figure>>(), figure.getColor());
-        setShadowToggled(true);
-        setGradientToggled(true);
-        setBevelToggled(true);
         add(figure);
-    }
-
-    private void updateProperties(DrawableFigure<? extends Figure> figure) {
-        super.setShadowToggled(isShadowToggled() & figure.isShadowToggled());
-        super.setGradientToggled(isGradientToggled() & figure.isGradientToggled());
-        super.setBevelToggled(isBevelToggled() & figure.isBevelToggled());
     }
 
     public void add(DrawableFigure<? extends Figure> figure){
         baseFigure.add(figure);
-        updateProperties(figure);
     }
 
     public void addAll(DrawableGroup group){
         baseFigure.addAll(group.baseFigure);
-        updateProperties(group);
     }
 
     public void addAll(Collection<DrawableGroup> groups){
@@ -67,33 +55,71 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
         return baseFigure.size();
     }
 
-    @Override
-    public void draw(GraphicsContext gc) {
+    private void applyConsumer(Consumer<DrawableFigure<? extends Figure>> consumer) {
         for(DrawableFigure<? extends Figure> figure : baseFigure){
-            figure.draw(gc);
+            consumer.accept(figure);
         }
     }
+
+    @Override
+    public void draw(GraphicsContext gc) {
+        applyConsumer((figure) -> figure.draw(gc));
+    }
+
     @Override
     public void setGradientToggled(boolean toggle) {
-        for(DrawableFigure<? extends Figure> figure : baseFigure){
-            figure.setGradientToggled(toggle);
-        }
-        super.setGradientToggled(toggle);
+        applyConsumer((figure) -> figure.setGradientToggled(toggle));
     }
 
     @Override
     public void setShadowToggled(boolean toggle) {
-        for(DrawableFigure<? extends Figure> figure : baseFigure){
-            figure.setShadowToggled(toggle);
-        }
-        super.setShadowToggled(toggle);
+        applyConsumer((figure) -> figure.setShadowToggled(toggle));
     }
 
     @Override
     public void setBevelToggled(boolean toggle) {
-        for(DrawableFigure<? extends Figure> figure : baseFigure){
-            figure.setBevelToggled(toggle);
-        }
-        super.setBevelToggled(toggle);
+        applyConsumer((figure) -> figure.setBevelToggled(toggle));
+    }
+
+    private boolean isToggled(Function<DrawableFigure<? extends Figure>, Boolean> toggled) {
+        for(DrawableFigure<? extends Figure> figure : baseFigure)
+            if (!toggled.apply(figure)) return false;
+
+        return true;
+    }
+
+    private boolean someToggled(Function<DrawableFigure<? extends Figure>, Boolean> toggled) {
+        int count = 0;
+        for(DrawableFigure<? extends Figure> figure : baseFigure)
+            if (toggled.apply(figure)) count++;
+
+        return count != 0 && count != baseFigure.size();
+    }
+
+    @Override
+    public boolean isShadowToggled() {
+        return isToggled((figure) -> figure.isShadowToggled());
+    }
+
+    public boolean someShadowToggled() {
+        return someToggled((figure) -> figure.isShadowToggled());
+    }
+
+    @Override
+    public boolean isGradientToggled() {
+        return isToggled((figure) -> figure.isGradientToggled());
+    }
+
+    public boolean someGradientToggled() {
+        return someToggled((figure) -> figure.isGradientToggled());
+    }
+
+    @Override
+    public boolean isBevelToggled() {
+        return isToggled((figure) -> figure.isBevelToggled());
+    }
+
+    public boolean someBevelToggled() {
+        return someToggled((figure) -> figure.isBevelToggled());
     }
 }

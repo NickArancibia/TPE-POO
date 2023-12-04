@@ -158,9 +158,15 @@ public class PaintPane extends BorderPane {
                 double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
                 newFigure = new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue());
             } else if (selectionButton.isSelected()){
-                if(!movingFigures){
-                    selectionManager.addToSelectionIfFigureInSelection(canvasState.figures(), startPoint, endPoint);
+                if(!movingFigures) {
+                    boolean addedFigures = selectionManager.addToSelectionIfFigureInSelection(canvasState.figures(), startPoint, endPoint);
+
+                    if (addedFigures) {
+                        drawPropertiesPane.setState(selectionManager.isShadowToggled(), selectionManager.isGradientToggled(), selectionManager.isBevelToggled());
+                        drawPropertiesPane.setSomeState(selectionManager.someShadowToggled(), selectionManager.someGradientToggled(), selectionManager.someBevelToggled());
+                    }
                 }
+                
                 redrawCanvas();
                 return;
             } else {
@@ -205,6 +211,7 @@ public class PaintPane extends BorderPane {
                         found = true;
                         selectionManager.add(figure);
                         drawPropertiesPane.setState(figure.isShadowToggled(), figure.isGradientToggled(), figure.isBevelToggled());
+                        drawPropertiesPane.setSomeState(figure.someShadowToggled(), figure.someGradientToggled(), figure.someBevelToggled());
                         label.append(figure.toString());
                     }
                 }

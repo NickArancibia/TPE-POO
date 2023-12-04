@@ -40,6 +40,12 @@ public class ShapeDrawPropertiesPane extends BorderPane {
         bevelCheckBox.setSelected(isBevelToggled);
     }
 
+    public void setSomeState(boolean someShadowToggled, boolean someGradientToggled, boolean someBevelToggled) {
+        shadowCheckBox.indeterminateProperty().set(someShadowToggled);
+        gradientCheckBox.indeterminateProperty().set(someGradientToggled);
+        bevelCheckBox.indeterminateProperty().set(someBevelToggled);
+    }
+
     public CheckBox getShadowCheckBox() {
         return shadowCheckBox;
     }
