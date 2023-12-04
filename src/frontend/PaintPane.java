@@ -40,14 +40,14 @@ public class PaintPane extends BorderPane {
 	ToggleButton circleButton = new ToggleButton("Círculo");
 	ToggleButton squareButton = new ToggleButton("Cuadrado");
 	ToggleButton ellipseButton = new ToggleButton("Elipse");
-	ToggleButton deleteButton = new ToggleButton("Borrar");
-	ToggleButton groupButton = new ToggleButton("Agrupar");
-	ToggleButton ungroupButton = new ToggleButton("Desagrupar");
-	ToggleButton rotateButton = new ToggleButton("Girar D");
-	ToggleButton flipVButton = new ToggleButton("Voltear V");
-	ToggleButton flipHButton = new ToggleButton("Voltear H");
-	ToggleButton scaleUpButton = new ToggleButton("Escalar +");
-	ToggleButton scaleDownButton = new ToggleButton("Escalar -");
+	Button deleteButton = new Button("Borrar");
+	Button groupButton = new Button("Agrupar");
+	Button ungroupButton = new Button("Desagrupar");
+	Button rotateButton = new Button("Girar D");
+	Button flipVButton = new Button("Voltear V");
+	Button flipHButton = new Button("Voltear H");
+	Button scaleUpButton = new Button("Escalar +");
+	Button scaleDownButton = new Button("Escalar -");
 
 	Label tagsLabel = new Label("Etiquetas");
 	TextArea tagsArea = new TextArea();
@@ -75,11 +75,16 @@ public class PaintPane extends BorderPane {
 	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
-		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, groupButton, ungroupButton, rotateButton, flipVButton, flipHButton, scaleUpButton, scaleDownButton, deleteButton};
-		ToggleGroup tools = new ToggleGroup();
-		for (ToggleButton tool : toolsArr) {
+		ToggleButton[] toggleToolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton};
+		Button[] toolsArr = {groupButton, ungroupButton, rotateButton, flipVButton, flipHButton, scaleUpButton, scaleDownButton, deleteButton};
+		ToggleGroup toggleTools = new ToggleGroup();
+		for (ToggleButton tool : toggleToolsArr) {
 			tool.setMinWidth(90);
-			tool.setToggleGroup(tools);
+			tool.setToggleGroup(toggleTools);
+			tool.setCursor(Cursor.HAND);
+		}
+		for (Button tool : toolsArr){
+			tool.setMinWidth(90);
 			tool.setCursor(Cursor.HAND);
 		}
 		tagsArea.setMaxHeight(50);
@@ -90,6 +95,7 @@ public class PaintPane extends BorderPane {
 		showAllButton.setCursor(Cursor.HAND);
 		filterTagButton.setCursor(Cursor.HAND);
 		VBox buttonsBox = new VBox(5);
+		buttonsBox.getChildren().addAll(toggleToolsArr);
 		buttonsBox.getChildren().addAll(toolsArr);
 		buttonsBox.getChildren().add(fillColorPicker);
 		buttonsBox.getChildren().add(tagsLabel);
