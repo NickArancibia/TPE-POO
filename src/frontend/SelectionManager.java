@@ -13,11 +13,16 @@ import frontend.model.DrawableGroup;
 public class SelectionManager {
     Set<DrawableGroup> selectedGroups = new HashSet<>();
 
-    public void addToSelectionIfFigureInSelection(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight) {
-        for(DrawableGroup group : figures){
-            if(group.isFigureInRectangle(topLeft, bottomRight))
+    public boolean addToSelectionIfFigureInSelection(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight) {
+        boolean addedFigureToSelection = false;
+
+        for(DrawableGroup group : figures)
+            if(group.isFigureInRectangle(topLeft, bottomRight)) {
                 selectedGroups.add(group);
-        }
+                addedFigureToSelection = true;
+            }
+
+        return addedFigureToSelection;
     }
 
     public void add(DrawableGroup group) {

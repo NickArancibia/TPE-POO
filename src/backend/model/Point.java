@@ -21,8 +21,8 @@ public class Point {
         y += deltaY;
     }
 
-    public boolean isPointInRectangle(Point startPoint, Point endPoint){
-        return x >= startPoint.x && x <= endPoint.x && y <= startPoint.y && y >= endPoint.y;
+    public boolean isPointInRectangle(Point topLeft, Point bottomRight){
+        return x >= topLeft.x && x <= bottomRight.x && y >= topLeft.y && y <= bottomRight.y;
     }
 
     @Override

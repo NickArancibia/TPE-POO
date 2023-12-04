@@ -68,6 +68,7 @@ public class PaintPane extends BorderPane {
 
     // Seleccionar una figura
     SelectionManager selectionManager = new SelectionManager();
+    boolean addedFigureToSelection = false;
 
     // StatusBar
     StatusPane statusPane;
@@ -155,8 +156,8 @@ public class PaintPane extends BorderPane {
                 double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
                 double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
                 newFigure = new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue());
-            } else if (selectionButton.isSelected() && !canvasState.figures().isEmpty()){
-                selectionManager.addToSelectionIfFigureInSelection(canvasState.figures(), startPoint, endPoint);
+            } else if (selectionButton.isSelected()){
+                addedFigureToSelection = selectionManager.addToSelectionIfFigureInSelection(canvasState.figures(), startPoint, endPoint);
                 redrawCanvas();
                 return;
             } else {
@@ -203,11 +204,12 @@ public class PaintPane extends BorderPane {
                 if (found) {
                     statusPane.updateStatus(label.toString());
                 } else {
-                    selectionManager.clearSelection();
+                    if (!addedFigureToSelection) selectionManager.clearSelection();
                     statusPane.updateStatus("Ninguna figura encontrada");
                 }
                 redrawCanvas();
             }
+            addedFigureToSelection = false;
         });
 
         canvas.setOnMouseDragged(event -> {
