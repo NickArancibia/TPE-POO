@@ -225,27 +225,27 @@ public class PaintPane extends BorderPane {
         });
 
         scaleUpButton.setOnAction(event -> {
-            selectionManager.applyActionToSelection((group) -> group.scaleUp());
+            selectionManager.applyActionToSelection(DrawableGroup::scaleUp);
             redrawCanvas();
         });
 
         scaleDownButton.setOnAction(event -> {
-            selectionManager.applyActionToSelection((group) -> group.scaleDown());
+            selectionManager.applyActionToSelection(DrawableGroup::scaleDown);
             redrawCanvas();
         });
 
         flipHButton.setOnAction(event -> {
-            selectionManager.applyActionToSelection((group) -> group.flipH());
+            selectionManager.applyActionToSelection(DrawableGroup::flipH);
             redrawCanvas();
         });
 
         flipVButton.setOnAction(event -> {
-            selectionManager.applyActionToSelection((group) -> group.flipV());
+            selectionManager.applyActionToSelection(DrawableGroup::flipV);
             redrawCanvas();
         });
 
         rotateButton.setOnAction(event -> {
-            selectionManager.applyActionToSelection((group) -> group.rotate());
+            selectionManager.applyActionToSelection(DrawableGroup::rotate);
             redrawCanvas();
         });
 
