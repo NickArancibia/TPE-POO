@@ -1,5 +1,8 @@
 package frontend;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import backend.CanvasState;
 import backend.model.*;
 import frontend.model.*;
@@ -150,7 +153,7 @@ public class PaintPane extends BorderPane {
 				newFigure = new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue());
 			} else if (selectionButton.isSelected() && !canvasState.figures().isEmpty()){
 				for(DrawableGroup group : canvasState.figures()){
-					if(group.isInRectangle(startPoint, endPoint))
+					if(group.isFigureInRectangle(startPoint, endPoint))
 						selectedGroups.add(group);
 				}
 				redrawCanvas();
