@@ -162,6 +162,9 @@ public class PaintPane extends BorderPane {
             }
             DrawableGroup newGroup = new DrawableGroup(fillColorPicker.getValue());
             newGroup.add(newFigure);
+            newGroup.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
+            newGroup.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
+            newGroup.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
             canvasState.addFigure(newGroup);
             startPoint = null;
             selectionManager.clearSelection();

@@ -19,9 +19,9 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     }
 
     private void updateProperties(DrawableFigure<? extends Figure> figure) {
-        setShadowToggled(isShadowToggled() | figure.isShadowToggled());
-        setGradientToggled(isGradientToggled() | figure.isGradientToggled());
-        setBevelToggled(isBevelToggled() | figure.isBevelToggled());
+        setShadowToggled(isShadowToggled() & figure.isShadowToggled());
+        setGradientToggled(isGradientToggled() & figure.isGradientToggled());
+        setBevelToggled(isBevelToggled() & figure.isBevelToggled());
     }
 
     public void add(DrawableFigure<? extends Figure> figure){
