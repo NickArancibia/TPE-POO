@@ -18,12 +18,20 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
          super(new FigureGroup<DrawableFigure<? extends Figure>>(), color);
     }
 
+    private void updateProperties(DrawableFigure<? extends Figure> figure) {
+        setShadowToggled(isShadowToggled() | figure.isShadowToggled());
+        setGradientToggled(isGradientToggled() | figure.isGradientToggled());
+        setBevelToggled(isBevelToggled() | figure.isBevelToggled());
+    }
+
     public void add(DrawableFigure<? extends Figure> figure){
         baseFigure.add(figure);
+        updateProperties(figure);
     }
 
     public void addAll(DrawableGroup group){
         baseFigure.addAll(group.baseFigure);
+        updateProperties(group);
     }
 
     public void addAll(Collection<DrawableGroup> groups){
