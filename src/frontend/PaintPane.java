@@ -296,8 +296,10 @@ public class PaintPane extends BorderPane {
 		else{
 			for(DrawableGroup group : selectedGroups){
 				if(group.size() != 1){
-					for(DrawableFigure figure : group.getFigures()){
-						canvasState.addFigure(new DrawableGroup(fillColorPicker.getValue()).add(figure));
+					for(DrawableFigure<? extends Figure> figure : group.getFigures()){
+						DrawableGroup groupToAdd = new DrawableGroup(fillColorPicker.getValue());
+						groupToAdd.add(figure);
+						canvasState.addFigure(groupToAdd);
 					}
 					canvasState.deleteFigure(group);
 				}
