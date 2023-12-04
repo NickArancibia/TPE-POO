@@ -13,16 +13,10 @@ import frontend.model.DrawableGroup;
 public class SelectionManager {
     Set<DrawableGroup> selectedGroups = new HashSet<>();
 
-    public boolean addToSelectionIfFigureInSelection(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight) {
-        boolean addedFigureToSelection = false;
-
+    public void addToSelectionIfFigureInSelection(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight) {
         for(DrawableGroup group : figures)
-            if(group.isFigureInRectangle(topLeft, bottomRight)) {
+            if(group.isFigureInRectangle(topLeft, bottomRight))
                 selectedGroups.add(group);
-                addedFigureToSelection = true;
-            }
-
-        return addedFigureToSelection;
     }
 
     public void add(DrawableGroup group) {
@@ -35,6 +29,10 @@ public class SelectionManager {
 
     public boolean canGroup() {
         return selectedGroups.size() >= 2;
+    }
+
+    public boolean noSelection(){
+        return selectedGroups.isEmpty();
     }
 
     public boolean canUngroup() {
