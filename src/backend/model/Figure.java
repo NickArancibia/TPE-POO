@@ -4,9 +4,9 @@ public interface Figure {
     boolean pointInFigure(Point p);
     void move(double deltaX, double deltaY);
     boolean isFigureInRectangle(Point topLeft, Point bottomRight);
-    void scaleGrowth();
-    void scaleReduce();
-    void turnAroundV();
-    void turnAroundH();
-    void spin();
+    void scaleUp();
+    void scaleDown();
+    void flipV();
+    void flipH();
+    void rotate();
 }

@@ -45,11 +45,11 @@ public class Rectangle implements Figure {
         return Math.abs(topLeft.getY() - bottomRight.getY());
     }
 
-    public void scaleGrowth(){
+    public void scaleUp(){
         scale(0.25);
     }
 
-    public void scaleReduce(){
+    public void scaleDown(){
         scale(-0.25);
     }
 
@@ -61,12 +61,12 @@ public class Rectangle implements Figure {
     }
 
     @Override
-    public void turnAroundH() {
+    public void flipH() {
         turnAround(getBase(),0);
     }
 
     @Override
-    public void turnAroundV() {
+    public void flipV() {
         turnAround(0,getHeight());
 
     }
@@ -77,7 +77,7 @@ public class Rectangle implements Figure {
     }
 
     @Override
-    public void spin() {
+    public void rotate() {
        double delta = (getBase() - getHeight())/2;
        topLeft.move(delta,-delta);
        bottomRight.move(-delta,delta);

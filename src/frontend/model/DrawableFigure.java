@@ -55,16 +55,16 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
     }
 
     @Override
-    public void scaleGrowth(){baseFigure.scaleGrowth();}
+    public void scaleUp(){baseFigure.scaleUp();}
 
     @Override
-    public void scaleReduce(){baseFigure.scaleReduce();}
+    public void scaleDown(){baseFigure.scaleDown();}
     @Override
-    public void spin(){baseFigure.spin();}
+    public void rotate(){baseFigure.rotate();}
     @Override
-    public void turnAroundV(){baseFigure.turnAroundV();}
+    public void flipV(){baseFigure.flipV();}
     @Override
-    public void turnAroundH(){baseFigure.turnAroundH();}
+    public void flipH(){baseFigure.flipH();}
     @Override
     public boolean isFigureInRectangle(Point topLeft, Point bottomRight) {
         return baseFigure.isFigureInRectangle(topLeft, bottomRight);

@@ -172,15 +172,15 @@ public class PaintPane extends BorderPane {
 
 		deleteButton.setOnAction(event -> performAction(() -> canvasState.deleteFigure(selectedFigure)));
 
-		scaleGrowButton.setOnAction(event -> performAction(selectedFigure::scaleGrowth));
+		scaleGrowButton.setOnAction(event -> performAction(selectedFigure::scaleUp));
 
-		scaleReduceButton.setOnAction(event -> performAction(selectedFigure::scaleReduce));
+		scaleReduceButton.setOnAction(event -> performAction(selectedFigure::scaleDown));
 
-		turnAroundHButton.setOnAction(event -> performAction(selectedFigure::turnAroundH));
+		turnAroundHButton.setOnAction(event -> performAction(selectedFigure::flipH));
 
-		turnAroundVButton.setOnAction(event -> performAction(selectedFigure::turnAroundV));
+		turnAroundVButton.setOnAction(event -> performAction(selectedFigure::flipV));
 
-		spinButton.setOnAction(event -> performAction(selectedFigure::spin));
+		spinButton.setOnAction(event -> performAction(selectedFigure::rotate));
 
 		setLeft(buttonsBox);
 		setRight(canvas);

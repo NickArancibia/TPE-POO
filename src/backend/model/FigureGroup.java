@@ -30,37 +30,37 @@ public class FigureGroup<T extends Figure> extends ArrayList<T> implements Figur
     }
 
     @Override
-    public void scaleGrowth() {
+    public void scaleUp() {
         for(Figure figure : this){
-            figure.scaleGrowth();
+            figure.scaleUp();
         }
     }
 
     @Override
-    public void scaleReduce() {
+    public void scaleDown() {
         for(Figure figure : this){
-            figure.scaleReduce();
+            figure.scaleDown();
         }
     }
 
     @Override
-    public void turnAroundH() {
+    public void flipH() {
         for(Figure figure : this){
-            figure.turnAroundH();
+            figure.flipH();
         }
     }
 
     @Override
-    public void turnAroundV() {
+    public void flipV() {
         for(Figure figure : this){
-            figure.turnAroundV();
+            figure.flipV();
         }
     }
 
     @Override
-    public void spin() {
+    public void rotate() {
         for(Figure figure : this){
-            figure.spin();
+            figure.rotate();
         }
     }
 

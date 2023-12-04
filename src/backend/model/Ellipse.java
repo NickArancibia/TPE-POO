@@ -44,11 +44,11 @@ public class Ellipse implements Figure {
                 Math.abs(topLeft.getY() - bottomRight.getY()) >= sMinorAxis;
     }
     @Override
-    public void scaleGrowth() {
+    public void scaleUp() {
         scale(0.25);
     }
     @Override
-    public void scaleReduce() {
+    public void scaleDown() {
         scale(-0.25);
     }
 
@@ -57,15 +57,15 @@ public class Ellipse implements Figure {
         sMinorAxis += sMinorAxis*factor;
     }
     @Override
-    public void turnAroundV(){
+    public void flipV(){
         centerPoint.move(0,sMinorAxis);
     }
     @Override
-    public void turnAroundH(){
+    public void flipH(){
         centerPoint.move(sMayorAxis,0);
     }
     @Override
-    public void spin(){
+    public void rotate(){
         double auxiliarAxis = sMayorAxis;
         sMayorAxis = sMinorAxis;
         sMinorAxis = auxiliarAxis;
