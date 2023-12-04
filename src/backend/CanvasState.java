@@ -26,6 +26,6 @@ public class CanvasState <T extends Figure> {
     }
 
     public Collection<T> figures() {
-        return new ArrayList<>(list);
+        return list;
     }
 }
