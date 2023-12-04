@@ -170,56 +170,28 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-		deleteButton.setOnAction(event -> {
-			if (selectedFigure != null) {
-				canvasState.deleteFigure(selectedFigure);
-				selectedFigure = null;
-				redrawCanvas();
-			}
-		});
+		deleteButton.setOnAction(event -> performAction(() -> canvasState.deleteFigure(selectedFigure)));
 
-		scaleGrowButton.setOnAction(event -> {
-			if (selectedFigure != null) {
-				selectedFigure.scaleGrowth();
-				selectedFigure = null;
-				redrawCanvas();
-			}
-		});
+		scaleGrowButton.setOnAction(event -> performAction(selectedFigure::scaleGrowth));
 
-		scaleReduceButton.setOnAction(event -> {
-			if (selectedFigure != null) {
-				selectedFigure.scaleReduce();
-				selectedFigure = null;
-				redrawCanvas();
-			}
-		});
+		scaleReduceButton.setOnAction(event -> performAction(selectedFigure::scaleReduce));
 
-		turnAroundHButton.setOnAction(event -> {
-			if (selectedFigure != null) {
-				selectedFigure.turnAroundH();
-				selectedFigure = null;
-				redrawCanvas();
-			}
-		});
+		turnAroundHButton.setOnAction(event -> performAction(selectedFigure::turnAroundH));
 
-		turnAroundVButton.setOnAction(event ->{
-			if (selectedFigure !=null){
-				selectedFigure.turnAroundV();
-				selectedFigure = null;
-				redrawCanvas();
-			}
-		});
+		turnAroundVButton.setOnAction(event -> performAction(selectedFigure::turnAroundV));
 
-		spinButton.setOnAction(event ->{
-			if (selectedFigure !=null){
-				selectedFigure.spin();
-				selectedFigure = null;
-				redrawCanvas();
-			}
-		});
+		spinButton.setOnAction(event -> performAction(selectedFigure::spin));
 
 		setLeft(buttonsBox);
 		setRight(canvas);
+	}
+
+	private void performAction(Runnable action){
+		if (selectedFigure !=null){
+			action.run();
+			selectedFigure = null;
+			redrawCanvas();
+		}
 	}
 
 	void redrawCanvas() {
