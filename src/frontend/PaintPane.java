@@ -246,7 +246,7 @@ public class PaintPane extends BorderPane {
 
 		flipHButton.setOnAction(event -> {
 			for (DrawableGroup group : selectedGroups)
-				group.flipH;
+				group.flipH();
 			selectedGroups.clear();
 				
 			// performAction(selectedFigure::flipH);
@@ -313,13 +313,14 @@ public class PaintPane extends BorderPane {
 		setBottom(tagsBox);
 	}
 
+	/*
 	private void performAction(Runnable action){
 		if (selectedFigure !=null){
 			action.run();
 			selectedFigure = null;
 			redrawCanvas();
 		}
-	}
+	}*/
 
 	void redrawCanvas() {
 		gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
