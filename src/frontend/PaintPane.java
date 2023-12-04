@@ -134,8 +134,6 @@ public class PaintPane extends BorderPane {
         });
 
         canvas.setOnMouseReleased(event -> {
-            if(!movingFigures)
-                selectionManager.clearSelection();
             Point endPoint = new Point(event.getX(), event.getY());
             if (startPoint == null) {
                 return;
@@ -159,6 +157,7 @@ public class PaintPane extends BorderPane {
                 newFigure = new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue());
             } else if (selectionButton.isSelected()){
                 if(!movingFigures) {
+                    selectionManager.clearSelection();
                     boolean addedFigures = selectionManager.addToSelectionIfFigureInSelection(canvasState.figures(), startPoint, endPoint);
 
                     if (addedFigures) {
@@ -198,7 +197,6 @@ public class PaintPane extends BorderPane {
             } else {
                 statusPane.updateStatus(eventPoint.toString());
             }
-            movingFigures = !selectionManager.noSelection();
         });
 
         canvas.setOnMouseClicked(event -> {
@@ -230,6 +228,7 @@ public class PaintPane extends BorderPane {
                 double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
                 double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
                 selectionManager.applyActionToSelection((group) -> group.move(diffX, diffY));
+                movingFigures = !selectionManager.noSelection();
                 redrawCanvas();
             }
         });
