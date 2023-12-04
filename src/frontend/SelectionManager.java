@@ -2,14 +2,16 @@ package frontend;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import backend.model.Point;
 import frontend.model.DrawableGroup;
 
 public class SelectionManager {
-    List<DrawableGroup> selectedGroups = new ArrayList<>();
+    Set<DrawableGroup> selectedGroups = new HashSet<>();
 
     public void addToSelectionIfFigureInSelection(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight) {
         for(DrawableGroup group : figures){
@@ -43,8 +45,9 @@ public class SelectionManager {
     public Collection<DrawableGroup> ungroupSelection() {
         List<DrawableGroup> ungrouped = new ArrayList<>();        
 
-        for (DrawableGroup group : selectedGroups) 
+        for (DrawableGroup group : selectedGroups) { 
             ungrouped.addAll(group.ungroup());
+        }
 
         return ungrouped;
     }
