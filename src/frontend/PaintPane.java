@@ -166,6 +166,7 @@ public class PaintPane extends BorderPane {
             newGroup.add(newFigure);
             canvasState.addFigure(newGroup);
             startPoint = null;
+            selectionManager.clearSelection();
             redrawCanvas();
         });
 
@@ -228,31 +229,26 @@ public class PaintPane extends BorderPane {
 
         scaleUpButton.setOnAction(event -> {
             selectionManager.applyActionToSelection((group) -> group.scaleUp());
-            selectionManager.clearSelection();
             redrawCanvas();
         });
 
         scaleDownButton.setOnAction(event -> {
             selectionManager.applyActionToSelection((group) -> group.scaleDown());
-            selectionManager.clearSelection();
             redrawCanvas();
         });
 
         flipHButton.setOnAction(event -> {
             selectionManager.applyActionToSelection((group) -> group.flipH());
-            selectionManager.clearSelection();
             redrawCanvas();
         });
 
         flipVButton.setOnAction(event -> {
             selectionManager.applyActionToSelection((group) -> group.flipV());
-            selectionManager.clearSelection();
             redrawCanvas();
         });
 
         rotateButton.setOnAction(event -> {
             selectionManager.applyActionToSelection((group) -> group.rotate());
-            selectionManager.clearSelection();
             redrawCanvas();
         });
 
