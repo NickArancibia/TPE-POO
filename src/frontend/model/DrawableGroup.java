@@ -15,8 +15,16 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
         baseFigure.add(figure);
     }
 
-    public void remove(DrawableFigure<? extends Figure> figure){
-        baseFigure.remove(figure);
+    public void addAll(DrawableGroup group){
+        baseFigure.addAll(group.baseFigure);
+    }
+
+    public FigureGroup<DrawableFigure<? extends Figure>> getFigures(){
+        return baseFigure;
+    }
+
+    public int size(){
+        return baseFigure.size();
     }
 
     @Override
