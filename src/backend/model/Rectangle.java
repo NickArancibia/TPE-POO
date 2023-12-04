@@ -46,18 +46,18 @@ public class Rectangle implements Figure {
     }
 
     public void scaleGrowth(){
-        scale(topLeft,bottomRight);
+        scale(0.25);
     }
 
     public void scaleReduce(){
-        scale(bottomRight,topLeft);
+        scale(-0.25);
     }
 
-    private void scale(Point newTopLeft, Point newBottomRight){
-        double deltaX = getBase()*0.25/2;
-        double deltaY = getHeight()*0.25 /2;
-        newTopLeft.move(-deltaX,-deltaY);
-        newBottomRight.move(deltaX,deltaY);
+    private void scale(double factor){
+        double deltaX = getBase()*factor/2;
+        double deltaY = getHeight()*factor /2;
+        topLeft.move(-deltaX,-deltaY);
+        bottomRight.move(deltaX,deltaY);
     }
 
     @Override

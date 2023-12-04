@@ -45,13 +45,16 @@ public class Ellipse implements Figure {
     }
     @Override
     public void scaleGrowth() {
-        sMayorAxis = sMayorAxis*1.25;
-        sMinorAxis = sMinorAxis*1.25;
+        scale(0.25);
     }
     @Override
     public void scaleReduce() {
-        sMayorAxis = sMayorAxis*0.75;
-        sMinorAxis = sMinorAxis*0.75;
+        scale(-0.25);
+    }
+
+    private void scale(double factor){
+        sMayorAxis += sMayorAxis*factor;
+        sMinorAxis += sMinorAxis*factor;
     }
     @Override
     public void turnAroundV(){
