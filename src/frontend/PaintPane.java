@@ -31,11 +31,11 @@ public class PaintPane extends BorderPane {
 	ToggleButton squareButton = new ToggleButton("Cuadrado");
 	ToggleButton ellipseButton = new ToggleButton("Elipse");
 	ToggleButton deleteButton = new ToggleButton("Borrar");
-	ToggleButton spinButton = new ToggleButton("Girar D");
-	ToggleButton turnAroundVButton = new ToggleButton("Voltear V");
-	ToggleButton turnAroundHButton = new ToggleButton("Voltear H");
-	ToggleButton scaleGrowButton = new ToggleButton("Escalar +");
-	ToggleButton scaleReduceButton = new ToggleButton("Escalar -");
+	ToggleButton rotateButton = new ToggleButton("Girar D");
+	ToggleButton flipVButton = new ToggleButton("Voltear V");
+	ToggleButton flipHButton = new ToggleButton("Voltear H");
+	ToggleButton scaleUpButton = new ToggleButton("Escalar +");
+	ToggleButton scaleDownButton = new ToggleButton("Escalar -");
 
 
 
@@ -54,7 +54,7 @@ public class PaintPane extends BorderPane {
 	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
-		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, spinButton, turnAroundVButton, turnAroundHButton, scaleGrowButton, scaleReduceButton, deleteButton};
+		ToggleButton[] toolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton, rotateButton, flipVButton, flipHButton, scaleUpButton, scaleDownButton, deleteButton};
 		ToggleGroup tools = new ToggleGroup();
 		for (ToggleButton tool : toolsArr) {
 			tool.setMinWidth(90);
@@ -175,17 +175,35 @@ public class PaintPane extends BorderPane {
 			}
 		});
 
-		deleteButton.setOnAction(event -> performAction(() -> canvasState.deleteFigure(selectedFigure)));
+		deleteButton.setOnAction(event -> {
+			if(selectedFigure != null)
+				performAction(() -> canvasState.deleteFigure(selectedFigure));
+		});
 
-		scaleGrowButton.setOnAction(event -> performAction(selectedFigure::scaleUp));
+		scaleUpButton.setOnAction(event -> {
+			if(selectedFigure != null)
+				performAction(selectedFigure::scaleUp);
+		});
 
-		scaleReduceButton.setOnAction(event -> performAction(selectedFigure::scaleDown));
+		scaleDownButton.setOnAction(event -> {
+			if (selectedFigure != null)
+				performAction(selectedFigure::scaleDown);
+		});
 
-		turnAroundHButton.setOnAction(event -> performAction(selectedFigure::flipH));
+		flipHButton.setOnAction(event -> {
+			if (selectedFigure != null)
+				performAction(selectedFigure::flipH);
+		});
 
-		turnAroundVButton.setOnAction(event -> performAction(selectedFigure::flipV));
+		flipVButton.setOnAction(event -> {
+			if (selectedFigure != null)
+				performAction(selectedFigure::flipV);
+		});
 
-		spinButton.setOnAction(event -> performAction(selectedFigure::rotate));
+		rotateButton.setOnAction(event -> {
+			if (selectedFigure != null)
+				performAction(selectedFigure::rotate);
+		});
 
 		setLeft(buttonsBox);
 		setRight(canvas);
