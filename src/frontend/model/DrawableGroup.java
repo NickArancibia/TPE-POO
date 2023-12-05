@@ -64,23 +64,8 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     }
 
     @Override
-    protected void drawShadow(GraphicsContext gc) {
-        applyConsumer((figure) -> figure.drawShadow(gc));
-    }
-
-    @Override
-    protected void drawGradient(GraphicsContext gc) {
-        applyConsumer((figure) -> figure.drawGradient(gc));
-    }
-
-    @Override
-    protected void drawShape(GraphicsContext gc) {
-        applyConsumer((figure) -> figure.drawShape(gc));
-    }
-
-    @Override
-    protected void drawBevel(GraphicsContext gc) {
-        applyConsumer((figure) -> figure.drawBevel(gc));
+    protected void drawFigure(GraphicsContext gc) {
+        applyConsumer((figure) -> figure.drawFigure(gc));
     }
 
     @Override

@@ -25,22 +25,15 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
         this.color = color;
     }
 
-    protected abstract void drawShadow(GraphicsContext gc);
-    protected abstract void drawGradient(GraphicsContext gc);
-    protected abstract void drawShape(GraphicsContext gc);
-    protected abstract void drawBevel(GraphicsContext gc);
+    protected abstract void drawFigure(GraphicsContext gc);
 
     public boolean isFigureVisible(TagFilterPane tagFilterPane){
         return !tagFilterPane.isFiltering() || tags.contains(tagFilterPane.getFilterTag());
     }
 
     public void draw(GraphicsContext gc, TagFilterPane tagFilterPane){
-        if(isFigureVisible(tagFilterPane)){
-            drawShadow(gc);
-            drawGradient(gc);
-            drawShape(gc);
-            drawBevel(gc);
-        }
+        if(isFigureVisible(tagFilterPane))
+            drawFigure(gc);
     }
 
     public Color getColor() {
