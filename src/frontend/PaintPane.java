@@ -60,11 +60,15 @@ public class PaintPane extends BorderPane {
 
     boolean movingFigures = false;
 
+    // TagFilterPane
+    TagFilterPane tagFilterPane;
+
     // StatusBar
     StatusPane statusPane;
 
 	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane) {
 		this.canvasState = canvasState;
+        this.tagFilterPane = tagFilterPane;
 		this.statusPane = statusPane;
 		ToggleButton[] toggleToolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton};
 		Button[] toolsArr = {groupButton, ungroupButton, rotateButton, flipVButton, flipHButton, scaleUpButton, scaleDownButton, deleteButton};
@@ -108,6 +112,10 @@ public class PaintPane extends BorderPane {
             redrawCanvas();
         });
 
+        tagFilterPane.getShowAllButton().setOnAction(e -> clearSelectionAndRedraw());
+
+        tagFilterPane.getFilterTagButton().setOnAction(e -> clearSelectionAndRedraw());
+
         canvas.setOnMousePressed(event -> {
             startPoint = new Point(event.getX(), event.getY());
             movingFigures = false;
@@ -138,7 +146,7 @@ public class PaintPane extends BorderPane {
             } else if (selectionButton.isSelected()){
                 if(!movingFigures) {
                     selectionManager.clearSelection();
-                    boolean addedFigures = selectionManager.addToSelectionIfFigureInSelection(canvasState.figures(), startPoint, endPoint);
+                    boolean addedFigures = selectionManager.addToSelectionIfFigureInSelection(canvasState.figures(), startPoint, endPoint, tagFilterPane.isFiltering(), tagFilterPane.getFilterTag());
 
                     if (addedFigures) {
                         drawPropertiesPane.setState(selectionManager.isShadowToggled(), selectionManager.isGradientToggled(), selectionManager.isBevelToggled());
@@ -158,8 +166,7 @@ public class PaintPane extends BorderPane {
             newGroup.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
             canvasState.addFigure(newGroup);
             startPoint = null;
-            selectionManager.clearSelection();
-            redrawCanvas();
+            clearSelectionAndRedraw();
         });
 
         canvas.setOnMouseMoved(event -> {
@@ -167,7 +174,7 @@ public class PaintPane extends BorderPane {
             boolean found = false;
             StringBuilder label = new StringBuilder();
             for(DrawableGroup figure : canvasState.figures()) {
-                if(figure.pointInFigure(eventPoint)) {
+                if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane.isFiltering(), tagFilterPane.getFilterTag())) {
                     found = true;
                     label.append(figure.toString());
                 }
@@ -185,7 +192,7 @@ public class PaintPane extends BorderPane {
                 boolean found = false;
                 StringBuilder label = new StringBuilder("Se seleccionó: ");
                 for (DrawableGroup figure : canvasState.figures()) {
-                    if(figure.pointInFigure(eventPoint)) {
+                    if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane.isFiltering(), tagFilterPane.getFilterTag())) {
                         found = true;
                         selectionManager.add(figure);
                         drawPropertiesPane.setState(figure.isShadowToggled(), figure.isGradientToggled(), figure.isBevelToggled());
@@ -227,8 +234,7 @@ public class PaintPane extends BorderPane {
         deleteButton.setOnAction(event -> {
             for (DrawableGroup group : selectionManager.getSelection())
                 canvasState.deleteFigure(group);
-            selectionManager.clearSelection();
-            redrawCanvas();
+            clearSelectionAndRedraw();
         });
 
         scaleUpButton.setOnAction(event -> {
@@ -263,9 +269,7 @@ public class PaintPane extends BorderPane {
                 canvasState.addFigure(selectionManager.groupSelection());
                 canvasState.deleteFigures(selectionManager.getSelection());
             }
-
-            selectionManager.clearSelection();
-            redrawCanvas();
+            clearSelectionAndRedraw();
         });
 
         ungroupButton.setOnAction(event -> {
@@ -275,9 +279,7 @@ public class PaintPane extends BorderPane {
                 canvasState.addAllFigures(selectionManager.ungroupSelection());
                 canvasState.deleteFigures(selectionManager.getSelection());
             }
-
-            selectionManager.clearSelection();
-            redrawCanvas();
+            clearSelectionAndRedraw();
         });
 
         saveTagsButton.setOnAction(event ->{
@@ -292,8 +294,14 @@ public class PaintPane extends BorderPane {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for(DrawableGroup group : canvasState.figures()) {
             gc.setStroke(selectionManager.isSelected(group) ? Color.RED : lineColor);
-            group.draw(gc);
+            if(group.isFigureVisible(tagFilterPane.isFiltering(), tagFilterPane.getFilterTag()))
+                group.draw(gc);
         }
+    }
+
+    private void clearSelectionAndRedraw(){
+        selectionManager.clearSelection();
+        redrawCanvas();
     }
 
     private Collection<String> parseTags(String text){

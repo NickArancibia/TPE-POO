@@ -29,6 +29,10 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
     protected abstract void handleShape(GraphicsContext gc);
     protected abstract void handleBevel(GraphicsContext gc);
 
+    public boolean isFigureVisible(boolean isFiltering, String filterTag){
+        return !isFiltering || tags.contains(filterTag);
+    }
+
     public void draw(GraphicsContext gc){
         handleShadow(gc);
         handleGradient(gc);

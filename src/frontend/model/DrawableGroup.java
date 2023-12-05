@@ -149,4 +149,12 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
         for(DrawableFigure<? extends Figure> figure : baseFigure)
             figure.setTags(tags);
     }
+
+    @Override
+    public boolean isFigureVisible(boolean shouldFilter, String tagFilter){
+        if(!shouldFilter) return true;
+        for(DrawableFigure<? extends Figure> figure : baseFigure)
+            if (figure.isFigureVisible(shouldFilter, tagFilter)) return true;
+        return false;
+    }
 }

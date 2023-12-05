@@ -43,8 +43,22 @@ public class TagFilterPane extends BorderPane{
         filterTagField = new TextField();
 		tagsBox.getChildren().add(filterTagField);
 
-        showAllButton.setSelected(true);
-
         setCenter(tagsBox);
+    }
+
+    public String getFilterTag(){
+        return filterTagField.getText().split(" ")[0];
+    }
+
+    public boolean isFiltering(){
+        return filterTagButton.isSelected();
+    }
+
+    public RadioButton getShowAllButton(){
+        return showAllButton;
+    }
+
+    public RadioButton getFilterTagButton(){
+        return filterTagButton;
     }
 }
