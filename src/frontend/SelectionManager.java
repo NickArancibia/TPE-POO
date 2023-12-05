@@ -34,16 +34,12 @@ public class SelectionManager {
         selectedGroups.clear();
     }
 
-    public boolean canGroup() {
+    public boolean atLeastTwoSelected() {
         return selectedGroups.size() >= 2;
     }
 
-    public boolean noSelection(){
+    public boolean noneSelected(){
         return selectedGroups.isEmpty();
-    }
-
-    public boolean canUngroup() {
-        return !selectedGroups.isEmpty();
     }
 
     public DrawableGroup groupSelection() {

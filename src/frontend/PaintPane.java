@@ -61,7 +61,7 @@ public class PaintPane extends BorderPane {
     // Seleccionar una figura
     SelectionManager selectionManager = new SelectionManager();
 
-    boolean movingFigures = false;
+    private final double toleranceForMouseClick = 10.0;
 
     // DrawPropertiesPane
     ShapeDrawPropertiesPane drawPropertiesPane;
@@ -125,7 +125,6 @@ public class PaintPane extends BorderPane {
 
         canvas.setOnMousePressed(event -> {
             startPoint = new Point(event.getX(), event.getY());
-            movingFigures = false;
         });
 
         deleteButton.setOnAction(event -> {
@@ -160,7 +159,7 @@ public class PaintPane extends BorderPane {
         });
 
         groupButton.setOnAction(event -> {
-            if(!selectionManager.canGroup())
+            if(!selectionManager.atLeastTwoSelected())
                 statusPane.updateStatus("Para agrupar es necesario seleccionar 2 o más grupos");
             else{
                 canvasState.addFigure(selectionManager.groupSelection());
@@ -170,7 +169,7 @@ public class PaintPane extends BorderPane {
         });
 
         ungroupButton.setOnAction(event -> {
-            if(!selectionManager.canUngroup())
+            if(selectionManager.noneSelected())
                 statusPane.updateStatus("Para desagrupar primero seleccione un grupo");
             else{
                 canvasState.addAllFigures(selectionManager.ungroupSelection());
@@ -203,7 +202,7 @@ public class PaintPane extends BorderPane {
                 double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
                 createFigure(new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue()));
             } else if (selectionButton.isSelected()){
-                if(!movingFigures) {
+                if(!isMovingFigures(endPoint)) {
                     boolean addedFigures = selectionManager.selectFiguresInRect(canvasState.figures(), startPoint, endPoint, tagFilterPane);
                     if (addedFigures) {
                         drawPropertiesPane.setState(selectionManager.isShadowToggled(), selectionManager.isGradientToggled(), selectionManager.isBevelToggled());
@@ -240,13 +239,13 @@ public class PaintPane extends BorderPane {
                 } else {
                     statusPane.updateStatus("Ninguna figura encontrada");
                 }
-                if(selectionManager.canGroup()){
+                if(selectionManager.atLeastTwoSelected()){
                     tagsArea.setDisable(true);
                     saveTagsButton.setDisable(true);
                 }else{
                     tagsArea.setDisable(false);
                     saveTagsButton.setDisable(false);
-                    if(!selectionManager.noSelection()){
+                    if(!selectionManager.noneSelected()){
                         String text = stringifyTags(selectionManager.getSelection().iterator().next().getTags());
                         tagsArea.setText(text);
                     }
@@ -261,13 +260,17 @@ public class PaintPane extends BorderPane {
                 double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
                 double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
                 selectionManager.applyActionToSelection((group) -> group.move(diffX, diffY));
-                movingFigures = !selectionManager.noSelection();
                 redrawCanvas();
             }
         });
         
         setLeft(buttonsBox);
         setRight(canvas);
+    }
+
+    private boolean isMovingFigures(Point endPoint){
+        double dist = startPoint.distance(endPoint);
+        return dist > toleranceForMouseClick && !selectionManager.noneSelected();
     }
 
     private void createFigure(DrawableFigure<? extends Figure> figure){

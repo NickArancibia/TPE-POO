@@ -25,6 +25,12 @@ public class Point {
         return x >= topLeft.x && x <= bottomRight.x && y >= topLeft.y && y <= bottomRight.y;
     }
 
+    public double distance(Point otherPoint){
+        double diffX = x - otherPoint.x;
+        double diffY = y - otherPoint.y;
+        return Math.sqrt(diffX * diffX + diffY * diffY);
+    }
+
     @Override
     public String toString() {
         return String.format("{%.2f , %.2f}", x, y);
