@@ -42,12 +42,12 @@ public class PaintPane extends BorderPane {
 
     //ButtonsPane
     ButtonsBoxPane buttonsPane;
-	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
-		this.canvasState = canvasState;
+    public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
+        this.canvasState = canvasState;
         this.tagFilterPane = tagFilterPane;
         this.drawPropertiesPane = drawPropertiesPane;
-		this.statusPane = statusPane;
-		this.buttonsPane = buttonsPane;
+        this.statusPane = statusPane;
+        this.buttonsPane = buttonsPane;
         buttonsPane.init(gc);
 
         drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
@@ -66,8 +66,8 @@ public class PaintPane extends BorderPane {
         });
 
         tagFilterPane.getShowAllButton().setOnAction(e -> clearSelectionAndRedraw());
-
         tagFilterPane.getFilterTagButton().setOnAction(e -> clearSelectionAndRedraw());
+        tagFilterPane.getFilterTagTextField().textProperty().addListener((observable, oldValue, newValue) -> redrawCanvas());
 
         canvas.setOnMousePressed(event -> {
             startPoint = new Point(event.getX(), event.getY());
@@ -168,26 +168,19 @@ public class PaintPane extends BorderPane {
                     label.append(figure.toString());
                 }
             }
-            if(found) {
-                statusPane.updateStatus(label.toString());
-            } else {
-                statusPane.updateStatus(eventPoint.toString());
-            }
+            statusPane.updateStatus(found ? label.toString() : eventPoint.toString());
         });
 
         canvas.setOnMouseClicked(event -> {
             if(buttonsPane.getSelectionButton().isSelected()) {
                 Point eventPoint = new Point(event.getX(), event.getY());
                 StringBuilder label = new StringBuilder("Se seleccionó: ");
-                if (clickOnFigure(eventPoint, canvasState.figures(), label)) {
-                    statusPane.updateStatus(label.toString());
-                } else {
-                    statusPane.updateStatus("Ninguna figura encontrada");
-                }
+                statusPane.updateStatus(clickOnFigure(eventPoint, canvasState.figures(), label) ? label.toString() : "Ninguna figura encontrada");
+
                 if(selectionManager.atLeastTwoSelected()){
                     buttonsPane.getTagsArea().setDisable(true);
                     buttonsPane.getSaveTagsButton().setDisable(true);
-                }else{
+                } else{
                     buttonsPane.getTagsArea().setDisable(false);
                     buttonsPane.getSaveTagsButton().setDisable(false);
                     if(!selectionManager.noneSelected()){
@@ -217,14 +210,14 @@ public class PaintPane extends BorderPane {
     }
 
     private void createFigure(DrawableFigure<? extends Figure> figure){
-            DrawableGroup newGroup = new DrawableGroup(buttonsPane.getFillColorPicker().getValue());
-            newGroup.add(figure);
-            newGroup.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
-            newGroup.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
-            newGroup.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
-            canvasState.addFigure(newGroup);
-            startPoint = null;
-            clearSelectionAndRedraw();
+        DrawableGroup newGroup = new DrawableGroup(buttonsPane.getFillColorPicker().getValue());
+        newGroup.add(figure);
+        newGroup.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
+        newGroup.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
+        newGroup.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
+        canvasState.addFigure(newGroup);
+        startPoint = null;
+        clearSelectionAndRedraw();
     }
 
     private boolean clickOnFigure(Point eventPoint, List<DrawableGroup> figures, StringBuilder label){

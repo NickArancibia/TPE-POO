@@ -25,10 +25,10 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
         this.color = color;
     }
 
-    protected abstract void handleShadow(GraphicsContext gc);
-    protected abstract void handleGradient(GraphicsContext gc);
-    protected abstract void handleShape(GraphicsContext gc);
-    protected abstract void handleBevel(GraphicsContext gc);
+    protected abstract void drawShadow(GraphicsContext gc);
+    protected abstract void drawGradient(GraphicsContext gc);
+    protected abstract void drawShape(GraphicsContext gc);
+    protected abstract void drawBevel(GraphicsContext gc);
 
     public boolean isFigureVisible(TagFilterPane tagFilterPane){
         return !tagFilterPane.isFiltering() || tags.contains(tagFilterPane.getFilterTag());
@@ -36,10 +36,10 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
 
     public void draw(GraphicsContext gc, TagFilterPane tagFilterPane){
         if(isFigureVisible(tagFilterPane)){
-            handleShadow(gc);
-            handleGradient(gc);
-            handleShape(gc);
-            handleBevel(gc);
+            drawShadow(gc);
+            drawGradient(gc);
+            drawShape(gc);
+            drawBevel(gc);
         }
     }
 

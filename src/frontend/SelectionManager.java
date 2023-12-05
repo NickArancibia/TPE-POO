@@ -81,7 +81,7 @@ public class SelectionManager {
 
     private boolean someToggled(Function<DrawableGroup, Boolean> toggled) {
         int count = 0;
-        for (DrawableGroup group: selectedGroups)
+        for (DrawableGroup group : selectedGroups)
             if (toggled.apply(group))
                 count++;
 

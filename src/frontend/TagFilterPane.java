@@ -11,7 +11,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 
 public class TagFilterPane extends BorderPane{
-    
     private final Label showTagsLabel;
     private final RadioButton showAllButton;
     private final RadioButton filterTagButton;
@@ -33,6 +32,7 @@ public class TagFilterPane extends BorderPane{
         showAllButton = new RadioButton("Todas");
 		showAllButton.setToggleGroup(showTagsGroup);
 		showAllButton.setCursor(Cursor.HAND);
+        showAllButton.setSelected(true);
 		tagsBox.getChildren().add(showAllButton);
 
         filterTagButton = new RadioButton("Sólo: ");
@@ -44,6 +44,10 @@ public class TagFilterPane extends BorderPane{
 		tagsBox.getChildren().add(filterTagField);
 
         setCenter(tagsBox);
+    }
+
+    public TextField getFilterTagTextField() {
+        return filterTagField;
     }
 
     public String getFilterTag(){

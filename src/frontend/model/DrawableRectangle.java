@@ -18,7 +18,7 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
     }
 
     @Override
-    protected void handleShadow(GraphicsContext gc) {
+    protected void drawShadow(GraphicsContext gc) {
         if (isShadowToggled()) {
             gc.setFill(Color.GRAY);
             gc.fillRect(baseFigure.getTopLeft().getX() + 10.0,
@@ -29,7 +29,7 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
     }
 
     @Override
-    protected void handleGradient(GraphicsContext gc) {
+    protected void drawGradient(GraphicsContext gc) {
         if (isGradientToggled()) {
             LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, true,
                     CycleMethod.NO_CYCLE,
@@ -43,7 +43,7 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
     }
 
     @Override
-    protected void handleShape(GraphicsContext gc) {
+    protected void drawShape(GraphicsContext gc) {
         gc.fillRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
                 Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()), Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
         gc.strokeRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
@@ -51,7 +51,7 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
     }
     
     @Override
-    protected void handleBevel(GraphicsContext gc) {
+    protected void drawBevel(GraphicsContext gc) {
         if (isBevelToggled()) {
             double x = baseFigure.getTopLeft().getX();
             double y = baseFigure.getTopLeft().getY();
