@@ -55,9 +55,10 @@ public class DrawableEllipse extends DrawableFigure<Ellipse> {
     protected void drawFigure(GraphicsContext gc) {
         drawShadow(gc);
         drawGradient(gc);
-        drawBevel(gc);
 
         gc.strokeOval(baseFigure.getCenterPoint().getX() - (baseFigure.getsMayorAxis() / 2), baseFigure.getCenterPoint().getY() - (baseFigure.getsMinorAxis() / 2), baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis());
         gc.fillOval(baseFigure.getCenterPoint().getX() - (baseFigure.getsMayorAxis() / 2), baseFigure.getCenterPoint().getY() - (baseFigure.getsMinorAxis() / 2), baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis());
+
+        drawBevel(gc);
     }
 }

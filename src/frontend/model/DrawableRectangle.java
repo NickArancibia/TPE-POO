@@ -61,11 +61,12 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
     protected void drawFigure(GraphicsContext gc) {
         drawShadow(gc);
         drawGradient(gc);
-        drawBevel(gc);
 
         gc.fillRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
                 Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()), Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
         gc.strokeRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
                 Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()), Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
+
+        drawBevel(gc);
     }
 }
