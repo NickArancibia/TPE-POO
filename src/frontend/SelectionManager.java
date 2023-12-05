@@ -12,7 +12,7 @@ import frontend.model.DrawableGroup;
 public class SelectionManager {
     List<DrawableGroup> selectedGroups = new ArrayList<>();
 
-    public boolean addToSelectionIfVisibleFigureInSelection(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight, TagFilterPane tagFilterPane) {
+    public boolean addAllSelectedAndVisible(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight, TagFilterPane tagFilterPane) {
         boolean addedFigures = false;
         for(DrawableGroup group : figures) {
             if(group.isFigureVisible(tagFilterPane) && group.isFigureInRectangle(topLeft, bottomRight)) {

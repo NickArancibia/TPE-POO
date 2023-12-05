@@ -128,106 +128,6 @@ public class PaintPane extends BorderPane {
             movingFigures = false;
         });
 
-        canvas.setOnMouseReleased(event -> {
-            Point endPoint = new Point(event.getX(), event.getY());
-            if (startPoint == null) {
-                return;
-            }
-            if (endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
-                return;
-            }
-            DrawableFigure<? extends Figure> newFigure = null;
-            if (rectangleButton.isSelected()) {
-                newFigure = new DrawableRectangle(startPoint, endPoint, fillColorPicker.getValue());
-            } else if (circleButton.isSelected()) {
-                double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
-                newFigure = new DrawableCircle(startPoint, circleRadius, fillColorPicker.getValue());
-            } else if (squareButton.isSelected()) {
-                double size = Math.abs(endPoint.getX() - startPoint.getX());
-                newFigure = new DrawableSquare(startPoint, size, fillColorPicker.getValue());
-            } else if(ellipseButton.isSelected()) {
-                Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
-                double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
-                double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
-                newFigure = new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue());
-            } else if (selectionButton.isSelected()){
-                if(!movingFigures) {
-                    selectionManager.clearSelection();
-                    boolean addedFigures = selectionManager.addToSelectionIfVisibleFigureInSelection(canvasState.figures(), startPoint, endPoint, tagFilterPane);
-
-                    if (addedFigures) {
-                        drawPropertiesPane.setState(selectionManager.isShadowToggled(), selectionManager.isGradientToggled(), selectionManager.isBevelToggled());
-                        drawPropertiesPane.setSomeState(selectionManager.someShadowToggled(), selectionManager.someGradientToggled(), selectionManager.someBevelToggled());
-                    }
-                }
-                
-                redrawCanvas();
-                return;
-            } else {
-                return;
-            }
-            DrawableGroup newGroup = new DrawableGroup(fillColorPicker.getValue());
-            newGroup.add(newFigure);
-            newGroup.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
-            newGroup.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
-            newGroup.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
-            canvasState.addFigure(newGroup);
-            startPoint = null;
-            clearSelectionAndRedraw();
-        });
-
-        canvas.setOnMouseMoved(event -> {
-            Point eventPoint = new Point(event.getX(), event.getY());
-            boolean found = false;
-            StringBuilder label = new StringBuilder();
-            for(DrawableGroup figure : canvasState.figures()) {
-                if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane)) {
-                    found = true;
-                    label.append(figure.toString());
-                }
-            }
-            if(found) {
-                statusPane.updateStatus(label.toString());
-            } else {
-                statusPane.updateStatus(eventPoint.toString());
-            }
-        });
-
-        canvas.setOnMouseClicked(event -> {
-            if(selectionButton.isSelected()) {
-                Point eventPoint = new Point(event.getX(), event.getY());
-                StringBuilder label = new StringBuilder("Se seleccionó: ");
-                if (clickOnFigure(eventPoint, canvasState.figures(), label)) {
-                    statusPane.updateStatus(label.toString());
-                } else {
-                    statusPane.updateStatus("Ninguna figura encontrada");
-                }
-                if(selectionManager.canGroup()){
-                    tagsArea.setDisable(true);
-                    saveTagsButton.setDisable(true);
-                }else{
-                    tagsArea.setDisable(false);
-                    saveTagsButton.setDisable(false);
-                    if(!selectionManager.noSelection()){
-                        String text = stringifyTags(selectionManager.getSelection().iterator().next().getTags());
-                        tagsArea.setText(text);
-                    }
-                }
-                redrawCanvas();
-            }
-        });
-
-        canvas.setOnMouseDragged(event -> {
-            if(selectionButton.isSelected()) {
-                Point eventPoint = new Point(event.getX(), event.getY());
-                double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
-                double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
-                selectionManager.applyActionToSelection((group) -> group.move(diffX, diffY));
-                movingFigures = !selectionManager.noSelection();
-                redrawCanvas();
-            }
-        });
-
         deleteButton.setOnAction(event -> {
             for (DrawableGroup group : selectionManager.getSelection())
                 canvasState.deleteFigure(group);
@@ -284,8 +184,102 @@ public class PaintPane extends BorderPane {
             clearSelectionAndRedraw();
         });
 
+        canvas.setOnMouseReleased(event -> {
+            Point endPoint = new Point(event.getX(), event.getY());
+            if (startPoint == null || endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
+                return;
+            }
+            if (rectangleButton.isSelected()) {
+                createFigure(new DrawableRectangle(startPoint, endPoint, fillColorPicker.getValue()));
+            } else if (circleButton.isSelected()) {
+                double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
+                createFigure(new DrawableCircle(startPoint, circleRadius, fillColorPicker.getValue()));
+            } else if (squareButton.isSelected()) {
+                double size = Math.abs(endPoint.getX() - startPoint.getX());
+                createFigure(new DrawableSquare(startPoint, size, fillColorPicker.getValue()));
+            } else if(ellipseButton.isSelected()) {
+                Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
+                double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
+                double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
+                createFigure(new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue()));
+            } else if (selectionButton.isSelected()){
+                if(!movingFigures) {
+                    selectionManager.clearSelection();
+                    boolean addedFigures = selectionManager.addAllSelectedAndVisible(canvasState.figures(), startPoint, endPoint, tagFilterPane);
+                    if (addedFigures) {
+                        drawPropertiesPane.setState(selectionManager.isShadowToggled(), selectionManager.isGradientToggled(), selectionManager.isBevelToggled());
+                        drawPropertiesPane.setSomeState(selectionManager.someShadowToggled(), selectionManager.someGradientToggled(), selectionManager.someBevelToggled());
+                    }
+                }
+                redrawCanvas();
+            }
+        });
+
+        canvas.setOnMouseMoved(event -> {
+            Point eventPoint = new Point(event.getX(), event.getY());
+            boolean found = false;
+            StringBuilder label = new StringBuilder();
+            for(DrawableGroup figure : canvasState.figures()) {
+                if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane)) {
+                    found = true;
+                    label.append(figure.toString());
+                }
+            }
+            if(found) {
+                statusPane.updateStatus(label.toString());
+            } else {
+                statusPane.updateStatus(eventPoint.toString());
+            }
+        });
+
+        canvas.setOnMouseClicked(event -> {
+            if(selectionButton.isSelected()) {
+                Point eventPoint = new Point(event.getX(), event.getY());
+                StringBuilder label = new StringBuilder("Se seleccionó: ");
+                if (clickOnFigure(eventPoint, canvasState.figures(), label)) {
+                    statusPane.updateStatus(label.toString());
+                } else {
+                    statusPane.updateStatus("Ninguna figura encontrada");
+                }
+                if(selectionManager.canGroup()){
+                    tagsArea.setDisable(true);
+                    saveTagsButton.setDisable(true);
+                }else{
+                    tagsArea.setDisable(false);
+                    saveTagsButton.setDisable(false);
+                    if(!selectionManager.noSelection()){
+                        String text = stringifyTags(selectionManager.getSelection().iterator().next().getTags());
+                        tagsArea.setText(text);
+                    }
+                }
+                redrawCanvas();
+            }
+        });
+
+        canvas.setOnMouseDragged(event -> {
+            if(selectionButton.isSelected()) {
+                Point eventPoint = new Point(event.getX(), event.getY());
+                double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
+                double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
+                selectionManager.applyActionToSelection((group) -> group.move(diffX, diffY));
+                movingFigures = !selectionManager.noSelection();
+                redrawCanvas();
+            }
+        });
+        
         setLeft(buttonsBox);
         setRight(canvas);
+    }
+
+    private void createFigure(DrawableFigure<? extends Figure> figure){
+            DrawableGroup newGroup = new DrawableGroup(fillColorPicker.getValue());
+            newGroup.add(figure);
+            newGroup.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
+            newGroup.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
+            newGroup.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
+            canvasState.addFigure(newGroup);
+            startPoint = null;
+            clearSelectionAndRedraw();
     }
 
     private boolean clickOnFigure(Point eventPoint, List<DrawableGroup> figures, StringBuilder label){

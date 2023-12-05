@@ -23,7 +23,7 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
         super(new FigureGroup<DrawableFigure<? extends Figure>>(), Color.YELLOW);
     }
 
-    DrawableGroup(DrawableFigure<? extends Figure> figure) {
+    public DrawableGroup(DrawableFigure<? extends Figure> figure) {
         super(new FigureGroup<DrawableFigure<? extends Figure>>(), figure.getColor());
         add(figure);
     }
