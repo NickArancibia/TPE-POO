@@ -32,26 +32,6 @@ public class PaintPane extends BorderPane {
     GraphicsContext gc = canvas.getGraphicsContext2D();
     Color lineColor = Color.BLACK;
     Color defaultFillColor = Color.YELLOW;
-
-	// Botones Barra Izquierda
-	ToggleButton selectionButton = new ToggleButton("Seleccionar");
-	ToggleButton rectangleButton = new ToggleButton("Rectángulo");
-	ToggleButton circleButton = new ToggleButton("Círculo");
-	ToggleButton squareButton = new ToggleButton("Cuadrado");
-	ToggleButton ellipseButton = new ToggleButton("Elipse");
-	Button deleteButton = new Button("Borrar");
-	Button groupButton = new Button("Agrupar");
-	Button ungroupButton = new Button("Desagrupar");
-	Button rotateButton = new Button("Girar D");
-	Button flipVButton = new Button("Voltear V");
-	Button flipHButton = new Button("Voltear H");
-	Button scaleUpButton = new Button("Escalar +");
-	Button scaleDownButton = new Button("Escalar -");
-
-    Label tagsLabel = new Label("Etiquetas");
-    TextArea tagsArea = new TextArea();
-    Button saveTagsButton = new Button("Guardar");
-
     // Selector de color de relleno
     ColorPicker fillColorPicker = new ColorPicker(defaultFillColor);
 
@@ -72,37 +52,15 @@ public class PaintPane extends BorderPane {
     // StatusBar
     StatusPane statusPane;
 
-	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane) {
+    //ButtonsPane
+    ButtonsBoxPane buttonsPane;
+	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
 		this.canvasState = canvasState;
         this.tagFilterPane = tagFilterPane;
         this.drawPropertiesPane = drawPropertiesPane;
 		this.statusPane = statusPane;
-		ToggleButton[] toggleToolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton};
-		Button[] toolsArr = {groupButton, ungroupButton, rotateButton, flipVButton, flipHButton, scaleUpButton, scaleDownButton, deleteButton};
-		ToggleGroup toggleTools = new ToggleGroup();
-		for (ToggleButton tool : toggleToolsArr) {
-			tool.setMinWidth(90);
-			tool.setToggleGroup(toggleTools);
-			tool.setCursor(Cursor.HAND);
-		}
-		for (Button tool : toolsArr){
-			tool.setMinWidth(90);
-			tool.setCursor(Cursor.HAND);
-		}
-        saveTagsButton.setMinWidth(90);
-		saveTagsButton.setCursor(Cursor.HAND);
-		tagsArea.setMaxHeight(50);
-		VBox buttonsBox = new VBox(5);
-		buttonsBox.getChildren().addAll(toggleToolsArr);
-		buttonsBox.getChildren().addAll(toolsArr);
-		buttonsBox.getChildren().add(fillColorPicker);
-		buttonsBox.getChildren().add(tagsLabel);
-		buttonsBox.getChildren().add(tagsArea);
-		buttonsBox.getChildren().add(saveTagsButton);
-		buttonsBox.setPadding(new Insets(5));
-		buttonsBox.setStyle("-fx-background-color: #999");
-		buttonsBox.setPrefWidth(100);
-		gc.setLineWidth(1);
+		this.buttonsPane = buttonsPane;
+        buttonsPane.init(gc);
 
         drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
             selectionManager.applyActionToSelection((group) -> group.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected()));
@@ -127,38 +85,37 @@ public class PaintPane extends BorderPane {
             startPoint = new Point(event.getX(), event.getY());
         });
 
-        deleteButton.setOnAction(event -> {
-            for (DrawableGroup group : selectionManager.getSelection())
-                canvasState.deleteFigure(group);
+        buttonsPane.getDeleteButton().setOnAction(event -> {
+            selectionManager.getSelection().forEach(canvasState::deleteFigure);
             clearSelectionAndRedraw();
         });
 
-        scaleUpButton.setOnAction(event -> {
+        buttonsPane.getScaleUpButton().setOnAction(event -> {
             selectionManager.applyActionToSelection(DrawableGroup::scaleUp);
             redrawCanvas();
         });
 
-        scaleDownButton.setOnAction(event -> {
+        buttonsPane.getScaleDownButton().setOnAction(event -> {
             selectionManager.applyActionToSelection(DrawableGroup::scaleDown);
             redrawCanvas();
         });
 
-        flipHButton.setOnAction(event -> {
+        buttonsPane.getFlipHButton().setOnAction(event -> {
             selectionManager.applyActionToSelection(DrawableGroup::flipH);
             redrawCanvas();
         });
 
-        flipVButton.setOnAction(event -> {
+        buttonsPane.getFlipVButton().setOnAction(event -> {
             selectionManager.applyActionToSelection(DrawableGroup::flipV);
             redrawCanvas();
         });
 
-        rotateButton.setOnAction(event -> {
+        buttonsPane.getRotateButton().setOnAction(event -> {
             selectionManager.applyActionToSelection(DrawableGroup::rotate);
             redrawCanvas();
         });
 
-        groupButton.setOnAction(event -> {
+        buttonsPane.getGroupButton().setOnAction(event -> {
             if(!selectionManager.atLeastTwoSelected())
                 statusPane.updateStatus("Para agrupar es necesario seleccionar 2 o más grupos");
             else{
@@ -168,7 +125,7 @@ public class PaintPane extends BorderPane {
             clearSelectionAndRedraw();
         });
 
-        ungroupButton.setOnAction(event -> {
+        buttonsPane.getUngroupButton().setOnAction(event -> {
             if(selectionManager.noneSelected())
                 statusPane.updateStatus("Para desagrupar primero seleccione un grupo");
             else{
@@ -178,8 +135,8 @@ public class PaintPane extends BorderPane {
             clearSelectionAndRedraw();
         });
 
-        saveTagsButton.setOnAction(event ->{
-            selectionManager.applyActionToSelection(group -> group.setTags(parseTags(tagsArea.getText())));
+        buttonsPane.getSaveTagsButton().setOnAction(event ->{
+            selectionManager.applyActionToSelection(group -> group.setTags(parseTags(buttonsPane.getTagsArea().getText())));
             clearSelectionAndRedraw();
         });
 
@@ -188,20 +145,20 @@ public class PaintPane extends BorderPane {
             if (startPoint == null || endPoint.getX() < startPoint.getX() || endPoint.getY() < startPoint.getY()) {
                 return;
             }
-            if (rectangleButton.isSelected()) {
+            if (buttonsPane.getRectangleButton().isSelected()) {
                 createFigure(new DrawableRectangle(startPoint, endPoint, fillColorPicker.getValue()));
-            } else if (circleButton.isSelected()) {
+            } else if (buttonsPane.getCircleButton().isSelected()) {
                 double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
                 createFigure(new DrawableCircle(startPoint, circleRadius, fillColorPicker.getValue()));
-            } else if (squareButton.isSelected()) {
+            } else if (buttonsPane.getSquareButton().isSelected()) {
                 double size = Math.abs(endPoint.getX() - startPoint.getX());
                 createFigure(new DrawableSquare(startPoint, size, fillColorPicker.getValue()));
-            } else if(ellipseButton.isSelected()) {
+            } else if(buttonsPane.getEllipseButton().isSelected()) {
                 Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
                 double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
                 double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
                 createFigure(new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue()));
-            } else if (selectionButton.isSelected()){
+            } else if (buttonsPane.getSelectionButton().isSelected()){
                 if(!isMovingFigures(endPoint)) {
                     boolean addedFigures = selectionManager.selectFiguresInRect(canvasState.figures(), startPoint, endPoint, tagFilterPane);
                     if (addedFigures) {
@@ -231,7 +188,7 @@ public class PaintPane extends BorderPane {
         });
 
         canvas.setOnMouseClicked(event -> {
-            if(selectionButton.isSelected()) {
+            if(buttonsPane.getSelectionButton().isSelected()) {
                 Point eventPoint = new Point(event.getX(), event.getY());
                 StringBuilder label = new StringBuilder("Se seleccionó: ");
                 if (clickOnFigure(eventPoint, canvasState.figures(), label)) {
@@ -240,14 +197,14 @@ public class PaintPane extends BorderPane {
                     statusPane.updateStatus("Ninguna figura encontrada");
                 }
                 if(selectionManager.atLeastTwoSelected()){
-                    tagsArea.setDisable(true);
-                    saveTagsButton.setDisable(true);
+                    buttonsPane.getTagsArea().setDisable(true);
+                    buttonsPane.getSaveTagsButton().setDisable(true);
                 }else{
-                    tagsArea.setDisable(false);
-                    saveTagsButton.setDisable(false);
+                    buttonsPane.getTagsArea().setDisable(false);
+                    buttonsPane.getSaveTagsButton().setDisable(false);
                     if(!selectionManager.noneSelected()){
                         String text = stringifyTags(selectionManager.getSelection().iterator().next().getTags());
-                        tagsArea.setText(text);
+                        buttonsPane.getTagsArea().setText(text);
                     }
                 }
                 redrawCanvas();
@@ -255,7 +212,7 @@ public class PaintPane extends BorderPane {
         });
 
         canvas.setOnMouseDragged(event -> {
-            if(selectionButton.isSelected()) {
+            if(buttonsPane.getSelectionButton().isSelected()) {
                 Point eventPoint = new Point(event.getX(), event.getY());
                 double diffX = (eventPoint.getX() - startPoint.getX()) / 100;
                 double diffY = (eventPoint.getY() - startPoint.getY()) / 100;
@@ -263,8 +220,6 @@ public class PaintPane extends BorderPane {
                 redrawCanvas();
             }
         });
-        
-        setLeft(buttonsBox);
         setRight(canvas);
     }
 
