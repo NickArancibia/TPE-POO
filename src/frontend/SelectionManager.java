@@ -14,10 +14,10 @@ import frontend.model.DrawableGroup;
 public class SelectionManager {
     Set<DrawableGroup> selectedGroups = new HashSet<>();
 
-    public boolean addToSelectionIfFigureInSelection(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight, boolean isFiltering, String tagFilter) {
+    public boolean addToSelectionIfVisibleFigureInSelection(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight, TagFilterPane tagFilterPane) {
         boolean addedFigures = false;
         for(DrawableGroup group : figures) {
-            if(group.isFigureVisible(isFiltering, tagFilter) && group.isFigureInRectangle(topLeft, bottomRight)) {
+            if(group.isFigureVisible(tagFilterPane) && group.isFigureInRectangle(topLeft, bottomRight)) {
                 selectedGroups.add(group);
                 addedFigures = true;
             }

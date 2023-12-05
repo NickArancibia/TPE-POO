@@ -6,6 +6,7 @@ import java.util.Set;
 
 import backend.model.Figure;
 import backend.model.Point;
+import frontend.TagFilterPane;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -29,15 +30,17 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
     protected abstract void handleShape(GraphicsContext gc);
     protected abstract void handleBevel(GraphicsContext gc);
 
-    public boolean isFigureVisible(boolean isFiltering, String filterTag){
-        return !isFiltering || tags.contains(filterTag);
+    public boolean isFigureVisible(TagFilterPane tagFilterPane){
+        return !tagFilterPane.isFiltering() || tags.contains(tagFilterPane.getFilterTag());
     }
 
-    public void draw(GraphicsContext gc){
-        handleShadow(gc);
-        handleGradient(gc);
-        handleShape(gc);
-        handleBevel(gc);
+    public void draw(GraphicsContext gc, TagFilterPane tagFilterPane){
+        if(isFigureVisible(tagFilterPane)){
+            handleShadow(gc);
+            handleGradient(gc);
+            handleShape(gc);
+            handleBevel(gc);
+        }
     }
 
     public Color getColor() {

@@ -146,7 +146,7 @@ public class PaintPane extends BorderPane {
             } else if (selectionButton.isSelected()){
                 if(!movingFigures) {
                     selectionManager.clearSelection();
-                    boolean addedFigures = selectionManager.addToSelectionIfFigureInSelection(canvasState.figures(), startPoint, endPoint, tagFilterPane.isFiltering(), tagFilterPane.getFilterTag());
+                    boolean addedFigures = selectionManager.addToSelectionIfVisibleFigureInSelection(canvasState.figures(), startPoint, endPoint, tagFilterPane);
 
                     if (addedFigures) {
                         drawPropertiesPane.setState(selectionManager.isShadowToggled(), selectionManager.isGradientToggled(), selectionManager.isBevelToggled());
@@ -174,7 +174,7 @@ public class PaintPane extends BorderPane {
             boolean found = false;
             StringBuilder label = new StringBuilder();
             for(DrawableGroup figure : canvasState.figures()) {
-                if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane.isFiltering(), tagFilterPane.getFilterTag())) {
+                if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane)) {
                     found = true;
                     label.append(figure.toString());
                 }
@@ -192,7 +192,7 @@ public class PaintPane extends BorderPane {
                 boolean found = false;
                 StringBuilder label = new StringBuilder("Se seleccionó: ");
                 for (DrawableGroup figure : canvasState.figures()) {
-                    if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane.isFiltering(), tagFilterPane.getFilterTag())) {
+                    if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane)) {
                         found = true;
                         selectionManager.add(figure);
                         drawPropertiesPane.setState(figure.isShadowToggled(), figure.isGradientToggled(), figure.isBevelToggled());
@@ -294,8 +294,7 @@ public class PaintPane extends BorderPane {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for(DrawableGroup group : canvasState.figures()) {
             gc.setStroke(selectionManager.isSelected(group) ? Color.RED : lineColor);
-            if(group.isFigureVisible(tagFilterPane.isFiltering(), tagFilterPane.getFilterTag()))
-                group.draw(gc);
+            group.draw(gc, tagFilterPane);
         }
     }
 

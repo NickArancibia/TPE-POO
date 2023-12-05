@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import backend.model.Figure;
 import backend.model.FigureGroup;
+import frontend.TagFilterPane;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -151,10 +152,9 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     }
 
     @Override
-    public boolean isFigureVisible(boolean shouldFilter, String tagFilter){
-        if(!shouldFilter) return true;
+    public boolean isFigureVisible(TagFilterPane tagFilterPane){
         for(DrawableFigure<? extends Figure> figure : baseFigure)
-            if (figure.isFigureVisible(shouldFilter, tagFilter)) return true;
+            if (figure.isFigureVisible(tagFilterPane)) return true;
         return false;
     }
 }
