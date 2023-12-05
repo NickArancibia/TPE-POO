@@ -7,20 +7,16 @@ import backend.CanvasState;
 import backend.model.*;
 import frontend.model.*;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
@@ -53,13 +49,6 @@ public class PaintPane extends BorderPane {
     TextArea tagsArea = new TextArea();
     Button saveTagsButton = new Button("Guardar");
 
-    // Botones Barra Inferior
-
-    Label showTagsLabel = new Label("Mostrar Etiquetas: ");
-    RadioButton showAllButton = new RadioButton("Todas");
-    RadioButton filterTagButton = new RadioButton("Sólo: ");
-    TextField filterTagField = new TextField();
-
     // Selector de color de relleno
     ColorPicker fillColorPicker = new ColorPicker(defaultFillColor);
 
@@ -74,7 +63,7 @@ public class PaintPane extends BorderPane {
     // StatusBar
     StatusPane statusPane;
 
-	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane) {
+	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane) {
 		this.canvasState = canvasState;
 		this.statusPane = statusPane;
 		ToggleButton[] toggleToolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton};
@@ -89,13 +78,9 @@ public class PaintPane extends BorderPane {
 			tool.setMinWidth(90);
 			tool.setCursor(Cursor.HAND);
 		}
-		tagsArea.setMaxHeight(50);
-		ToggleGroup showTagsGroup = new ToggleGroup();
-		showAllButton.setToggleGroup(showTagsGroup);
-		filterTagButton.setToggleGroup(showTagsGroup);
+        saveTagsButton.setMinWidth(90);
 		saveTagsButton.setCursor(Cursor.HAND);
-		showAllButton.setCursor(Cursor.HAND);
-		filterTagButton.setCursor(Cursor.HAND);
+		tagsArea.setMaxHeight(50);
 		VBox buttonsBox = new VBox(5);
 		buttonsBox.getChildren().addAll(toggleToolsArr);
 		buttonsBox.getChildren().addAll(toolsArr);
@@ -106,14 +91,6 @@ public class PaintPane extends BorderPane {
 		buttonsBox.setPadding(new Insets(5));
 		buttonsBox.setStyle("-fx-background-color: #999");
 		buttonsBox.setPrefWidth(100);
-		HBox tagsBox = new HBox(10);
-		tagsBox.setAlignment(Pos.CENTER);
-		tagsBox.getChildren().add(showTagsLabel);
-		tagsBox.getChildren().add(showAllButton);
-		tagsBox.getChildren().add(filterTagButton);
-		tagsBox.getChildren().add(filterTagField);
-		tagsBox.setPadding(new Insets(5));
-		tagsBox.setStyle("-fx-background-color: #999");
 		gc.setLineWidth(1);
 
         drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
@@ -309,7 +286,6 @@ public class PaintPane extends BorderPane {
 
         setLeft(buttonsBox);
         setRight(canvas);
-        setBottom(tagsBox);
     }
 
     private void redrawCanvas() {

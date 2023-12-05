@@ -9,10 +9,12 @@ public class MainFrame extends VBox {
         AppMenuBar appMenuBar = new AppMenuBar();
         StatusPane statusPane = new StatusPane();
         ShapeDrawPropertiesPane drawPropertiesPane = new ShapeDrawPropertiesPane();
-        PaintPane paintPane = new PaintPane(canvasState, statusPane, drawPropertiesPane);
+        TagFilterPane tagFilterPane = new TagFilterPane();
+        PaintPane paintPane = new PaintPane(canvasState, statusPane, drawPropertiesPane, tagFilterPane);
         getChildren().add(appMenuBar);
         getChildren().add(drawPropertiesPane);
         getChildren().add(paintPane);
+        getChildren().add(tagFilterPane);
         getChildren().add(statusPane);
     }
 }
