@@ -284,6 +284,7 @@ public class PaintPane extends BorderPane {
 
         saveTagsButton.setOnAction(event ->{
             selectionManager.applyActionToSelection(group -> group.setTags(parseTags(tagsArea.getText())));
+            clearSelectionAndRedraw();
         });
 
         setLeft(buttonsBox);
