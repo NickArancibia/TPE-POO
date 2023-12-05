@@ -2,9 +2,7 @@ package frontend;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -12,13 +10,13 @@ import backend.model.Point;
 import frontend.model.DrawableGroup;
 
 public class SelectionManager {
-    Set<DrawableGroup> selectedGroups = new HashSet<>();
+    List<DrawableGroup> selectedGroups = new ArrayList<>();
 
     public boolean addToSelectionIfVisibleFigureInSelection(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight, TagFilterPane tagFilterPane) {
         boolean addedFigures = false;
         for(DrawableGroup group : figures) {
             if(group.isFigureVisible(tagFilterPane) && group.isFigureInRectangle(topLeft, bottomRight)) {
-                selectedGroups.add(group);
+                add(group);
                 addedFigures = true;
             }
         }
@@ -27,7 +25,8 @@ public class SelectionManager {
     }
 
     public void add(DrawableGroup group) {
-        selectedGroups.add(group);
+        if(!selectedGroups.contains(group))
+            selectedGroups.add(group);
     }
 
     public void clearSelection() {
