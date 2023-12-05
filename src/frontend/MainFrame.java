@@ -2,6 +2,7 @@ package frontend;
 
 import backend.CanvasState;
 import frontend.model.DrawableGroup;
+import frontend.TagFilterPane;
 import javafx.scene.layout.VBox;
 
 public class MainFrame extends VBox {
