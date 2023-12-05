@@ -24,7 +24,17 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
         this.color = color;
     }
 
-    public abstract void draw(GraphicsContext gc);
+    protected abstract void handleShadow(GraphicsContext gc);
+    protected abstract void handleGradient(GraphicsContext gc);
+    protected abstract void handleShape(GraphicsContext gc);
+    protected abstract void handleBevel(GraphicsContext gc);
+
+    public void draw(GraphicsContext gc){
+        handleShadow(gc);
+        handleGradient(gc);
+        handleShape(gc);
+        handleBevel(gc);
+    }
 
     public Color getColor() {
         return color;

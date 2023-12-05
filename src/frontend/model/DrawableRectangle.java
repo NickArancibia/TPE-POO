@@ -17,7 +17,8 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
         super(rectangle, color);
     }
 
-    private void handleShadow(GraphicsContext gc) {
+    @Override
+    protected void handleShadow(GraphicsContext gc) {
         if (isShadowToggled()) {
             gc.setFill(Color.GRAY);
             gc.fillRect(baseFigure.getTopLeft().getX() + 10.0,
@@ -27,7 +28,8 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
         }
     }
 
-    private void handleGradient(GraphicsContext gc) {
+    @Override
+    protected void handleGradient(GraphicsContext gc) {
         if (isGradientToggled()) {
             LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, true,
                     CycleMethod.NO_CYCLE,
@@ -40,7 +42,16 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
         gc.setFill(color);
     }
 
-    private void handleBevel(GraphicsContext gc) {
+    @Override
+    protected void handleShape(GraphicsContext gc) {
+        gc.fillRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
+                Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()), Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
+        gc.strokeRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
+                Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()), Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
+    }
+    
+    @Override
+    protected void handleBevel(GraphicsContext gc) {
         if (isBevelToggled()) {
             double x = baseFigure.getTopLeft().getX();
             double y = baseFigure.getTopLeft().getY();
@@ -55,18 +66,5 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
             gc.strokeLine(x, y + height, x + width, y + height);
             gc.setLineWidth(1);
         }
-    }
-
-    @Override
-    public void draw(GraphicsContext gc) {
-        handleShadow(gc);
-        handleGradient(gc);
-
-        gc.fillRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
-                Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()), Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
-        gc.strokeRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
-                Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()), Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
-
-        handleBevel(gc);
     }
 }
