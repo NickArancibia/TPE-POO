@@ -75,7 +75,7 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
         this.tags = new HashSet<String>(tags);
     }
 
-    public Collection<String> getTags(){
+    public Set<String> getTags(){
         return tags;
     }
 

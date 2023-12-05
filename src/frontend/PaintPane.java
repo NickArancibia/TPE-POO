@@ -2,6 +2,7 @@ package frontend;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Set;
 
 import backend.CanvasState;
 import backend.model.*;
@@ -308,7 +309,7 @@ public class PaintPane extends BorderPane {
         return Arrays.asList(text.split("[ \n]"));
     }
 
-    private String stringifyTags(Collection<String> tags){
+    private String stringifyTags(Set<String> tags){
         return String.join("\n", tags);
     }
 }

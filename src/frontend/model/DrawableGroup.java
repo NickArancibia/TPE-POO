@@ -2,7 +2,9 @@ package frontend.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -139,8 +141,8 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
         return someToggled((figure) -> figure.isBevelToggled());
     }
 
-    public Collection<String> getTags(){
-        List<String> tags = new ArrayList<>();
+    public Set<String> getTags(){
+        Set<String> tags = new HashSet<>();
         for(DrawableFigure<? extends Figure> figure : baseFigure)
             tags.addAll(figure.getTags());
         return tags;
