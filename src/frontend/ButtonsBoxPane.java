@@ -26,6 +26,8 @@ public class ButtonsBoxPane extends BorderPane {
     private final Label tagsLabel;
     private final TextArea tagsArea;
     private final Button saveTagsButton;
+    private Color defaultFillColor = Color.YELLOW;
+    // Selector de color de relleno
     private ColorPicker fillColorPicker;
     private ToggleButton[] toggleToolsArr;
     private Button[] toolsArr;
@@ -49,7 +51,7 @@ public class ButtonsBoxPane extends BorderPane {
         saveTagsButton.setMinWidth(90);
         saveTagsButton.setCursor(Cursor.HAND);
         tagsLabel = new Label("Etiquetas");
-        fillColorPicker = new ColorPicker(Color.YELLOW);
+        fillColorPicker = new ColorPicker(defaultFillColor);
         toggleToolsArr = new ToggleButton[]{selectionButton, rectangleButton, circleButton, squareButton, ellipseButton};
         toolsArr = new Button[]{groupButton, ungroupButton, rotateButton, flipVButton, flipHButton, scaleUpButton, scaleDownButton, deleteButton};
         ToggleGroup toggleTools = new ToggleGroup();
@@ -136,5 +138,8 @@ public class ButtonsBoxPane extends BorderPane {
         return squareButton;
     }
 
+    public ColorPicker getFillColorPicker() {
+        return fillColorPicker;
+    }
 }
 

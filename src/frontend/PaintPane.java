@@ -31,9 +31,6 @@ public class PaintPane extends BorderPane {
     Canvas canvas = new Canvas(800, 600);
     GraphicsContext gc = canvas.getGraphicsContext2D();
     Color lineColor = Color.BLACK;
-    Color defaultFillColor = Color.YELLOW;
-    // Selector de color de relleno
-    ColorPicker fillColorPicker = new ColorPicker(defaultFillColor);
 
     // Dibujar una figura
     Point startPoint;
@@ -146,18 +143,18 @@ public class PaintPane extends BorderPane {
                 return;
             }
             if (buttonsPane.getRectangleButton().isSelected()) {
-                createFigure(new DrawableRectangle(startPoint, endPoint, fillColorPicker.getValue()));
+                createFigure(new DrawableRectangle(startPoint, endPoint, buttonsPane.getFillColorPicker().getValue()));
             } else if (buttonsPane.getCircleButton().isSelected()) {
                 double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
-                createFigure(new DrawableCircle(startPoint, circleRadius, fillColorPicker.getValue()));
+                createFigure(new DrawableCircle(startPoint, circleRadius, buttonsPane.getFillColorPicker().getValue()));
             } else if (buttonsPane.getSquareButton().isSelected()) {
                 double size = Math.abs(endPoint.getX() - startPoint.getX());
-                createFigure(new DrawableSquare(startPoint, size, fillColorPicker.getValue()));
+                createFigure(new DrawableSquare(startPoint, size, buttonsPane.getFillColorPicker().getValue()));
             } else if(buttonsPane.getEllipseButton().isSelected()) {
                 Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
                 double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
                 double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
-                createFigure(new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue()));
+                createFigure(new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, buttonsPane.getFillColorPicker().getValue()));
             } else if (buttonsPane.getSelectionButton().isSelected()){
                 if(!isMovingFigures(endPoint)) {
                     boolean addedFigures = selectionManager.selectFiguresInRect(canvasState.figures(), startPoint, endPoint, tagFilterPane);
@@ -229,7 +226,7 @@ public class PaintPane extends BorderPane {
     }
 
     private void createFigure(DrawableFigure<? extends Figure> figure){
-            DrawableGroup newGroup = new DrawableGroup(fillColorPicker.getValue());
+            DrawableGroup newGroup = new DrawableGroup(buttonsPane.getFillColorPicker().getValue());
             newGroup.add(figure);
             newGroup.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
             newGroup.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
