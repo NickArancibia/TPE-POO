@@ -26,7 +26,6 @@ public class ButtonsBoxPane extends BorderPane {
     private final Label tagsLabel;
     private final TextArea tagsArea;
     private final Button saveTagsButton;
-    private final Color defaultFillColor = Color.YELLOW;
     private ColorPicker fillColorPicker;
     private ToggleButton[] toggleToolsArr;
     private Button[] toolsArr;
@@ -50,7 +49,7 @@ public class ButtonsBoxPane extends BorderPane {
         saveTagsButton.setMinWidth(90);
         saveTagsButton.setCursor(Cursor.HAND);
         tagsLabel = new Label("Etiquetas");
-        fillColorPicker = new ColorPicker(defaultFillColor);
+        fillColorPicker = new ColorPicker(Color.YELLOW);
         toggleToolsArr = new ToggleButton[]{selectionButton, rectangleButton, circleButton, squareButton, ellipseButton};
         toolsArr = new Button[]{groupButton, ungroupButton, rotateButton, flipVButton, flipHButton, scaleUpButton, scaleDownButton, deleteButton};
         ToggleGroup toggleTools = new ToggleGroup();
@@ -118,15 +117,6 @@ public class ButtonsBoxPane extends BorderPane {
     public Button getUngroupButton() {
         return ungroupButton;
     }
-
-    public Color getDefaultFillColor() {
-        return defaultFillColor;
-    }
-
-    public Label getTagsLabel() {
-        return tagsLabel;
-    }
-
     public ToggleButton getEllipseButton() {
         return ellipseButton;
     }
@@ -138,25 +128,12 @@ public class ButtonsBoxPane extends BorderPane {
     public TextArea getTagsArea() {
         return tagsArea;
     }
-
-    public ColorPicker getFillColorPicker() {
-        return fillColorPicker;
-    }
-
     public ToggleButton getSelectionButton() {
         return selectionButton;
     }
 
     public ToggleButton getSquareButton() {
         return squareButton;
-    }
-
-    public Button[] getToolsArr() {
-        return toolsArr;
-    }
-
-    public ToggleButton[] getToggleToolsArr() {
-        return toggleToolsArr;
     }
 
 }
