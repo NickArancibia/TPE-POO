@@ -204,8 +204,7 @@ public class PaintPane extends BorderPane {
                 createFigure(new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, fillColorPicker.getValue()));
             } else if (selectionButton.isSelected()){
                 if(!movingFigures) {
-                    selectionManager.clearSelection();
-                    boolean addedFigures = selectionManager.addAllSelectedAndVisible(canvasState.figures(), startPoint, endPoint, tagFilterPane);
+                    boolean addedFigures = selectionManager.selectFiguresInRect(canvasState.figures(), startPoint, endPoint, tagFilterPane);
                     if (addedFigures) {
                         drawPropertiesPane.setState(selectionManager.isShadowToggled(), selectionManager.isGradientToggled(), selectionManager.isBevelToggled());
                         drawPropertiesPane.setSomeState(selectionManager.someShadowToggled(), selectionManager.someGradientToggled(), selectionManager.someBevelToggled());
