@@ -1,5 +1,8 @@
 package frontend;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import backend.CanvasState;
 import backend.model.*;
 import frontend.model.*;
@@ -218,6 +221,17 @@ public class PaintPane extends BorderPane {
                 } else {
                     statusPane.updateStatus("Ninguna figura encontrada");
                 }
+                if(selectionManager.canGroup()){
+                    tagsArea.setDisable(true);
+                    saveTagsButton.setDisable(true);
+                }else{
+                    tagsArea.setDisable(false);
+                    saveTagsButton.setDisable(false);
+                    if(!selectionManager.noSelection()){
+                        String text = stringifyTags(selectionManager.getSelection().iterator().next().getTags());
+                        tagsArea.setText(text);
+                    }
+                }
                 redrawCanvas();
             }
         });
@@ -289,16 +303,28 @@ public class PaintPane extends BorderPane {
             redrawCanvas();
         });
 
+        saveTagsButton.setOnAction(event ->{
+            selectionManager.applyActionToSelection(group -> group.setTags(parseTags(tagsArea.getText())));
+        });
+
         setLeft(buttonsBox);
         setRight(canvas);
         setBottom(tagsBox);
     }
 
-    void redrawCanvas() {
+    private void redrawCanvas() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for(DrawableGroup group : canvasState.figures()) {
             gc.setStroke(selectionManager.isSelected(group) ? Color.RED : lineColor);
             group.draw(gc);
         }
+    }
+
+    private Collection<String> parseTags(String text){
+        return Arrays.asList(text.split("[ \n]"));
+    }
+
+    private String stringifyTags(Collection<String> tags){
+        return String.join("\n", tags);
     }
 }

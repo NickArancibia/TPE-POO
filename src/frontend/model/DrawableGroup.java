@@ -122,4 +122,16 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     public boolean someBevelToggled() {
         return someToggled((figure) -> figure.isBevelToggled());
     }
+
+    public Collection<String> getTags(){
+        List<String> tags = new ArrayList<>();
+        for(DrawableFigure<? extends Figure> figure : baseFigure)
+            tags.addAll(figure.getTags());
+        return tags;
+    }
+
+    public void setTags(Collection<String> tags){
+        for(DrawableFigure<? extends Figure> figure : baseFigure)
+            figure.setTags(tags);
+    }
 }

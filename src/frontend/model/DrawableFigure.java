@@ -1,5 +1,9 @@
 package frontend.model;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import backend.model.Figure;
 import backend.model.Point;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,6 +16,8 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
     private boolean gradientToggled = false;
     private boolean shadowToggled = false;
     private boolean bevelToggled = false;
+
+    private Set<String> tags = new HashSet<>();
 
     DrawableFigure(T baseFigure, Color color) {
         this.baseFigure = baseFigure;
@@ -46,6 +52,14 @@ public abstract class DrawableFigure<T extends Figure> implements Figure {
 
     public boolean isBevelToggled() {
         return bevelToggled;
+    }
+
+    public void setTags(Collection<String> tags){
+        this.tags = new HashSet<String>(tags);
+    }
+
+    public Collection<String> getTags(){
+        return tags;
     }
 
     @Override
