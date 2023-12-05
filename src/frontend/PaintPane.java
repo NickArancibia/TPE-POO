@@ -2,6 +2,8 @@ package frontend;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import backend.CanvasState;
@@ -61,6 +63,9 @@ public class PaintPane extends BorderPane {
 
     boolean movingFigures = false;
 
+    // DrawPropertiesPane
+    ShapeDrawPropertiesPane drawPropertiesPane;
+
     // TagFilterPane
     TagFilterPane tagFilterPane;
 
@@ -70,6 +75,7 @@ public class PaintPane extends BorderPane {
 	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane) {
 		this.canvasState = canvasState;
         this.tagFilterPane = tagFilterPane;
+        this.drawPropertiesPane = drawPropertiesPane;
 		this.statusPane = statusPane;
 		ToggleButton[] toggleToolsArr = {selectionButton, rectangleButton, circleButton, squareButton, ellipseButton};
 		Button[] toolsArr = {groupButton, ungroupButton, rotateButton, flipVButton, flipHButton, scaleUpButton, scaleDownButton, deleteButton};
@@ -190,18 +196,8 @@ public class PaintPane extends BorderPane {
         canvas.setOnMouseClicked(event -> {
             if(selectionButton.isSelected()) {
                 Point eventPoint = new Point(event.getX(), event.getY());
-                boolean found = false;
                 StringBuilder label = new StringBuilder("Se seleccionó: ");
-                for (DrawableGroup figure : canvasState.figures()) {
-                    if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane)) {
-                        found = true;
-                        selectionManager.add(figure);
-                        drawPropertiesPane.setState(figure.isShadowToggled(), figure.isGradientToggled(), figure.isBevelToggled());
-                        drawPropertiesPane.setSomeState(figure.someShadowToggled(), figure.someGradientToggled(), figure.someBevelToggled());
-                        label.append(figure.toString());
-                    }
-                }
-                if (found) {
+                if (clickOnFigure(eventPoint, canvasState.figures(), label)) {
                     statusPane.updateStatus(label.toString());
                 } else {
                     statusPane.updateStatus("Ninguna figura encontrada");
@@ -290,6 +286,21 @@ public class PaintPane extends BorderPane {
 
         setLeft(buttonsBox);
         setRight(canvas);
+    }
+
+    private boolean clickOnFigure(Point eventPoint, List<DrawableGroup> figures, StringBuilder label){
+        ListIterator<DrawableGroup> iter = figures.listIterator(figures.size());
+        while (iter.hasPrevious()) {
+            DrawableGroup figure = iter.previous(); 
+            if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane)) {
+                selectionManager.add(figure);
+                drawPropertiesPane.setState(figure.isShadowToggled(), figure.isGradientToggled(), figure.isBevelToggled());
+                drawPropertiesPane.setSomeState(figure.someShadowToggled(), figure.someGradientToggled(), figure.someBevelToggled());
+                label.append(figure.toString());
+                return true;
+            }
+        }
+        return false;
     }
 
     private void redrawCanvas() {

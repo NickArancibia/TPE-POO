@@ -25,7 +25,7 @@ public class CanvasState <T extends Figure> {
         list.removeAll(figures);
     }
 
-    public Collection<T> figures() {
+    public List<T> figures() {
         return list;
     }
 }
