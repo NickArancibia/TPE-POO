@@ -39,9 +39,8 @@ public class Ellipse implements Figure {
 
     @Override
     public boolean isFigureInRectangle(Point topLeft, Point bottomRight){
-        return centerPoint.isPointInRectangle(topLeft, bottomRight) &&
-                Math.abs(topLeft.getX() - bottomRight.getX()) >= sMayorAxis &&
-                Math.abs(topLeft.getY() - bottomRight.getY()) >= sMinorAxis;
+        return (new Point(centerPoint.getX() - sMayorAxis / 2, centerPoint.getY() - sMinorAxis / 2)).isPointInRectangle(topLeft, bottomRight)
+            && (new Point(centerPoint.getX() + sMayorAxis / 2, centerPoint.getY() + sMinorAxis / 2 )).isPointInRectangle(topLeft, bottomRight);
     }
     @Override
     public void scaleUp() {
