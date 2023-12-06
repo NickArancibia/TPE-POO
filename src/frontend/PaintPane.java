@@ -1,7 +1,6 @@
 package frontend;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -248,8 +247,12 @@ public class PaintPane extends BorderPane {
         redrawCanvas();
     }
 
-    private Collection<String> parseTags(String text){
-        return Arrays.asList(text.split("[ \n]"));
+    private Set<String> parseTags(String text){
+        Set<String> tags = new HashSet<>();
+        for(String tag : text.split("[ \n]")){
+            tags.add(tag);
+        }
+        return tags;
     }
 
     private String stringifyTags(Set<String> tags){

@@ -68,6 +68,4 @@ public abstract class Figure {
     public abstract void flipH();
     
     public abstract void rotate();
-
-
 }

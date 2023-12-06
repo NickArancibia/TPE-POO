@@ -1,7 +1,6 @@
 package frontend.model;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 import backend.model.Figure;
@@ -25,8 +24,9 @@ public abstract class DrawableFigure<T extends Figure> extends Figure {
     }
 
     public void draw(GraphicsContext gc, TagFilterPane tagFilterPane){
-        if(isFigureVisible(tagFilterPane))
+        if(isFigureVisible(tagFilterPane)){
             drawFigure(gc);
+        }
     }
 
     public Color getColor() {
