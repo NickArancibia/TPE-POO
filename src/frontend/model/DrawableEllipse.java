@@ -9,19 +9,24 @@ import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.ArcType;
 
-public class DrawableEllipse extends DrawableFigure<Ellipse> {
+public class DrawableEllipse extends Ellipse implements Drawable {
+
     public DrawableEllipse(Point centerPoint, double sMayorAxis, double sMinorAxis, Color color) {
-        super(new Ellipse(centerPoint, sMayorAxis, sMinorAxis, color.toString()));
+        super(centerPoint, sMayorAxis, sMinorAxis, color.toString());
     }
 
-    public DrawableEllipse(Ellipse ellipse) {
-        super(ellipse);
+    public DrawableEllipse(Point centerPoint, double radius, Color color) {
+        super(centerPoint, radius, radius, color.toString());
+    }
+
+    private Color getColor(){
+        return Color.web(getColorAsHex());
     }
 
     private void drawShadow(GraphicsContext gc) {
         if (isShadowToggled()) {
             gc.setFill(Color.GRAY);
-            gc.fillOval(baseFigure.getCenterPoint().getX() - (baseFigure.getsMayorAxis() / 2) + 10.0, baseFigure.getCenterPoint().getY() - (baseFigure.getsMinorAxis() / 2) + 10.0, baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis());
+            gc.fillOval(getCenterPoint().getX() - (getsMayorAxis() / 2) + 10.0, getCenterPoint().getY() - (getsMinorAxis() / 2) + 10.0, getsMayorAxis(), getsMinorAxis());
         }
     }
 
@@ -40,24 +45,23 @@ public class DrawableEllipse extends DrawableFigure<Ellipse> {
 
     private void drawBevel(GraphicsContext gc) {
         if (isBevelToggled()) {
-            double arcX = baseFigure.getCenterPoint().getX() - (baseFigure.getsMayorAxis() / 2);
-            double arcY = baseFigure.getCenterPoint().getY() - (baseFigure.getsMinorAxis() / 2);
+            double arcX = getCenterPoint().getX() - (getsMayorAxis() / 2);
+            double arcY = getCenterPoint().getY() - (getsMinorAxis() / 2);
             gc.setLineWidth(10);
             gc.setStroke(Color.LIGHTGRAY);
-            gc.strokeArc(arcX, arcY, baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis(), 45, 180, ArcType.OPEN);
+            gc.strokeArc(arcX, arcY, getsMayorAxis(), getsMinorAxis(), 45, 180, ArcType.OPEN);
             gc.setStroke(Color.BLACK);
-            gc.strokeArc(arcX, arcY, baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis(), 225, 180, ArcType.OPEN);
+            gc.strokeArc(arcX, arcY, getsMayorAxis(), getsMinorAxis(), 225, 180, ArcType.OPEN);
             gc.setLineWidth(1);
         }
     }
 
-    @Override
-    protected void drawFigure(GraphicsContext gc) {
+    public void drawFigure(GraphicsContext gc) {
         drawShadow(gc);
         drawGradient(gc);
 
-        gc.strokeOval(baseFigure.getCenterPoint().getX() - (baseFigure.getsMayorAxis() / 2), baseFigure.getCenterPoint().getY() - (baseFigure.getsMinorAxis() / 2), baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis());
-        gc.fillOval(baseFigure.getCenterPoint().getX() - (baseFigure.getsMayorAxis() / 2), baseFigure.getCenterPoint().getY() - (baseFigure.getsMinorAxis() / 2), baseFigure.getsMayorAxis(), baseFigure.getsMinorAxis());
+        gc.strokeOval(getCenterPoint().getX() - (getsMayorAxis() / 2), getCenterPoint().getY() - (getsMinorAxis() / 2), getsMayorAxis(), getsMinorAxis());
+        gc.fillOval(getCenterPoint().getX() - (getsMayorAxis() / 2), getCenterPoint().getY() - (getsMinorAxis() / 2), getsMayorAxis(), getsMinorAxis());
 
         drawBevel(gc);
     }

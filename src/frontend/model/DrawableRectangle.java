@@ -8,22 +8,27 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 
-public class DrawableRectangle extends DrawableFigure<Rectangle> {
+public class DrawableRectangle extends Rectangle implements Drawable {
+    
     public DrawableRectangle(Point topLeft, Point bottomRight, Color color) {
-        super(new Rectangle(topLeft, bottomRight, color.toString()));
+        super(topLeft, bottomRight, color.toString());
     }
 
-    public DrawableRectangle(Rectangle rectangle) {
-        super(rectangle);
+    public DrawableRectangle(Point topLeft, double width, double height, Color color) {
+        super(topLeft, width, height, color.toString());
     }
-
+    
+    private Color getColor(){
+        return Color.web(getColorAsHex());
+    }
+    
     private void drawShadow(GraphicsContext gc) {
         if (isShadowToggled()) {
             gc.setFill(Color.GRAY);
-            gc.fillRect(baseFigure.getTopLeft().getX() + 10.0,
-                    baseFigure.getTopLeft().getY() + 10.0,
-                    Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()),
-                    Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
+            gc.fillRect(getTopLeft().getX() + 10.0,
+                    getTopLeft().getY() + 10.0,
+                    Math.abs(getTopLeft().getX() - getBottomRight().getX()),
+                    Math.abs(getTopLeft().getY() - getBottomRight().getY()));
         }
     }
 
@@ -42,10 +47,10 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
 
     private void drawBevel(GraphicsContext gc) {
         if (isBevelToggled()) {
-            double x = baseFigure.getTopLeft().getX();
-            double y = baseFigure.getTopLeft().getY();
-            double width = Math.abs(x - baseFigure.getBottomRight().getX());
-            double height = Math.abs(y - baseFigure.getBottomRight().getY());
+            double x = getTopLeft().getX();
+            double y = getTopLeft().getY();
+            double width = Math.abs(x - getBottomRight().getX());
+            double height = Math.abs(y - getBottomRight().getY());
             gc.setLineWidth(10);
             gc.setStroke(Color.LIGHTGRAY);
             gc.strokeLine(x, y, x + width, y);
@@ -58,14 +63,14 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
     }
 
     @Override
-    protected void drawFigure(GraphicsContext gc) {
+    public void drawFigure(GraphicsContext gc) {
         drawShadow(gc);
         drawGradient(gc);
 
-        gc.fillRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
-                Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()), Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
-        gc.strokeRect(baseFigure.getTopLeft().getX(), baseFigure.getTopLeft().getY(),
-                Math.abs(baseFigure.getTopLeft().getX() - baseFigure.getBottomRight().getX()), Math.abs(baseFigure.getTopLeft().getY() - baseFigure.getBottomRight().getY()));
+        gc.fillRect(getTopLeft().getX(), getTopLeft().getY(),
+                Math.abs(getTopLeft().getX() - getBottomRight().getX()), Math.abs(getTopLeft().getY() - getBottomRight().getY()));
+        gc.strokeRect(getTopLeft().getX(), getTopLeft().getY(),
+                Math.abs(getTopLeft().getX() - getBottomRight().getX()), Math.abs(getTopLeft().getY() - getBottomRight().getY()));
 
         drawBevel(gc);
     }

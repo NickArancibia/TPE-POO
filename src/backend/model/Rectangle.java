@@ -9,6 +9,10 @@ public class Rectangle extends Figure {
         this.bottomRight = bottomRight;
     }
 
+    public Rectangle(Point topLeft, double width, double height, String colorAsHex) {
+        this(topLeft, new Point(topLeft.getX() + width, topLeft.getY() + height), colorAsHex);
+    }
+
     public Point getTopLeft() {
         return topLeft;
     }

@@ -208,7 +208,7 @@ public class PaintPane extends BorderPane {
         return dist > toleranceForMouseClick && !selectionManager.noneSelected();
     }
 
-    private void createFigure(DrawableFigure<? extends Figure> figure){
+    private void createFigure(Drawable figure){
         DrawableGroup newGroup = new DrawableGroup(buttonsPane.getFillColorPicker().getValue());
         newGroup.add(figure);
         newGroup.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
@@ -238,7 +238,7 @@ public class PaintPane extends BorderPane {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for(DrawableGroup group : canvasState) {
             gc.setStroke(selectionManager.isSelected(group) ? Color.RED : lineColor);
-            group.draw(gc, tagFilterPane);
+            if(!tagFilterPane.isFiltering() || group.hasTag(tagFilterPane.getFilterTag())) group.drawFigure(gc);
         }
     }
 

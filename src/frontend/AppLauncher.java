@@ -1,6 +1,8 @@
 package frontend;
 
 import backend.CanvasState;
+import backend.model.Figure;
+import frontend.model.Drawable;
 import frontend.model.DrawableGroup;
 import javafx.application.Application;
 import javafx.scene.Scene;
