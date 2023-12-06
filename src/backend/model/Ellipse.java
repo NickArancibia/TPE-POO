@@ -43,16 +43,9 @@ public class Ellipse extends Figure {
         return (new Point(centerPoint.getX() - sMayorAxis / 2, centerPoint.getY() - sMinorAxis / 2)).isPointInRectangle(topLeft, bottomRight)
             && (new Point(centerPoint.getX() + sMayorAxis / 2, centerPoint.getY() + sMinorAxis / 2 )).isPointInRectangle(topLeft, bottomRight);
     }
-    @Override
-    public void scaleUp() {
-        scale(0.25);
-    }
-    @Override
-    public void scaleDown() {
-        scale(-0.25);
-    }
 
-    private void scale(double factor){
+    @Override
+    public void scale(double factor){
         sMayorAxis += sMayorAxis*factor;
         sMinorAxis += sMinorAxis*factor;
     }

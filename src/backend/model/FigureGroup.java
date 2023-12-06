@@ -1,5 +1,7 @@
 package backend.model;
 
+import frontend.model.DrawableGroup;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +33,7 @@ public class FigureGroup<T extends Figure> extends Figure{
         for(T figure : figures)
             add(figure);
     }
+
 
     public void addAll(FigureGroup<T> figureGroup){
         addAll(figureGroup.figures);
@@ -134,15 +137,9 @@ public class FigureGroup<T extends Figure> extends Figure{
         }
         return false;
     }
-
     @Override
-    public void scaleUp() {
-        applyConsumer((figure) -> figure.scaleUp());
-    }
-
-    @Override
-    public void scaleDown() {
-        applyConsumer((figure) -> figure.scaleDown());
+    public void scale(double delta) {
+        applyConsumer((figure) -> figure.scale(delta));
     }
 
     @Override
@@ -166,4 +163,6 @@ public class FigureGroup<T extends Figure> extends Figure{
         applyConsumer((figure) -> s.append(figure.toString()));
         return s.toString();
     }
+
+
 }
