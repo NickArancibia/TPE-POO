@@ -1,0 +1,168 @@
+@startuml
+
+class CanvasState<T extends Figure>{}
+class ArrayList<T>{}
+
+ArrayList <|-- CanvasState
+
+class AppLauncher{
+
++static void main(String[] args)
++void start(Stage primaryStage)
+}
+
+AppLauncher *--CanvasState
+AppLauncher *--MainFrame
+
+class MainFrame {
+
++MainFrame(CanvasState<DrawableGroup> canvasState)
+}
+
+MainFrame *-- AppMenuBar
+MainFrame *-- StatusPane
+MainFrame *-- ShapeDrawPropertiesPane
+MainFrame *-- TagFilterPane
+MainFrame *-- ButtonsBoxPane
+MainFrame *-- PaintPane
+
+class AppMenuBar {
+    public AppMenuBar()
+}
+
+
+
+class TagFilterPane{
+    
+    -final Label showTagsLabel
+    -final RadioButton showAllButton
+    -final RadioButton filterTagButton
+    -final TextField filterTagField
+    -final ToggleGroup showTagsGroup
+
+    +TagFilterPane()
+    +TextField getFilterTagTextField()
+    +String getFilterTag()
+    +boolean isFiltering()
+    +RadioButton getShowAllButton()
+    +RadioButton getFilterTagButton()
+}
+
+ class StatusPane {
+	-final Label statusLabel
+	+StatusPane()
+	+void updateStatus(String text)
+}
+
+
+class ShapeDrawPropertiesPane {
+    -final CheckBox shadowCheckBox
+    -final CheckBox gradientCheckBox
+    -final CheckBox bevelCheckBox
+
+    +ShapeDrawPropertiesPane()
+    +void setState(boolean isShadowToggled, boolean isGradientToggled, boolean isBevelToggled) 
+    +void setSomeState(boolean someShadowToggled, boolean someGradientToggled, boolean someBevelToggled)
+    +CheckBox getShadowCheckBox() 
+    +CheckBox getGradientCheckBox()
+    +CheckBox getBevelCheckBox()
+}
+
+class ButtonsBoxPane {
+
+   -final ToggleButton selectionButton;
+    -final ToggleButton rectangleButton;
+    -final ToggleButton circleButton;
+    -final ToggleButton squareButton;
+    -final ToggleButton ellipseButton;
+    -final Button deleteButton;
+    -final Button groupButton;
+    -final Button ungroupButton;
+    -final Button rotateButton;
+     -final Button flipVButton;
+    -final Button flipHButton;
+    -final Button scaleUpButton;
+    -final Button scaleDownButton;
+    -final Label tagsLabel;
+    -final TextArea tagsArea;
+    -final Button saveTagsButton;
+    -Color defaultFillColor = Color.YELLOW;
+    -ColorPicker fillColorPicker;
+    -ToggleButton[] toggleToolsArr;
+    -Button[] toolsArr;
+    +ButtonsBoxPane()
+    +void init(GraphicsContext gc){
+    +Button getDeleteButton() 
+    +Button getGroupButton() 
+    +Button getUngroupButton() 
+    +Button getFlipHButton() 
+    +Button getFlipVButton() 
+    +Button getRotateButton() 
+    +Button getSaveTagsButton() 
+    +Button getScaleDownButton() 
+    +Button getScaleUpButton() 
+    +ToggleButton getCircleButton() 
+    +ToggleButton getEllipseButton() 
+    +ToggleButton getRectangleButton() 
+    +ToggleButton getSelectionButton() 
+    +ToggleButton getSquareButton() 
+    +ColorPicker getFillColorPicker()
+    +TextArea getTagsArea() 
+}
+
+
+class SelectionManager {
+  - List<DrawableGroup> selectedGroups
+  + boolean selectFiguresInRect(Collection<DrawableGroup> figures,Point topLeft ,Point bottomRight,TagFilterPane tagFilterPane)
+  + void add(DrawableGroup group)
+  + void clearSelection()
+  + boolean atLeastTwoSelected() 
+  + boolean noneSelected()
+  + DrawableGroup groupSelection()
+  + Collection<DrawableGroup> ungroupSelection() 
+  + Collection<DrawableGroup> getSelection()
+  + boolean isSelected(DrawableGroup group)
+  + void applyActionToSelection(Consumer<DrawableGroup> consumer)
+  + boolean isShadowToggled()
+  + boolean someShadowToggled()
+  + boolean isGradientToggled()
+  + boolean someGradientToggled()
+  + boolean isBevelToggled()
+  + boolean someBevelToggled()
+  -boolean isToggled(Function<DrawableGroup, Boolean> toggled)
+  -boolean someToggled(Function<DrawableGroup, Boolean> toggled)
+  
+}
+
+SelectionManager *-- DrawableGroup
+PaintPane *-- CanvasState
+PaintPane *-- StatusPane
+PaintPane *-- ShapeDrawPropertiesPane
+PaintPane *-- ButtonsBoxPane
+PaintPane *-- TagFilterPane
+PaintPane *-- SelectionManager 
+
+class PaintPane {
+    -final double toleranceForMouseClick
+    CanvasState<DrawableGroup> canvasState;
+    Canvas canvas 
+    GraphicsContext gc 
+    Color lineColor 
+    Point startPoint;
+    SelectionManager selectionManager 
+    ShapeDrawPropertiesPane drawPropertiesPane
+    TagFilterPane tagFilterPane;
+    StatusPane statusPane
+    ButtonsBoxPane buttonsPane
+ 
+   +PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane)
+   -boolean isMovingFigures(Point endPoint)
+   -void createFigure(DrawableFigure<? extends Figure> figure)
+   -boolean clickOnFigure(Point eventPoint, List<DrawableGroup> figures, StringBuilder label)
+   -void redrawCanvas()
+   -void clearSelectionAndRedraw()
+   -Collection<String> parseTags(String text)
+   -String stringifyTags(Set<String> tags)
+}
+
+@enduml

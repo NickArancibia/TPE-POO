@@ -1,0 +1,103 @@
+@startuml
+Interface Figure{
+    +boolean pointInFigure(Point p)
+    +void move(double deltaX, double deltaY)
+    +boolean isFigureInRectangle(Point topLeft, Point bottomRight)
+    +void scaleUp()
+    +void scaleDown()
+    +void flipV()
+    +void flipH()
+    +void rotate()
+}
+
+class ArrayList<T>{}
+class Ellipse{
+    -final Point centerPoint
+    -double sMayorAxis
+    -double sMinorAxis
+    +Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis)
+    +Point getCenterPoint()
+    +double getsMayorAxis()
+    +double getsMinorAxis()
+    +String toString()
+    +boolean pointInFigure(Point p)
+    +void move(double deltaX, double deltaY)
+    +boolean isFigureInRectangle(Point topLeft, Point bottomRight)
+    +void scaleUp()
+    +void scaleDown()
+    +void flipV()
+    +void flipH()
+    +void rotate()
+    -void scale(double factor)
+}
+
+class Rectangle{
+   -final Point topLeft
+   -final Point bottomRight
+    +Rectangle(Point topLeft, Point bottomRight)
+    +Point getTopLeft() 
+    +Point getBottomRight()
+    +String toString()
+    +double getBase()
+    +double getHeight()
+    +boolean pointInFigure(Point p)
+    +void move(double deltaX, double deltaY)
+    +boolean isFigureInRectangle(Point topLeft, Point bottomRight)
+    +void scaleUp()
+    +void scaleDown()
+    +void flipV()
+    +void flipH()
+    +void rotate()
+    -void turnAround(double deltaX,double deltaY)
+    -void scale(double factor)
+
+}
+
+class Point{
+
+    -double x
+    -double y
+    +Point(double x, double y)
+    +double getX()
+    +double getY()
+    +double distance(Point otherPoint)
+    +void move(double deltaX, double deltaY)
+    +boolean isPointInRectangle(Point topLeft, Point bottomRight)
+    +String toString()
+}
+
+class Square{
+    +Square(Point topLeft, double size)
+    +String toString()
+}
+
+class Circle {
+    +Circle(Point centerPoint, double radius)
+    +String toString()
+    +double getRadius()
+
+}
+
+
+class FigureGroup<T extends Figure>{
+
+    +boolean pointInFigure(Point p)
+    +void move(double deltaX, double deltaY)
+    +boolean isFigureInRectangle(Point topLeft, Point bottomRight)
+    +void scaleUp()
+    +void scaleDown() 
+    +void flipH()
+    +void flipV()
+    +void rotate() 
+    +String toString()
+}
+
+ArrayList <|-- FigureGroup
+Figure <-.. FigureGroup : implements
+Figure <-.. Rectangle : implements
+Rectangle <|-- Square
+Figure <-.. Ellipse : implements
+Ellipse <|-- Circle
+Point *-- Rectangle
+Point *-- Ellipse
+@enduml
