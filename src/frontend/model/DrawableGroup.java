@@ -30,10 +30,12 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
 
     public void add(DrawableFigure<? extends Figure> figure){
         baseFigure.add(figure);
+        getTags().addAll(figure.getTags());
     }
 
     public void addAll(DrawableGroup group){
         baseFigure.addAll(group.baseFigure);
+        getTags().addAll(group.getTags());
     }
 
     public void addAll(Collection<DrawableGroup> groups){
@@ -141,14 +143,8 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
         return someToggled((figure) -> figure.isBevelToggled());
     }
 
-    public Set<String> getTags(){
-        Set<String> tags = new HashSet<>();
-        for(DrawableFigure<? extends Figure> figure : baseFigure)
-            tags.addAll(figure.getTags());
-        return tags;
-    }
-
     public void setTags(Collection<String> tags){
+        super.setTags(tags);
         for(DrawableFigure<? extends Figure> figure : baseFigure)
             figure.setTags(tags);
     }
