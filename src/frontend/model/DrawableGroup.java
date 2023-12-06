@@ -24,18 +24,17 @@ public class DrawableGroup<T extends Figure & Drawable> extends FigureGroup<T> i
         super(figure);
     }
 
-    public Collection<DrawableGroup<T>> ungroup() {
-        List<DrawableGroup<T>> out = new ArrayList<>();
-
-        for(T figure : getFigures()) 
-            out.add(new DrawableGroup<>(figure));
-
-        return out;
-    }
-
     private void applyConsumer(Consumer<T> consumer) {
         for(T figure : getFigures())
             consumer.accept(figure);
+    }
+
+    public Collection<DrawableGroup<T>> ungroup() {
+        List<DrawableGroup<T>> out = new ArrayList<>();
+
+        applyConsumer((figure) -> out.add(new DrawableGroup<>(figure)));
+
+        return out;
     }
 
     @Override

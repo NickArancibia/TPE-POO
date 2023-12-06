@@ -109,8 +109,7 @@ public class FigureGroup<T extends Figure> extends Figure{
 
     public void setTags(Collection<String> tags){
         super.setTags(tags);
-        for(T figure : figures)
-            figure.setTags(tags);
+        applyConsumer((figure) -> figure.setTags(tags));
     }
 
     @Override
@@ -164,9 +163,7 @@ public class FigureGroup<T extends Figure> extends Figure{
     @Override
     public String toString(){
         StringBuilder s = new StringBuilder();
-        for(T figure : figures) {
-            s.append(figure.toString());
-        }
+        applyConsumer((figure) -> s.append(figure.toString()));
         return s.toString();
     }
 }
