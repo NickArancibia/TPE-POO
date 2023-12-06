@@ -50,15 +50,8 @@ public class Rectangle extends Figure {
         return Math.abs(topLeft.getY() - bottomRight.getY());
     }
 
-    public void scaleUp(){
-        scale(0.25);
-    }
-
-    public void scaleDown(){
-        scale(-0.25);
-    }
-
-    private void scale(double factor){
+    @Override
+    public void scale(double factor){
         double deltaX = getBase()*factor/2;
         double deltaY = getHeight()*factor /2;
         topLeft.move(-deltaX,-deltaY);

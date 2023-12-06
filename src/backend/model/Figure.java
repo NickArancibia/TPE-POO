@@ -10,7 +10,6 @@ public abstract class Figure {
     private boolean gradientToggled = false;
     private boolean shadowToggled = false;
     private boolean bevelToggled = false;
-
     private Set<String> tags = new HashSet<>();
 
     public Figure(String colorAsHex) {
@@ -63,9 +62,10 @@ public abstract class Figure {
     
     public abstract boolean isFigureInRectangle(Point topLeft, Point bottomRight);
     
-    public abstract void scaleUp();
+    public void scaleUp(){scale(0.25);}
     
-    public abstract void scaleDown();
+    public void scaleDown(){scale(-0.25);}
+    public abstract void scale(double delta);
     
     public abstract void flipV();
     

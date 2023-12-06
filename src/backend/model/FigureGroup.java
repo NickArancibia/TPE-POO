@@ -32,6 +32,7 @@ public class FigureGroup<T extends Figure> extends Figure{
             add((T)figure);
     }
 
+
     public void addAll(FigureGroup<T> figureGroup){
         addAll(figureGroup.figures);
         getTags().addAll(figureGroup.getTags());
@@ -134,15 +135,9 @@ public class FigureGroup<T extends Figure> extends Figure{
         }
         return false;
     }
-
     @Override
-    public void scaleUp() {
-        applyConsumer((figure) -> figure.scaleUp());
-    }
-
-    @Override
-    public void scaleDown() {
-        applyConsumer((figure) -> figure.scaleDown());
+    public void scale(double delta) {
+        applyConsumer((figure) -> figure.scale(delta));
     }
 
     @Override
@@ -166,4 +161,6 @@ public class FigureGroup<T extends Figure> extends Figure{
         applyConsumer((figure) -> s.append(figure.toString()));
         return s.toString();
     }
+
+
 }
