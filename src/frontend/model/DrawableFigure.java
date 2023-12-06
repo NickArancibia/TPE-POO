@@ -1,7 +1,5 @@
 package frontend.model;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 import backend.model.Figure;
@@ -18,8 +16,6 @@ public abstract class DrawableFigure<T extends Figure> extends Figure {
     private boolean shadowToggled = false;
     private boolean bevelToggled = false;
 
-    private Set<String> tags = new HashSet<>();
-
     DrawableFigure(T baseFigure, Color color) {
         this.baseFigure = baseFigure;
         this.color = color;
@@ -27,13 +23,18 @@ public abstract class DrawableFigure<T extends Figure> extends Figure {
 
     protected abstract void drawFigure(GraphicsContext gc);
 
+    public boolean hasTag(String tag){
+        return baseFigure.hasTag(tag);
+    }
+
     public boolean isFigureVisible(TagFilterPane tagFilterPane){
-        return !tagFilterPane.isFiltering() || tags.contains(tagFilterPane.getFilterTag());
+        return tagFilterPane.getShowAllButton().isSelected() || hasTag(tagFilterPane.getFilterTag());
     }
 
     public void draw(GraphicsContext gc, TagFilterPane tagFilterPane){
-        if(isFigureVisible(tagFilterPane))
+        if(isFigureVisible(tagFilterPane)){
             drawFigure(gc);
+        }
     }
 
     public Color getColor() {
@@ -64,12 +65,12 @@ public abstract class DrawableFigure<T extends Figure> extends Figure {
         return bevelToggled;
     }
 
-    public void setTags(Collection<String> tags){
-        this.tags = new HashSet<String>(tags);
+    public void setTags(Set<String> tags){
+        baseFigure.setTags(tags);
     }
 
     public Set<String> getTags(){
-        return tags;
+        return baseFigure.getTags();
     }
 
     @Override
