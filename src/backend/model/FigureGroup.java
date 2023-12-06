@@ -27,6 +27,7 @@ public class FigureGroup<T extends Figure> extends Figure{
         getTags().addAll(figure.getTags());
     }
 
+    @SuppressWarnings("unchecked")
     public void addAll(Iterable<? extends  Figure> figures){
         for(Figure figure : figures)
             add((T)figure);
