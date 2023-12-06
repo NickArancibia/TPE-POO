@@ -7,7 +7,7 @@ ArrayList <|-- CanvasState
 
 class AppLauncher{
 
-+static void main(String[] args)
++{static} void main(String[] args)
 +void start(Stage primaryStage)
 }
 
@@ -16,7 +16,7 @@ AppLauncher *--MainFrame
 
 class MainFrame {
 
-+MainFrame(CanvasState<DrawableGroup> canvasState)
++MainFrame(CanvasState<DrawableGroup<? extends Figure>> canvasState)
 }
 
 MainFrame *-- AppMenuBar
@@ -70,28 +70,28 @@ class ShapeDrawPropertiesPane {
 
 class ButtonsBoxPane {
 
-   -final ToggleButton selectionButton;
-    -final ToggleButton rectangleButton;
-    -final ToggleButton circleButton;
-    -final ToggleButton squareButton;
-    -final ToggleButton ellipseButton;
-    -final Button deleteButton;
-    -final Button groupButton;
-    -final Button ungroupButton;
-    -final Button rotateButton;
-     -final Button flipVButton;
-    -final Button flipHButton;
-    -final Button scaleUpButton;
-    -final Button scaleDownButton;
-    -final Label tagsLabel;
-    -final TextArea tagsArea;
-    -final Button saveTagsButton;
-    -Color defaultFillColor = Color.YELLOW;
-    -ColorPicker fillColorPicker;
-    -ToggleButton[] toggleToolsArr;
-    -Button[] toolsArr;
+    -final ToggleButton selectionButton
+    -final ToggleButton rectangleButton
+    -final ToggleButton circleButton
+    -final ToggleButton squareButton
+    -final ToggleButton ellipseButton
+    -final Button deleteButton
+    -final Button groupButton
+    -final Button ungroupButton
+    -final Button rotateButton
+    -final Button flipVButton
+    -final Button flipHButton
+    -final Button scaleUpButton
+    -final Button scaleDownButton
+    -final Label tagsLabel
+    -final TextArea tagsArea
+    -final Button saveTagsButton
+    -Color defaultFillColor = Color.YELLOW
+    -ColorPicker fillColorPicker
+    -ToggleButton[] toggleToolsArr
+    -Button[] toolsArr
     +ButtonsBoxPane()
-    +void init(GraphicsContext gc){
+    +void init(GraphicsContext gc)
     +Button getDeleteButton() 
     +Button getGroupButton() 
     +Button getUngroupButton() 
@@ -134,7 +134,9 @@ class SelectionManager {
   
 }
 
-SelectionManager *-- DrawableGroup
+class ArrayList<E>{}
+
+SelectionManager *-- ArrayList
 PaintPane *-- CanvasState
 PaintPane *-- StatusPane
 PaintPane *-- ShapeDrawPropertiesPane
@@ -144,24 +146,24 @@ PaintPane *-- SelectionManager
 
 class PaintPane {
     -final double toleranceForMouseClick
-    CanvasState<DrawableGroup> canvasState;
+    CanvasState<DrawableGroup<? extends Figure>> canvasState
     Canvas canvas 
     GraphicsContext gc 
     Color lineColor 
-    Point startPoint;
+    Point startPoint
     SelectionManager selectionManager 
     ShapeDrawPropertiesPane drawPropertiesPane
-    TagFilterPane tagFilterPane;
+    TagFilterPane tagFilterPane
     StatusPane statusPane
     ButtonsBoxPane buttonsPane
  
-   +PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane)
+   +PaintPane(CanvasState<DrawableGroup<? extends Figure>> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane)
    -boolean isMovingFigures(Point endPoint)
-   -void createFigure(DrawableFigure<? extends Figure> figure)
+   -<T extends Figure & Drawable> void createFigure(T figure)
    -boolean clickOnFigure(Point eventPoint, List<DrawableGroup> figures, StringBuilder label)
    -void redrawCanvas()
    -void clearSelectionAndRedraw()
-   -Collection<String> parseTags(String text)
+   -Set<String> parseTags(String text)
    -String stringifyTags(Set<String> tags)
 }
 
