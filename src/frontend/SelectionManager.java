@@ -45,7 +45,7 @@ public class SelectionManager {
 
     public DrawableGroup<? extends Figure> groupSelection() {
         DrawableGroup<? extends Figure> group = new DrawableGroup<>();
-        group.addAll(selectedGroups);
+        group.addAllGroups(selectedGroups);
         return group;
     }
 

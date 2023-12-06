@@ -33,10 +33,15 @@ public class FigureGroup<T extends Figure> extends Figure{
             add((T)figure);
     }
 
-
-    public void addAll(FigureGroup<T> figureGroup){
+    public void addGroup(FigureGroup<T> figureGroup){
         addAll(figureGroup.figures);
         getTags().addAll(figureGroup.getTags());
+    }
+
+    @SuppressWarnings("unchecked")
+    public void addAllGroups(Iterable<? extends FigureGroup<? extends Figure>> figureGroups){
+        for(FigureGroup<? extends Figure> figureGroup : figureGroups)
+            addGroup((FigureGroup<T>) figureGroup);
     }
 
     public int size(){
