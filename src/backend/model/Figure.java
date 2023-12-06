@@ -49,6 +49,10 @@ public abstract class Figure {
         this.tags = new HashSet<String>(tags);
     }
 
+    public boolean hasTag(String tag){
+        return tags.contains(tag);
+    }
+
     public Set<String> getTags(){
         return tags;
     }

@@ -20,7 +20,7 @@ public abstract class DrawableFigure<T extends Figure> extends Figure {
     protected abstract void drawFigure(GraphicsContext gc);
 
     public boolean isFigureVisible(TagFilterPane tagFilterPane){
-        return !tagFilterPane.isFiltering() || getTags().contains(tagFilterPane.getFilterTag());
+        return !tagFilterPane.isFiltering() || hasTag(tagFilterPane.getFilterTag());
     }
 
     public void draw(GraphicsContext gc, TagFilterPane tagFilterPane){
