@@ -13,6 +13,15 @@ public class FigureGroup<T extends Figure> extends Figure{
         super(colorAsHex);
     }
 
+    public FigureGroup() {
+        super("#ffffff");
+    }
+
+    public FigureGroup(T figure) {
+        super(figure.getColorAsHex());
+        add(figure);
+    }
+
     public void add(T figure){
         figures.add(figure);
         getTags().addAll(figure.getTags());

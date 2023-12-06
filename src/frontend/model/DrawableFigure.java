@@ -24,9 +24,8 @@ public abstract class DrawableFigure<T extends Figure> extends Figure {
     }
 
     public void draw(GraphicsContext gc, TagFilterPane tagFilterPane){
-        if(isFigureVisible(tagFilterPane)){
+        if (isFigureVisible(tagFilterPane))
             drawFigure(gc);
-        }
     }
 
     public Color getColor() {
@@ -53,7 +52,7 @@ public abstract class DrawableFigure<T extends Figure> extends Figure {
         baseFigure.setGradientToggled(toggle);
     }
 
-     @Override
+    @Override
     public boolean isBevelToggled() {
         return baseFigure.isBevelToggled();
     }

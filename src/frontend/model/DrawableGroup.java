@@ -17,12 +17,11 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     }
 
     public DrawableGroup() {
-        super(new FigureGroup<DrawableFigure<? extends Figure>>(Color.YELLOW.toString()));
+        super(new FigureGroup<DrawableFigure<? extends Figure>>());
     }
 
     public DrawableGroup(DrawableFigure<? extends Figure> figure) {
-        super(new FigureGroup<DrawableFigure<? extends Figure>>(figure.getColorAsHex()));
-        add(figure);
+        super(new FigureGroup<DrawableFigure<? extends Figure>>(figure));
     }
 
     public void add(DrawableFigure<? extends Figure> figure){
