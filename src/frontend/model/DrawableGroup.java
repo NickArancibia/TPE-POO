@@ -41,8 +41,8 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
             addAll(group);
     }
 
-    public FigureGroup<DrawableFigure<? extends Figure>> getFigures(){
-        return baseFigure;
+    private List<DrawableFigure<? extends Figure>> getFigures(){
+        return baseFigure.getGroup();
     }
 
     public Collection<DrawableGroup> ungroup() {
@@ -59,7 +59,7 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     }
 
     private void applyConsumer(Consumer<DrawableFigure<? extends Figure>> consumer) {
-        for(DrawableFigure<? extends Figure> figure : baseFigure)
+        for(DrawableFigure<? extends Figure> figure : getFigures())
             consumer.accept(figure);
     }
 
@@ -84,7 +84,7 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     }
 
     private boolean isToggled(Function<DrawableFigure<? extends Figure>, Boolean> toggled) {
-        for(DrawableFigure<? extends Figure> figure : baseFigure)
+        for(DrawableFigure<? extends Figure> figure : getFigures())
             if (!toggled.apply(figure)) return false;
 
         return true;
@@ -92,7 +92,7 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
 
     private boolean someToggled(Function<DrawableFigure<? extends Figure>, Boolean> toggled) {
         int count = 0;
-        for(DrawableFigure<? extends Figure> figure : baseFigure)
+        for(DrawableFigure<? extends Figure> figure : getFigures())
             if (toggled.apply(figure)) count++;
 
         return count != 0 && count != baseFigure.size();
@@ -127,13 +127,13 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
 
     public void setTags(Collection<String> tags){
         super.setTags(tags);
-        for(DrawableFigure<? extends Figure> figure : baseFigure)
+        for(DrawableFigure<? extends Figure> figure : getFigures())
             figure.setTags(tags);
     }
 
     @Override
     public boolean isFigureVisible(TagFilterPane tagFilterPane){
-        for(DrawableFigure<? extends Figure> figure : baseFigure)
+        for(DrawableFigure<? extends Figure> figure : getFigures())
             if (figure.isFigureVisible(tagFilterPane)) return true;
         return false;
     }

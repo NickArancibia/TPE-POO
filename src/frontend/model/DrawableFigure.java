@@ -10,7 +10,7 @@ import frontend.TagFilterPane;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public abstract class DrawableFigure<T extends Figure> implements Figure {
+public abstract class DrawableFigure<T extends Figure> extends Figure {
     protected final T baseFigure;
     protected Color color;
 

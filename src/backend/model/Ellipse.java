@@ -1,6 +1,6 @@
 package backend.model;
 
-public class Ellipse implements Figure {
+public class Ellipse extends Figure {
     private final Point centerPoint;
     private double sMayorAxis, sMinorAxis;
 
