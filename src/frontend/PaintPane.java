@@ -28,7 +28,7 @@ public class PaintPane extends BorderPane {
     // Seleccionar una figura
     SelectionManager selectionManager = new SelectionManager();
 
-    private final double toleranceForMouseClick = 10.0;
+    private final double toleranceForMouseClick = 5.0;
 
     // DrawPropertiesPane
     ShapeDrawPropertiesPane drawPropertiesPane;

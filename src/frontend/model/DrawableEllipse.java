@@ -16,7 +16,7 @@ public class DrawableEllipse extends Ellipse implements Drawable {
     }
 
     public DrawableEllipse(Point centerPoint, double radius, Color color) {
-        super(centerPoint, radius, radius, color.toString());
+        super(centerPoint, radius*2, radius*2, color.toString());
     }
 
     private Color getColor(){
