@@ -1,8 +1,8 @@
 package backend.model;
 
 public class Square extends Rectangle{
-    public Square(Point topLeft, double size) {
-        super(topLeft, new Point(topLeft.getX() + size, topLeft.getY() + size));
+    public Square(Point topLeft, double size, String colorAsHex) {
+        super(topLeft, new Point(topLeft.getX() + size, topLeft.getY() + size), colorAsHex);
     }
 
     @Override

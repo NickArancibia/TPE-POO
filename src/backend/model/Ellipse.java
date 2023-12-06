@@ -4,7 +4,8 @@ public class Ellipse extends Figure {
     private final Point centerPoint;
     private double sMayorAxis, sMinorAxis;
 
-    public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis) {
+    public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis, String colorAsHex) {
+        super(colorAsHex);
         this.centerPoint = centerPoint;
         this.sMayorAxis = sMayorAxis;
         this.sMinorAxis = sMinorAxis;

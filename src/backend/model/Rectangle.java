@@ -3,7 +3,8 @@ package backend.model;
 public class Rectangle extends Figure {
     private final Point topLeft, bottomRight;
 
-    public Rectangle(Point topLeft, Point bottomRight) {
+    public Rectangle(Point topLeft, Point bottomRight, String colorAsHex) {
+        super(colorAsHex);
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
     }

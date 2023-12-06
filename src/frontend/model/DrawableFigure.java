@@ -12,23 +12,16 @@ import javafx.scene.paint.Color;
 
 public abstract class DrawableFigure<T extends Figure> extends Figure {
     protected final T baseFigure;
-    protected Color color;
-
-    private boolean gradientToggled = false;
-    private boolean shadowToggled = false;
-    private boolean bevelToggled = false;
-
-    private Set<String> tags = new HashSet<>();
-
-    DrawableFigure(T baseFigure, Color color) {
+    
+    DrawableFigure(T baseFigure) {
+        super(baseFigure.getColorAsHex());
         this.baseFigure = baseFigure;
-        this.color = color;
     }
 
     protected abstract void drawFigure(GraphicsContext gc);
 
     public boolean isFigureVisible(TagFilterPane tagFilterPane){
-        return !tagFilterPane.isFiltering() || tags.contains(tagFilterPane.getFilterTag());
+        return !tagFilterPane.isFiltering() || getTags().contains(tagFilterPane.getFilterTag());
     }
 
     public void draw(GraphicsContext gc, TagFilterPane tagFilterPane){
@@ -37,39 +30,47 @@ public abstract class DrawableFigure<T extends Figure> extends Figure {
     }
 
     public Color getColor() {
-        return color;
+        return Color.valueOf(getColorAsHex());
     }
 
-    public void setGradientToggled(boolean toggle) {
-        gradientToggled = toggle;
-    }
-
-    public boolean isGradientToggled() {
-        return gradientToggled;
-    }
-
-    public void setShadowToggled(boolean toggle) {
-        shadowToggled = toggle;
-    }
-
+    @Override
     public boolean isShadowToggled() {
-        return shadowToggled;
+        return baseFigure.isShadowToggled();
     }
 
-    public void setBevelToggled(boolean toggle) {
-        bevelToggled = toggle;
+    @Override
+    public void setShadowToggled(boolean toggle) {
+        baseFigure.setShadowToggled(toggle);
     }
 
+    @Override
+    public boolean isGradientToggled() {
+        return baseFigure.isGradientToggled();
+    }
+
+    @Override
+    public void setGradientToggled(boolean toggle) {
+        baseFigure.setGradientToggled(toggle);
+    }
+
+     @Override
     public boolean isBevelToggled() {
-        return bevelToggled;
+        return baseFigure.isBevelToggled();
     }
 
-    public void setTags(Collection<String> tags){
-        this.tags = new HashSet<String>(tags);
+    @Override
+    public void setBevelToggled(boolean toggle) {
+        baseFigure.setBevelToggled(toggle);
     }
 
-    public Set<String> getTags(){
-        return tags;
+    @Override
+    public Set<String> getTags() {
+        return baseFigure.getTags();
+    }
+
+    @Override
+    public void setTags(Collection<String> tags) {
+        baseFigure.setTags(tags);
     }
 
     @Override

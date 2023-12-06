@@ -1,8 +1,8 @@
 package backend.model;
 
 public class Circle extends Ellipse {
-    public Circle(Point centerPoint, double radius) {
-        super(centerPoint, radius * 2, radius * 2);
+    public Circle(Point centerPoint, double radius, String colorAsHex) {
+        super(centerPoint, radius * 2, radius * 2, colorAsHex);
     }
 
     @Override

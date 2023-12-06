@@ -10,11 +10,11 @@ import javafx.scene.paint.Stop;
 
 public class DrawableRectangle extends DrawableFigure<Rectangle> {
     public DrawableRectangle(Point topLeft, Point bottomRight, Color color) {
-        super(new Rectangle(topLeft, bottomRight), color);
+        super(new Rectangle(topLeft, bottomRight, color.toString()));
     }
 
-    public DrawableRectangle(Rectangle rectangle, Color color) {
-        super(rectangle, color);
+    public DrawableRectangle(Rectangle rectangle) {
+        super(rectangle);
     }
 
     private void drawShadow(GraphicsContext gc) {
@@ -31,13 +31,13 @@ public class DrawableRectangle extends DrawableFigure<Rectangle> {
         if (isGradientToggled()) {
             LinearGradient linearGradient = new LinearGradient(0, 0, 1, 0, true,
                     CycleMethod.NO_CYCLE,
-                    new Stop(0, color),
-                    new Stop(1, color.invert()));
+                    new Stop(0, getColor()),
+                    new Stop(1, getColor().invert()));
             gc.setFill(linearGradient);
             return;
         }
 
-        gc.setFill(color);
+        gc.setFill(getColor());
     }
 
     private void drawBevel(GraphicsContext gc) {

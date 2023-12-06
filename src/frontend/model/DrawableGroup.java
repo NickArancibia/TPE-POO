@@ -14,26 +14,24 @@ import javafx.scene.paint.Color;
 
 public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? extends Figure>>> {
     public DrawableGroup(Color color) {
-        super(new FigureGroup<DrawableFigure<? extends Figure>>(), color);
+        super(new FigureGroup<DrawableFigure<? extends Figure>>(color.toString()));
     }
 
     public DrawableGroup() {
-        super(new FigureGroup<DrawableFigure<? extends Figure>>(), Color.YELLOW);
+        super(new FigureGroup<DrawableFigure<? extends Figure>>(Color.YELLOW.toString()));
     }
 
     public DrawableGroup(DrawableFigure<? extends Figure> figure) {
-        super(new FigureGroup<DrawableFigure<? extends Figure>>(), figure.getColor());
+        super(new FigureGroup<DrawableFigure<? extends Figure>>(figure.getColorAsHex()));
         add(figure);
     }
 
     public void add(DrawableFigure<? extends Figure> figure){
         baseFigure.add(figure);
-        getTags().addAll(figure.getTags());
     }
 
     public void addAll(DrawableGroup group){
         baseFigure.addAll(group.baseFigure);
-        getTags().addAll(group.getTags());
     }
 
     public void addAll(Collection<DrawableGroup> groups){
@@ -42,7 +40,7 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     }
 
     private List<DrawableFigure<? extends Figure>> getFigures(){
-        return baseFigure.getGroup();
+        return baseFigure.getFigures();
     }
 
     public Collection<DrawableGroup> ungroup() {
@@ -68,67 +66,16 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
         applyConsumer((figure) -> figure.drawFigure(gc));
     }
 
-    @Override
-    public void setGradientToggled(boolean toggle) {
-        applyConsumer((figure) -> figure.setGradientToggled(toggle));
-    }
-
-    @Override
-    public void setShadowToggled(boolean toggle) {
-        applyConsumer((figure) -> figure.setShadowToggled(toggle));
-    }
-
-    @Override
-    public void setBevelToggled(boolean toggle) {
-        applyConsumer((figure) -> figure.setBevelToggled(toggle));
-    }
-
-    private boolean isToggled(Function<DrawableFigure<? extends Figure>, Boolean> toggled) {
-        for(DrawableFigure<? extends Figure> figure : getFigures())
-            if (!toggled.apply(figure)) return false;
-
-        return true;
-    }
-
-    private boolean someToggled(Function<DrawableFigure<? extends Figure>, Boolean> toggled) {
-        int count = 0;
-        for(DrawableFigure<? extends Figure> figure : getFigures())
-            if (toggled.apply(figure)) count++;
-
-        return count != 0 && count != baseFigure.size();
-    }
-
-    @Override
-    public boolean isShadowToggled() {
-        return isToggled((figure) -> figure.isShadowToggled());
-    }
-
     public boolean someShadowToggled() {
-        return someToggled((figure) -> figure.isShadowToggled());
-    }
-
-    @Override
-    public boolean isGradientToggled() {
-        return isToggled((figure) -> figure.isGradientToggled());
+        return baseFigure.someShadowToggled();
     }
 
     public boolean someGradientToggled() {
-        return someToggled((figure) -> figure.isGradientToggled());
-    }
-
-    @Override
-    public boolean isBevelToggled() {
-        return isToggled((figure) -> figure.isBevelToggled());
+        return baseFigure.someGradientToggled();
     }
 
     public boolean someBevelToggled() {
-        return someToggled((figure) -> figure.isBevelToggled());
-    }
-
-    public void setTags(Collection<String> tags){
-        super.setTags(tags);
-        for(DrawableFigure<? extends Figure> figure : getFigures())
-            figure.setTags(tags);
+        return baseFigure.someBevelToggled();
     }
 
     @Override
