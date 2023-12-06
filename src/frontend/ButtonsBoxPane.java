@@ -9,8 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class ButtonsBoxPane extends BorderPane {
-
-   private final ToggleButton selectionButton;
+    private final ToggleButton selectionButton;
     private final ToggleButton rectangleButton;
     private final ToggleButton circleButton;
     private final ToggleButton squareButton;
@@ -142,4 +141,3 @@ public class ButtonsBoxPane extends BorderPane {
         return fillColorPicker;
     }
 }
-
