@@ -6,17 +6,18 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import backend.model.Figure;
 import backend.model.Point;
 import frontend.model.DrawableGroup;
 
 public class SelectionManager {
-    List<DrawableGroup> selectedGroups = new ArrayList<>();
+    List<DrawableGroup<? extends Figure>> selectedGroups = new ArrayList<>();
 
-    public boolean selectFiguresInRect(Collection<DrawableGroup> figures, Point topLeft, Point bottomRight, TagFilterPane tagFilterPane) {
+    public boolean selectFiguresInRect(Collection<DrawableGroup<? extends Figure>> figures, Point topLeft, Point bottomRight, TagFilterPane tagFilterPane) {
         clearSelection();
         boolean addedFigures = false;
-        for(DrawableGroup group : figures) {
-            if(group.isFigureVisible(tagFilterPane) && group.isFigureInRectangle(topLeft, bottomRight)) {
+        for(DrawableGroup<? extends Figure> group : figures) {
+            if( group.isFigureVisible(tagFilterPane) && group.isFigureInRectangle(topLeft, bottomRight)) {
                 add(group);
                 addedFigures = true;
             }
@@ -25,7 +26,7 @@ public class SelectionManager {
         return addedFigures;
     }
 
-    public void add(DrawableGroup group) {
+    public void add(DrawableGroup<? extends Figure> group) {
         if(!selectedGroups.contains(group))
             selectedGroups.add(group);
     }
@@ -42,46 +43,46 @@ public class SelectionManager {
         return selectedGroups.isEmpty();
     }
 
-    public DrawableGroup groupSelection() {
-        DrawableGroup group = new DrawableGroup();
+    public DrawableGroup<? extends Figure> groupSelection() {
+        DrawableGroup<? extends Figure> group = new DrawableGroup<>();
         group.addAll(selectedGroups);
         return group;
     }
 
-    public Collection<DrawableGroup> ungroupSelection() {
-        List<DrawableGroup> ungrouped = new ArrayList<>();        
+    public Collection<DrawableGroup<? extends Figure>> ungroupSelection() {
+        List<DrawableGroup<? extends Figure>> ungrouped = new ArrayList<>();        
 
-        for (DrawableGroup group : selectedGroups) { 
+        for (DrawableGroup<? extends Figure> group : selectedGroups) { 
             ungrouped.addAll(group.ungroup());
         }
 
         return ungrouped;
     }
 
-    public Collection<DrawableGroup> getSelection() {
+    public Collection<DrawableGroup<? extends Figure>> getSelection() {
         return selectedGroups;
     }
 
-    public boolean isSelected(DrawableGroup group) {
+    public boolean isSelected(DrawableGroup<? extends Figure> group) {
         return selectedGroups.contains(group);
     }
 
-    public void applyActionToSelection(Consumer<DrawableGroup> consumer) {
-        for (DrawableGroup group : selectedGroups) 
+    public void applyActionToSelection(Consumer<DrawableGroup<? extends Figure>> consumer) {
+        for (DrawableGroup<? extends Figure> group : selectedGroups) 
             consumer.accept(group);
     }
 
-    private boolean isToggled(Function<DrawableGroup, Boolean> toggled) {
-        for (DrawableGroup group : selectedGroups)
+    private boolean isToggled(Function<DrawableGroup<? extends Figure>, Boolean> toggled) {
+        for (DrawableGroup<? extends Figure> group : selectedGroups)
             if (!toggled.apply(group))
                 return false;
 
         return true;
     }
 
-    private boolean someToggled(Function<DrawableGroup, Boolean> toggled) {
+    private boolean someToggled(Function<DrawableGroup<? extends Figure>, Boolean> toggled) {
         int count = 0;
-        for (DrawableGroup group : selectedGroups)
+        for (DrawableGroup<? extends Figure> group : selectedGroups)
             if (toggled.apply(group))
                 count++;
 

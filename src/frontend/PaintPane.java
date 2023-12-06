@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
 
 public class PaintPane extends BorderPane {
     // BackEnd
-    CanvasState<DrawableGroup> canvasState;
+    CanvasState<DrawableGroup<? extends Figure>> canvasState;
 
     // Canvas y relacionados
     Canvas canvas = new Canvas(800, 600);
@@ -41,7 +41,7 @@ public class PaintPane extends BorderPane {
 
     //ButtonsPane
     ButtonsBoxPane buttonsPane;
-    public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
+    public PaintPane(CanvasState<DrawableGroup<? extends Figure>> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
         this.canvasState = canvasState;
         this.tagFilterPane = tagFilterPane;
         this.drawPropertiesPane = drawPropertiesPane;
@@ -161,7 +161,7 @@ public class PaintPane extends BorderPane {
             Point eventPoint = new Point(event.getX(), event.getY());
             boolean found = false;
             StringBuilder label = new StringBuilder();
-            for(DrawableGroup figure : canvasState) {
+            for(DrawableGroup<? extends Figure> figure : canvasState) {
                 if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane)) {
                     found = true;
                     label.append(figure.toString());
@@ -208,8 +208,8 @@ public class PaintPane extends BorderPane {
         return dist > toleranceForMouseClick && !selectionManager.noneSelected();
     }
 
-    private void createFigure(Drawable figure){
-        DrawableGroup newGroup = new DrawableGroup(buttonsPane.getFillColorPicker().getValue());
+    private <T extends Figure & Drawable> void createFigure(T figure){
+        DrawableGroup<T> newGroup = new DrawableGroup<>(buttonsPane.getFillColorPicker().getValue());
         newGroup.add(figure);
         newGroup.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
         newGroup.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
@@ -219,10 +219,10 @@ public class PaintPane extends BorderPane {
         clearSelectionAndRedraw();
     }
 
-    private boolean clickOnFigure(Point eventPoint, List<DrawableGroup> figures, StringBuilder label){
-        ListIterator<DrawableGroup> iter = figures.listIterator(figures.size());
+    private boolean clickOnFigure(Point eventPoint, List<DrawableGroup<? extends Figure>> figures, StringBuilder label){
+        ListIterator<DrawableGroup<? extends Figure>> iter = figures.listIterator(figures.size());
         while (iter.hasPrevious()) {
-            DrawableGroup figure = iter.previous(); 
+            DrawableGroup<? extends Figure> figure = iter.previous(); 
             if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane)) {
                 selectionManager.add(figure);
                 drawPropertiesPane.setState(figure.isShadowToggled(), figure.isGradientToggled(), figure.isBevelToggled());
@@ -236,7 +236,7 @@ public class PaintPane extends BorderPane {
 
     private void redrawCanvas() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for(DrawableGroup group : canvasState) {
+        for(DrawableGroup<? extends Figure> group : canvasState) {
             gc.setStroke(selectionManager.isSelected(group) ? Color.RED : lineColor);
             if(!tagFilterPane.isFiltering() || group.hasTag(tagFilterPane.getFilterTag())) group.drawFigure(gc);
         }

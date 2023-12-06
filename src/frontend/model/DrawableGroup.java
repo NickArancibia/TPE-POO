@@ -44,7 +44,7 @@ public class DrawableGroup<T extends Figure & Drawable> extends FigureGroup<T> i
     }
 
     public boolean isFigureVisible(TagFilterPane tagFilterPane){
-        if(tagFilterPane.isFiltering()) return true;
+        if(!tagFilterPane.isFiltering()) return true;
         for(T figure : getFigures())
             if (figure.hasTag(tagFilterPane.getFilterTag())) return true;
         return false;
