@@ -42,12 +42,12 @@ public class PaintPane extends BorderPane {
 
     //ButtonsPane
     ButtonsBoxPane buttonsPane;
-	public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
-		this.canvasState = canvasState;
+    public PaintPane(CanvasState<DrawableGroup> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
+        this.canvasState = canvasState;
         this.tagFilterPane = tagFilterPane;
         this.drawPropertiesPane = drawPropertiesPane;
-		this.statusPane = statusPane;
-		this.buttonsPane = buttonsPane;
+        this.statusPane = statusPane;
+        this.buttonsPane = buttonsPane;
         buttonsPane.init(gc);
 
         drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
@@ -66,15 +66,15 @@ public class PaintPane extends BorderPane {
         });
 
         tagFilterPane.getShowAllButton().setOnAction(e -> clearSelectionAndRedraw());
-
         tagFilterPane.getFilterTagButton().setOnAction(e -> clearSelectionAndRedraw());
+        tagFilterPane.getFilterTagTextField().textProperty().addListener((observable, oldValue, newValue) -> redrawCanvas());
 
         canvas.setOnMousePressed(event -> {
             startPoint = new Point(event.getX(), event.getY());
         });
 
         buttonsPane.getDeleteButton().setOnAction(event -> {
-            selectionManager.getSelection().forEach(canvasState::deleteFigure);
+            selectionManager.getSelection().forEach(canvasState::remove);
             clearSelectionAndRedraw();
         });
 
@@ -107,8 +107,8 @@ public class PaintPane extends BorderPane {
             if(!selectionManager.atLeastTwoSelected())
                 statusPane.updateStatus("Para agrupar es necesario seleccionar 2 o más grupos");
             else{
-                canvasState.addFigure(selectionManager.groupSelection());
-                canvasState.deleteFigures(selectionManager.getSelection());
+                canvasState.add(selectionManager.groupSelection());
+                canvasState.removeAll(selectionManager.getSelection());
             }
             clearSelectionAndRedraw();
         });
@@ -117,8 +117,8 @@ public class PaintPane extends BorderPane {
             if(selectionManager.noneSelected())
                 statusPane.updateStatus("Para desagrupar primero seleccione un grupo");
             else{
-                canvasState.addAllFigures(selectionManager.ungroupSelection());
-                canvasState.deleteFigures(selectionManager.getSelection());
+                canvasState.addAll(selectionManager.ungroupSelection());
+                canvasState.removeAll(selectionManager.getSelection());
             }
             clearSelectionAndRedraw();
         });
@@ -148,7 +148,7 @@ public class PaintPane extends BorderPane {
                 createFigure(new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, buttonsPane.getFillColorPicker().getValue()));
             } else if (buttonsPane.getSelectionButton().isSelected()){
                 if(!isMovingFigures(endPoint)) {
-                    boolean addedFigures = selectionManager.selectFiguresInRect(canvasState.figures(), startPoint, endPoint, tagFilterPane);
+                    boolean addedFigures = selectionManager.selectFiguresInRect(canvasState, startPoint, endPoint, tagFilterPane);
                     if (addedFigures) {
                         drawPropertiesPane.setState(selectionManager.isShadowToggled(), selectionManager.isGradientToggled(), selectionManager.isBevelToggled());
                         drawPropertiesPane.setSomeState(selectionManager.someShadowToggled(), selectionManager.someGradientToggled(), selectionManager.someBevelToggled());
@@ -162,32 +162,25 @@ public class PaintPane extends BorderPane {
             Point eventPoint = new Point(event.getX(), event.getY());
             boolean found = false;
             StringBuilder label = new StringBuilder();
-            for(DrawableGroup figure : canvasState.figures()) {
+            for(DrawableGroup figure : canvasState) {
                 if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane)) {
                     found = true;
                     label.append(figure.toString());
                 }
             }
-            if(found) {
-                statusPane.updateStatus(label.toString());
-            } else {
-                statusPane.updateStatus(eventPoint.toString());
-            }
+            statusPane.updateStatus(found ? label.toString() : eventPoint.toString());
         });
 
         canvas.setOnMouseClicked(event -> {
             if(buttonsPane.getSelectionButton().isSelected()) {
                 Point eventPoint = new Point(event.getX(), event.getY());
                 StringBuilder label = new StringBuilder("Se seleccionó: ");
-                if (clickOnFigure(eventPoint, canvasState.figures(), label)) {
-                    statusPane.updateStatus(label.toString());
-                } else {
-                    statusPane.updateStatus("Ninguna figura encontrada");
-                }
+                statusPane.updateStatus(clickOnFigure(eventPoint, canvasState, label) ? label.toString() : "Ninguna figura encontrada");
+
                 if(selectionManager.atLeastTwoSelected()){
                     buttonsPane.getTagsArea().setDisable(true);
                     buttonsPane.getSaveTagsButton().setDisable(true);
-                }else{
+                } else{
                     buttonsPane.getTagsArea().setDisable(false);
                     buttonsPane.getSaveTagsButton().setDisable(false);
                     if(!selectionManager.noneSelected()){
@@ -217,14 +210,14 @@ public class PaintPane extends BorderPane {
     }
 
     private void createFigure(DrawableFigure<? extends Figure> figure){
-            DrawableGroup newGroup = new DrawableGroup(buttonsPane.getFillColorPicker().getValue());
-            newGroup.add(figure);
-            newGroup.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
-            newGroup.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
-            newGroup.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
-            canvasState.addFigure(newGroup);
-            startPoint = null;
-            clearSelectionAndRedraw();
+        DrawableGroup newGroup = new DrawableGroup(buttonsPane.getFillColorPicker().getValue());
+        newGroup.add(figure);
+        newGroup.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
+        newGroup.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected());
+        newGroup.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected());
+        canvasState.add(newGroup);
+        startPoint = null;
+        clearSelectionAndRedraw();
     }
 
     private boolean clickOnFigure(Point eventPoint, List<DrawableGroup> figures, StringBuilder label){
@@ -244,7 +237,7 @@ public class PaintPane extends BorderPane {
 
     private void redrawCanvas() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for(DrawableGroup group : canvasState.figures()) {
+        for(DrawableGroup group : canvasState) {
             gc.setStroke(selectionManager.isSelected(group) ? Color.RED : lineColor);
             group.draw(gc, tagFilterPane);
         }

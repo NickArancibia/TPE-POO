@@ -61,29 +61,13 @@ public class DrawableGroup extends DrawableFigure<FigureGroup<DrawableFigure<? e
     }
 
     private void applyConsumer(Consumer<DrawableFigure<? extends Figure>> consumer) {
-        for(DrawableFigure<? extends Figure> figure : baseFigure){
+        for(DrawableFigure<? extends Figure> figure : baseFigure)
             consumer.accept(figure);
-        }
     }
 
     @Override
-    protected void handleShadow(GraphicsContext gc) {
-        applyConsumer((figure) -> figure.handleShadow(gc));
-    }
-
-    @Override
-    protected void handleGradient(GraphicsContext gc) {
-        applyConsumer((figure) -> figure.handleGradient(gc));
-    }
-
-    @Override
-    protected void handleShape(GraphicsContext gc) {
-        applyConsumer((figure) -> figure.handleShape(gc));
-    }
-
-    @Override
-    protected void handleBevel(GraphicsContext gc) {
-        applyConsumer((figure) -> figure.handleBevel(gc));
+    protected void drawFigure(GraphicsContext gc) {
+        applyConsumer((figure) -> figure.drawFigure(gc));
     }
 
     @Override
