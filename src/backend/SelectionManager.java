@@ -1,23 +1,29 @@
-package frontend;
+package backend;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import backend.model.Figure;
+import backend.model.FigureGroup;
 import backend.model.Point;
-import frontend.model.DrawableGroup;
 
-public class SelectionManager {
-    List<DrawableGroup<? extends Figure>> selectedGroups = new ArrayList<>();
+public class SelectionManager<T extends FigureGroup<? extends Figure>> {
+    private final Supplier<T> groupFactory;
+    private List<T> selectedGroups = new ArrayList<>();
 
-    public boolean selectFiguresInRect(Collection<DrawableGroup<? extends Figure>> figures, Point topLeft, Point bottomRight, TagFilterPane tagFilterPane) {
+    SelectionManager(Supplier<T> groupFactory) {
+        this.groupFactory = groupFactory;
+    }
+
+    public boolean selectFiguresInRect(Collection<T> figures, Point topLeft, Point bottomRight, boolean isFilteringByTags, String filterTag) {
         clearSelection();
         boolean addedFigures = false;
-        for(DrawableGroup<? extends Figure> group : figures) {
-            if( group.isFigureVisible(tagFilterPane) && group.isFigureInRectangle(topLeft, bottomRight)) {
+        for(T group : figures) {
+            if(group.isFigureVisible(isFilteringByTags, filterTag) && group.isFigureInRectangle(topLeft, bottomRight)) {
                 add(group);
                 addedFigures = true;
             }
@@ -26,7 +32,7 @@ public class SelectionManager {
         return addedFigures;
     }
 
-    public void add(DrawableGroup<? extends Figure> group) {
+    public void add(T group) {
         if(!selectedGroups.contains(group))
             selectedGroups.add(group);
     }
@@ -43,47 +49,46 @@ public class SelectionManager {
         return selectedGroups.isEmpty();
     }
 
-    public DrawableGroup<? extends Figure> groupSelection() {
-        DrawableGroup<? extends Figure> group = new DrawableGroup<>();
+    public T groupSelection() {
+        T group = groupFactory.get();
         group.addAll(selectedGroups);
         return group;
     }
 
-    public Collection<DrawableGroup<? extends Figure>> ungroupSelection() {
-        List<DrawableGroup<? extends Figure>> ungrouped = new ArrayList<>();        
+    public Collection<T> ungroupSelection() {
+        List<T> ungrouped = new ArrayList<>();        
 
-        for (DrawableGroup<? extends Figure> group : selectedGroups) { 
+        for (T group : selectedGroups)  
             ungrouped.addAll(group.ungroup());
-        }
 
         return ungrouped;
     }
 
-    public Collection<DrawableGroup<? extends Figure>> getSelection() {
+    public Collection<T> getSelection() {
         return selectedGroups;
     }
 
-    public boolean isSelected(DrawableGroup<? extends Figure> group) {
+    public boolean isSelected(T group) {
         return selectedGroups.contains(group);
     }
 
-    public void applyActionToSelection(Consumer<DrawableGroup<? extends Figure>> consumer) {
-        for (DrawableGroup<? extends Figure> group : selectedGroups) 
+    public void applyActionToSelection(Consumer<T> consumer) {
+        for (T group : selectedGroups) 
             consumer.accept(group);
     }
 
-    private boolean isToggled(Function<DrawableGroup<? extends Figure>, Boolean> toggled) {
-        for (DrawableGroup<? extends Figure> group : selectedGroups)
-            if (!toggled.apply(group))
+    private boolean isToggled(Predicate<T> toggled) {
+        for (T group : selectedGroups)
+            if (!toggled.test(group))
                 return false;
 
         return true;
     }
 
-    private boolean someToggled(Function<DrawableGroup<? extends Figure>, Boolean> toggled) {
+    private boolean someToggled(Predicate<T> toggled) {
         int count = 0;
-        for (DrawableGroup<? extends Figure> group : selectedGroups)
-            if (toggled.apply(group))
+        for (T group : selectedGroups)
+            if (toggled.test(group))
                 count++;
 
         return count != 0 && count != selectedGroups.size();

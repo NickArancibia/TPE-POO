@@ -6,6 +6,7 @@ import java.util.ListIterator;
 import java.util.Set;
 
 import backend.CanvasState;
+import backend.SelectionManager;
 import backend.model.*;
 import frontend.model.*;
 import javafx.scene.canvas.Canvas;
@@ -26,7 +27,7 @@ public class PaintPane extends BorderPane {
     Point startPoint;
 
     // Seleccionar una figura
-    SelectionManager selectionManager = new SelectionManager();
+    SelectionManager<DrawableGroup<? extends Figure>> selectionManager = new SelectionManager<>();
 
     private final double toleranceForMouseClick = 10.0;
 
@@ -78,27 +79,27 @@ public class PaintPane extends BorderPane {
         });
 
         buttonsPane.getScaleUpButton().setOnAction(event -> {
-            selectionManager.applyActionToSelection(DrawableGroup::scaleUp);
+            selectionManager.applyActionToSelection(FigureGroup::scaleUp);
             redrawCanvas();
         });
 
         buttonsPane.getScaleDownButton().setOnAction(event -> {
-            selectionManager.applyActionToSelection(DrawableGroup::scaleDown);
+            selectionManager.applyActionToSelection(FigureGroup::scaleDown);
             redrawCanvas();
         });
 
         buttonsPane.getFlipHButton().setOnAction(event -> {
-            selectionManager.applyActionToSelection(DrawableGroup::flipH);
+            selectionManager.applyActionToSelection(FigureGroup::flipH);
             redrawCanvas();
         });
 
         buttonsPane.getFlipVButton().setOnAction(event -> {
-            selectionManager.applyActionToSelection(DrawableGroup::flipV);
+            selectionManager.applyActionToSelection(FigureGroup::flipV);
             redrawCanvas();
         });
 
         buttonsPane.getRotateButton().setOnAction(event -> {
-            selectionManager.applyActionToSelection(DrawableGroup::rotate);
+            selectionManager.applyActionToSelection(FigureGroup::rotate);
             redrawCanvas();
         });
 
@@ -147,7 +148,7 @@ public class PaintPane extends BorderPane {
                 createFigure(new DrawableEllipse(centerPoint, sMayorAxis, sMinorAxis, buttonsPane.getFillColorPicker().getValue()));
             } else if (buttonsPane.getSelectionButton().isSelected()){
                 if(!isMovingFigures(endPoint)) {
-                    boolean addedFigures = selectionManager.selectFiguresInRect(canvasState, startPoint, endPoint, tagFilterPane);
+                    boolean addedFigures = selectionManager.selectFiguresInRect(canvasState, startPoint, endPoint, tagFilterPane.isFiltering(), tagFilterPane.getFilterTag());
                     if (addedFigures) {
                         drawPropertiesPane.setState(selectionManager.isShadowToggled(), selectionManager.isGradientToggled(), selectionManager.isBevelToggled());
                         drawPropertiesPane.setSomeState(selectionManager.someShadowToggled(), selectionManager.someGradientToggled(), selectionManager.someBevelToggled());

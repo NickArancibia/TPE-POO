@@ -1,8 +1,5 @@
 package frontend.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.function.Consumer;
 
 import backend.model.Figure;
@@ -24,14 +21,6 @@ public class DrawableGroup<T extends Figure & Drawable> extends FigureGroup<T> i
         super(figure);
     }
 
-    public Collection<DrawableGroup<T>> ungroup() {
-        List<DrawableGroup<T>> out = new ArrayList<>();
-
-        for(T figure : getFigures()) 
-            out.add(new DrawableGroup<>(figure));
-
-        return out;
-    }
 
     private void applyConsumer(Consumer<T> consumer) {
         for(T figure : getFigures())
@@ -44,9 +33,6 @@ public class DrawableGroup<T extends Figure & Drawable> extends FigureGroup<T> i
     }
 
     public boolean isFigureVisible(TagFilterPane tagFilterPane){
-        if(!tagFilterPane.isFiltering()) return true;
-        for(T figure : getFigures())
-            if (figure.hasTag(tagFilterPane.getFilterTag())) return true;
-        return false;
+        return super.isFigureVisible(tagFilterPane.isFiltering(), tagFilterPane.getFilterTag());
     }
 }

@@ -37,6 +37,15 @@ public class FigureGroup<T extends Figure> extends Figure{
         getTags().addAll(figureGroup.getTags());
     }
 
+    public Collection<FigureGroup<T>> ungroup() {
+        List<FigureGroup<T>> out = new ArrayList<>();
+
+        for(T figure : getFigures()) 
+            out.add(new FigureGroup<>(figure));
+
+        return out;
+    }
+
     public int size(){
         return figures.size();
     }
@@ -159,6 +168,14 @@ public class FigureGroup<T extends Figure> extends Figure{
     @Override
     public void rotate() {
         applyConsumer((figure) -> figure.rotate());
+    }
+
+    @Override
+    public boolean isFigureVisible(boolean isFilteringByTags, String filterTag) {
+        if(!isFilteringByTags) return true;
+        for(T figure : getFigures())
+            if (figure.hasTag(filterTag)) return true;
+        return false;
     }
 
     @Override
