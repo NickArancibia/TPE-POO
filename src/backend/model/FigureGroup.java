@@ -1,7 +1,5 @@
 package backend.model;
 
-import frontend.model.DrawableGroup;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
