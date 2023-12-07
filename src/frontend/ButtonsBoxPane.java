@@ -157,7 +157,7 @@ public class ButtonsBoxPane extends BorderPane {
         return squareButton;
     }
 
-    public ColorPicker getFillColorPicker() {
-        return fillColorPicker;
+    public String getFillColorPickerColorAsString() {
+        return fillColorPicker.getValue().toString();
     }
 }

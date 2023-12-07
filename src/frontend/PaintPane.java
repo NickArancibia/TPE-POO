@@ -136,18 +136,18 @@ public class PaintPane extends BorderPane {
                 return;
             }
             if (buttonsPane.getRectangleButton().isSelected()) {
-                createFigure(new Rectangle(startPoint, endPoint, buttonsPane.getFillColorPicker().getValue().toString(), rectangleDrawManager));
+                createFigure(new Rectangle(startPoint, endPoint, buttonsPane.getFillColorPickerColorAsString(), rectangleDrawManager));
             } else if (buttonsPane.getCircleButton().isSelected()) {
                 double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
-                createFigure(new Circle(startPoint, circleRadius, buttonsPane.getFillColorPicker().getValue().toString(), ellipseDrawManager));
+                createFigure(new Circle(startPoint, circleRadius, buttonsPane.getFillColorPickerColorAsString(), ellipseDrawManager));
             } else if (buttonsPane.getSquareButton().isSelected()) {
                 double size = Math.abs(endPoint.getX() - startPoint.getX());
-                createFigure(new Square(startPoint, size, buttonsPane.getFillColorPicker().getValue().toString(), rectangleDrawManager));
+                createFigure(new Square(startPoint, size, buttonsPane.getFillColorPickerColorAsString(), rectangleDrawManager));
             } else if(buttonsPane.getEllipseButton().isSelected()) {
                 Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
                 double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
                 double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
-                createFigure(new Ellipse(centerPoint, sMayorAxis, sMinorAxis, buttonsPane.getFillColorPicker().getValue().toString(), ellipseDrawManager));
+                createFigure(new Ellipse(centerPoint, sMayorAxis, sMinorAxis, buttonsPane.getFillColorPickerColorAsString(), ellipseDrawManager));
             } else if (buttonsPane.getSelectionButton().isSelected()){
                 if(!isMovingFigures(endPoint)) {
                     boolean addedFigures = selectionManager.selectFiguresInRect(canvasState, startPoint, endPoint, tagFilterPane.isFiltering(), tagFilterPane.getFilterTag());
