@@ -7,7 +7,7 @@ import java.util.Set;
 import backend.DrawManager;
 
 public abstract class Figure {
-    private String colorAsHex; 
+    private final String colorAsHex;
 
     private boolean gradientToggled = false;
     private boolean shadowToggled = false;
@@ -25,9 +25,6 @@ public abstract class Figure {
         drawManager.draw(this);
     }
 
-    public boolean isFigureVisible(boolean isFilteringByTags, String tagFilter) {
-        return !isFilteringByTags || hasTag(tagFilter);
-    }
 
     public String getColorAsHex() {
         return colorAsHex;
@@ -58,7 +55,7 @@ public abstract class Figure {
     }
 
     public void setTags(Collection<String> tags){
-        this.tags = new HashSet<String>(tags);
+        this.tags = new HashSet<>(tags);
     }
 
     public boolean hasTag(String tag){

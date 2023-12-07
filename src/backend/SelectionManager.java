@@ -10,7 +10,7 @@ import backend.model.FigureGroup;
 import backend.model.Point;
 
 public class SelectionManager {
-    private List<FigureGroup> selectedGroups = new ArrayList<>();
+    private final List<FigureGroup> selectedGroups = new ArrayList<>();
 
     public boolean selectFiguresInRect(Collection<FigureGroup> figures, Point topLeft, Point bottomRight, boolean isFilteringByTags, String filterTag) {
         clearSelection();

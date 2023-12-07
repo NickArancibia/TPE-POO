@@ -1,9 +1,6 @@
 package frontend;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
+import java.util.*;
 
 import backend.CanvasState;
 import backend.SelectionManager;
@@ -75,9 +72,7 @@ public class PaintPane extends BorderPane {
         tagFilterPane.getFilterTagButton().setOnAction(e -> clearSelectionAndRedraw());
         tagFilterPane.getFilterTagTextField().textProperty().addListener((observable, oldValue, newValue) -> redrawCanvas());
 
-        canvas.setOnMousePressed(event -> {
-            startPoint = new Point(event.getX(), event.getY());
-        });
+        canvas.setOnMousePressed(event -> startPoint = new Point(event.getX(), event.getY()));
 
         buttonsPane.getDeleteButton().setOnAction(event -> {
             selectionManager.getSelection().forEach(canvasState::remove);
@@ -258,11 +253,7 @@ public class PaintPane extends BorderPane {
     }
 
     private Set<String> parseTags(String text){
-        Set<String> tags = new HashSet<>();
-        for(String tag : text.split("[ \n]")){
-            tags.add(tag);
-        }
-        return tags;
+        return new HashSet<>(Arrays.asList(text.split("[ \n]")));
     }
 
     private String stringifyTags(Set<String> tags){
