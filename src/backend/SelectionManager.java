@@ -5,9 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
-import backend.model.Figure;
 import backend.model.FigureGroup;
 import backend.model.Point;
 
@@ -90,26 +88,26 @@ public class SelectionManager {
     }
 
     public boolean isShadowToggled() {
-        return isToggled((figure) -> figure.isShadowToggled());
+        return isToggled(FigureGroup::isShadowToggled);
     }
 
     public boolean someShadowToggled() {
-        return someToggled((figure) -> figure.isShadowToggled());
+        return someToggled(FigureGroup::someShadowToggled);
     }
 
     public boolean isGradientToggled() {
-        return isToggled((figure) -> figure.isGradientToggled());
+        return isToggled(FigureGroup::isGradientToggled);
     }
 
     public boolean someGradientToggled() {
-        return someToggled((figure) -> figure.isGradientToggled());
+        return someToggled(FigureGroup::someGradientToggled);
     }
 
     public boolean isBevelToggled() {
-        return isToggled((figure) -> figure.isBevelToggled());
+        return isToggled(FigureGroup::isBevelToggled);
     }
 
     public boolean someBevelToggled() {
-        return someToggled((figure) -> figure.isBevelToggled());
+        return someToggled(FigureGroup::someBevelToggled);
     }
 }
