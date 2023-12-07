@@ -45,7 +45,7 @@ public class FigureGroup<T extends Figure> extends Figure{
             addGroup((FigureGroup<T>) figureGroup);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("all")
     public Collection<FigureGroup<T>> ungroup(Supplier<? extends FigureGroup> groupFactory) {
         List<FigureGroup<T>> out = new ArrayList<>();
 
