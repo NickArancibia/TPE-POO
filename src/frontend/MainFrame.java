@@ -2,7 +2,7 @@ package frontend;
 
 import backend.CanvasState;
 import backend.model.Figure;
-import frontend.model.DrawableGroup;
+import frontend.drawables.DrawableGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
