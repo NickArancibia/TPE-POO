@@ -109,7 +109,6 @@ class FigureGroup{
     +void flipH()
     +void flipV()
     +void rotate() 
-    +String toString()
     +boolean hasTag(String filterTag)
     -boolean isToggled(Predicate<Figure> toggled)
     -boolean someToggled(Predicate<Figure> toggled)
