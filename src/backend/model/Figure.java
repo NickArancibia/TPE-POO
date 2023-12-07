@@ -6,6 +6,7 @@ import java.util.Set;
 
 import backend.DrawManager;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class Figure {
     private final String colorAsHex;
 
