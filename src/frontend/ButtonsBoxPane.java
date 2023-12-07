@@ -1,5 +1,9 @@
 package frontend;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,6 +18,7 @@ public class ButtonsBoxPane extends BorderPane {
     private final ToggleButton circleButton;
     private final ToggleButton squareButton;
     private final ToggleButton ellipseButton;
+
     private final Button deleteButton;
     private final Button groupButton;
     private final Button ungroupButton;
@@ -22,14 +27,17 @@ public class ButtonsBoxPane extends BorderPane {
     private final Button flipHButton;
     private final Button scaleUpButton;
     private final Button scaleDownButton;
+
     private final Label tagsLabel;
     private final TextArea tagsArea;
     private final Button saveTagsButton;
+
     private Color defaultFillColor = Color.YELLOW;
-    // Selector de color de relleno
     private ColorPicker fillColorPicker;
+
     private ToggleButton[] toggleToolsArr;
     private Button[] toolsArr;
+
     public ButtonsBoxPane(){
         selectionButton = new ToggleButton("Seleccionar");
         rectangleButton = new ToggleButton("Rectángulo");
@@ -45,25 +53,31 @@ public class ButtonsBoxPane extends BorderPane {
         scaleUpButton = new Button("Escalar +");
         scaleDownButton = new Button("Escalar -");
         saveTagsButton = new Button("Guardar");
+
         tagsArea = new TextArea();
         tagsArea.setMaxHeight(50);
         saveTagsButton.setMinWidth(90);
         saveTagsButton.setCursor(Cursor.HAND);
         tagsLabel = new Label("Etiquetas");
+
         fillColorPicker = new ColorPicker(defaultFillColor);
+
         toggleToolsArr = new ToggleButton[]{selectionButton, rectangleButton, circleButton, squareButton, ellipseButton};
         toolsArr = new Button[]{groupButton, ungroupButton, rotateButton, flipVButton, flipHButton, scaleUpButton, scaleDownButton, deleteButton};
+
         ToggleGroup toggleTools = new ToggleGroup();
         for (ToggleButton tool : toggleToolsArr) {
             tool.setMinWidth(90);
             tool.setToggleGroup(toggleTools);
             tool.setCursor(Cursor.HAND);
         }
+
         for (Button tool : toolsArr){
             tool.setMinWidth(90);
             tool.setCursor(Cursor.HAND);
         }
     }
+
     public void init(GraphicsContext gc){
         VBox buttonsBox = new VBox(5);
         buttonsBox.getChildren().addAll(toggleToolsArr);
@@ -118,6 +132,7 @@ public class ButtonsBoxPane extends BorderPane {
     public Button getUngroupButton() {
         return ungroupButton;
     }
+
     public ToggleButton getEllipseButton() {
         return ellipseButton;
     }
@@ -129,6 +144,11 @@ public class ButtonsBoxPane extends BorderPane {
     public TextArea getTagsArea() {
         return tagsArea;
     }
+
+    public Set<String> getTagsFromTagsArea(){
+        return new HashSet<>(Arrays.asList(tagsArea.getText().split("[ \n]")));
+    }
+
     public ToggleButton getSelectionButton() {
         return selectionButton;
     }

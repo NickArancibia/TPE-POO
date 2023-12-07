@@ -124,6 +124,7 @@ class ButtonsBoxPane {
     +ToggleButton getSquareButton() 
     +ColorPicker getFillColorPicker()
     +TextArea getTagsArea() 
+    +Set<String> getTagsFromTagsArea()
 }
 
 
@@ -147,7 +148,6 @@ class PaintPane {
    -boolean clickOnFigure(Point eventPoint, List<FigureGroup> figures, StringBuilder label)
    -void redrawCanvas()
    -void clearSelectionAndRedraw()
-   -Set<String> parseTags(String text)
    -String stringifyTags(Set<String> tags)
 }
 

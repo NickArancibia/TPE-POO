@@ -126,7 +126,7 @@ public class PaintPane extends BorderPane {
         });
 
         buttonsPane.getSaveTagsButton().setOnAction(event ->{
-            selectionManager.applyActionToSelection(group -> group.setTags(parseTags(buttonsPane.getTagsArea().getText())));
+            selectionManager.applyActionToSelection(group -> group.setTags(buttonsPane.getTagsFromTagsArea()));
             clearSelectionAndRedraw();
         });
 
@@ -252,11 +252,7 @@ public class PaintPane extends BorderPane {
         redrawCanvas();
     }
 
-    private Set<String> parseTags(String text){
-        return new HashSet<>(Arrays.asList(text.split("[ \n]")));
-    }
-
-    private String stringifyTags(Set<String> tags){
+    private static String stringifyTags(Set<String> tags){
         return String.join("\n", tags);
     }
 }

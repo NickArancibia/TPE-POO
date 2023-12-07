@@ -20,8 +20,8 @@ public class AppMenuBar extends MenuBar {
                 }
             }
         });
-
         file.getItems().add(exitMenuItem);
+
         Menu help = new Menu("Ayuda");
         MenuItem aboutMenuItem = new MenuItem("Acerca De");
         aboutMenuItem.setOnAction(event -> {

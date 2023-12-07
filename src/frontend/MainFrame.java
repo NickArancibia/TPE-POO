@@ -11,7 +11,7 @@ public class MainFrame extends VBox {
         ShapeDrawPropertiesPane drawPropertiesPane = new ShapeDrawPropertiesPane();
         TagFilterPane tagFilterPane = new TagFilterPane();
         ButtonsBoxPane buttonsPane = new ButtonsBoxPane();
-        PaintPane paintPane = new PaintPane(canvasState, statusPane, drawPropertiesPane, tagFilterPane,buttonsPane);
+        PaintPane paintPane = new PaintPane(canvasState, statusPane, drawPropertiesPane, tagFilterPane, buttonsPane);
         getChildren().add(appMenuBar);
         getChildren().add(drawPropertiesPane);
         getChildren().add(new HBox(buttonsPane,paintPane));
