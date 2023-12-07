@@ -133,6 +133,29 @@ interface DrawManager<T extends Figure>{
     +default void draw(T figure)
 }
 
+
+class RectangleDrawManager {
+    -final GraphicsContext gc
+    +RectangleDrawManager(GraphicsContext gc)
+    +void drawShadow(Rectangle figure)
+    +void drawGradient(Rectangle figure)
+    +void drawBevel(Rectangle figure)
+    +void drawShape(Rectangle figure)
+    -Color getColor(Rectangle figure)
+}
+
+
+class EllipseDrawManager {
+    -final GraphicsContext gc
+    +EllipseDrawManager(GraphicsContext gc)
+    +void drawShadow(Ellipse figure)
+    +void drawGradient(Ellipse figure)
+    +void drawBevel(Ellipse figure)
+    +void drawShape(Ellipse figure)
+    -Color getColor(Ellipse figure)
+}
+DrawManager <|--EllipseDrawManager
+DrawManager<|-- RectangleDrawManager
 ArrayList <|-- FigureGroup : Figure
 Rectangle <|-- Square
 Ellipse <|-- Circle
@@ -143,4 +166,5 @@ Figure *-- HashSet
 Point *-- Rectangle
 Point *-- Ellipse
 Figure *-- DrawManager
+ FigureGroup *-- Figure
 @enduml

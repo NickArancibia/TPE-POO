@@ -29,29 +29,6 @@ class SelectionManager {
   
 }
 
-
-class RectangleDrawManager {
-    -final GraphicsContext gc
-    +RectangleDrawManager(GraphicsContext gc)
-    +void drawShadow(Rectangle figure)
-    +void drawGradient(Rectangle figure)
-    +void drawBevel(Rectangle figure)
-    +void drawShape(Rectangle figure)
-    -Color getColor(Rectangle figure)
-}
-
-
-class EllipseDrawManager {
-    -final GraphicsContext gc
-    +EllipseDrawManager(GraphicsContext gc)
-    +void drawShadow(Ellipse figure)
-    +void drawGradient(Ellipse figure)
-    +void drawBevel(Ellipse figure)
-    +void drawShape(Ellipse figure)
-    -Color getColor(Ellipse figure)
-}
-
-
 class AppLauncher{
 
 +{static} void main(String[] args)
@@ -181,8 +158,7 @@ PaintPane *-- ShapeDrawPropertiesPane
 PaintPane *-- ButtonsBoxPane
 PaintPane *-- TagFilterPane
 PaintPane *-- SelectionManager 
-DrawableManager <|--EllipseDrawManager
-DrawableManager <|-- RectangleDrawManager
+
 
 MainFrame *-- AppMenuBar
 MainFrame *-- StatusPane
@@ -191,7 +167,7 @@ MainFrame *-- TagFilterPane
 MainFrame *-- ButtonsBoxPane
 MainFrame *-- PaintPane
 ArrayList <|-- CanvasState : <FigureGroup>
-ArrayList <|-- SelectionManager : <FigureGroup>
+
 AppLauncher *--CanvasState
 AppLauncher *--MainFrame
 
