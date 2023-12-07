@@ -15,6 +15,10 @@ public class SelectionManager<T extends FigureGroup<? extends Figure>> {
     private Supplier<T> groupFactory;
     private List<T> selectedGroups = new ArrayList<>();
 
+    public SelectionManager(Supplier<T> groupFactory) {
+        setGroupFactory(groupFactory);
+    }
+
     public void setGroupFactory(Supplier<T> groupFactory) {
         this.groupFactory = groupFactory;
     }
