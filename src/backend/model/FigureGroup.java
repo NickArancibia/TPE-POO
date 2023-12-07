@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class FigureGroup extends ArrayList<Figure>{
-
     public FigureGroup() {
 
     }
@@ -131,12 +130,5 @@ public class FigureGroup extends ArrayList<Figure>{
         for(Figure figure : this)
             if (figure.hasTag(filterTag)) return true;
         return false;
-    }
-
-    @Override
-    public String toString(){
-        StringBuilder s = new StringBuilder();
-        forEach((figure) -> s.append(figure.toString()));
-        return s.toString();
     }
 }

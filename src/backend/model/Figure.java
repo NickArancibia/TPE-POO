@@ -26,7 +26,6 @@ public abstract class Figure {
         drawManager.draw(this);
     }
 
-
     public String getColorAsHex() {
         return colorAsHex;
     }
@@ -73,13 +72,11 @@ public abstract class Figure {
     
     public abstract boolean isFigureInRectangle(Point topLeft, Point bottomRight);
     
-    public void scaleUp(){scale(0.25);}
-    
-    public void scaleDown(){scale(-0.25);}
     public abstract void scale(double delta);
+    public void scaleUp(){scale(0.25);}
+    public void scaleDown(){scale(-0.25);}
     
     public abstract void flipV();
-    
     public abstract void flipH();
     
     public abstract void rotate();
