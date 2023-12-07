@@ -1,7 +1,6 @@
 package frontend;
 
 import backend.DrawManager;
-import backend.model.Figure;
 import backend.model.Rectangle;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
