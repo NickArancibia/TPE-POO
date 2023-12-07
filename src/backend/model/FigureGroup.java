@@ -127,8 +127,7 @@ public class FigureGroup extends ArrayList<Figure>{
         forEach(Figure::rotate);
     }
 
-    public boolean isFigureVisible(boolean isFilteringByTags, String filterTag) {
-        if(!isFilteringByTags) return true;
+    public boolean hasTag(String filterTag) {
         for(Figure figure : this)
             if (figure.hasTag(filterTag)) return true;
         return false;

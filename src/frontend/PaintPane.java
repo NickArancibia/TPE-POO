@@ -170,7 +170,7 @@ public class PaintPane extends BorderPane {
             boolean found = false;
             StringBuilder label = new StringBuilder();
             for(FigureGroup group : canvasState) {
-                if(group.pointInFigure(eventPoint) && group.isFigureVisible(tagFilterPane.isFiltering(), tagFilterPane.getFilterTag())) {
+                if(group.pointInFigure(eventPoint) && (!tagFilterPane.isFiltering() || group.hasTag(tagFilterPane.getFilterTag()))) {
                     found = true;
                     label.append(group.toString());
                 }
@@ -231,7 +231,7 @@ public class PaintPane extends BorderPane {
         ListIterator<FigureGroup> iter = figures.listIterator(figures.size());
         while (iter.hasPrevious()) {
             FigureGroup figure = iter.previous(); 
-            if(figure.pointInFigure(eventPoint) && figure.isFigureVisible(tagFilterPane.isFiltering(), tagFilterPane.getFilterTag())) {
+            if(figure.pointInFigure(eventPoint) && (!tagFilterPane.isFiltering() || figure.hasTag(tagFilterPane.getFilterTag()))) {
                 selectionManager.add(figure);
                 drawPropertiesPane.setState(figure.isShadowToggled(), figure.isGradientToggled(), figure.isBevelToggled());
                 drawPropertiesPane.setSomeState(figure.someShadowToggled(), figure.someGradientToggled(), figure.someBevelToggled());
@@ -247,7 +247,7 @@ public class PaintPane extends BorderPane {
         for(FigureGroup group : canvasState) {
             gc.setStroke(selectionManager.isSelected(group) ? Color.RED : lineColor);
 
-            if (group.isFigureVisible(tagFilterPane.isFiltering(), tagFilterPane.getFilterTag()))
+            if (!tagFilterPane.isFiltering() || group.hasTag(tagFilterPane.getFilterTag()))
                 group.draw();
         }
     }

@@ -16,7 +16,7 @@ public class SelectionManager {
         clearSelection();
         boolean addedFigures = false;
         for(FigureGroup group : figures) {
-            if(group.isFigureVisible(isFilteringByTags, filterTag) && group.isFigureInRectangle(topLeft, bottomRight)) {
+            if((!isFilteringByTags || group.hasTag(filterTag)) && group.isFigureInRectangle(topLeft, bottomRight)) {
                 add(group);
                 addedFigures = true;
             }
