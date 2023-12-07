@@ -1,4 +1,4 @@
-package frontend;
+package frontend.drawManagers;
 
 import backend.DrawManager;
 import backend.model.Rectangle;

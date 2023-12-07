@@ -8,6 +8,8 @@ import java.util.Set;
 import backend.CanvasState;
 import backend.SelectionManager;
 import backend.model.*;
+import frontend.drawManagers.EllipseDrawManager;
+import frontend.drawManagers.RectangleDrawManager;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
