@@ -10,7 +10,6 @@ import java.util.function.Predicate;
 
 public class FigureGroup {
     private List<Figure> figures = new ArrayList<>();
-    private Set<String> tags = new HashSet<>();
 
     public FigureGroup() {
 
@@ -22,7 +21,6 @@ public class FigureGroup {
 
     public void add(Figure figure){
         figures.add(figure);
-        tags.addAll(figure.getTags());
     }
 
     public void addAll(Iterable<Figure> figures){
@@ -32,7 +30,6 @@ public class FigureGroup {
 
     public void addGroup(FigureGroup figureGroup){
         addAll(figureGroup.figures);
-        tags.addAll(figureGroup.getTags());
     }
 
     public void addAllGroups(Iterable<FigureGroup> figureGroups){
@@ -118,11 +115,12 @@ public class FigureGroup {
     }
 
     public void setTags(Collection<String> tags){
-        this.tags.addAll(tags);
         applyConsumer((figure) -> figure.setTags(tags));
     }
 
     public Set<String> getTags(){
+        Set<String> tags = new HashSet<>();
+        applyConsumer((figure) -> tags.addAll(figure.getTags()));
         return tags;
     }
 
