@@ -1,13 +1,11 @@
 package frontend;
 
 import backend.CanvasState;
-import backend.model.Figure;
-import frontend.model.DrawableGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class MainFrame extends VBox {
-    public MainFrame(CanvasState<DrawableGroup<? extends Figure>> canvasState) {
+    public MainFrame(CanvasState canvasState) {
         AppMenuBar appMenuBar = new AppMenuBar();
         StatusPane statusPane = new StatusPane();
         ShapeDrawPropertiesPane drawPropertiesPane = new ShapeDrawPropertiesPane();

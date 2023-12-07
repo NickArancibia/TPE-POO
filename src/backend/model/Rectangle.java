@@ -1,16 +1,14 @@
 package backend.model;
 
+import backend.DrawManager;
+
 public class Rectangle extends Figure {
     private final Point topLeft, bottomRight;
 
-    public Rectangle(Point topLeft, Point bottomRight, String colorAsHex) {
-        super(colorAsHex);
+    public Rectangle(Point topLeft, Point bottomRight, String colorAsHex, DrawManager<Rectangle> drawManager) {
+        super(colorAsHex, drawManager);
         this.topLeft = topLeft;
         this.bottomRight = bottomRight;
-    }
-
-    public Rectangle(Point topLeft, double width, double height, String colorAsHex) {
-        this(topLeft, new Point(topLeft.getX() + width, topLeft.getY() + height), colorAsHex);
     }
 
     public Point getTopLeft() {
