@@ -124,8 +124,8 @@ public class PaintPane extends BorderPane {
             if(selectionManager.noneSelected())
                 statusPane.updateStatus("Para desagrupar primero seleccione un grupo");
             else{
-                canvasState.addAll(selectionManager.ungroupSelection());
                 canvasState.removeAll(selectionManager.getSelection());
+                canvasState.addAll(selectionManager.ungroupSelection());
             }
             clearSelectionAndRedraw();
         });

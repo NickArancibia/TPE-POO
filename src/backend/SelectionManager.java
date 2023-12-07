@@ -49,7 +49,7 @@ public class SelectionManager {
     }
 
     public Collection<FigureGroup> ungroupSelection() {
-        List<FigureGroup> ungrouped = new ArrayList<>();        
+        List<FigureGroup> ungrouped = new ArrayList<>();
 
         for (FigureGroup group : selectedGroups)  
             ungrouped.addAll(group.ungroup());
