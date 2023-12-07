@@ -5,9 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
-import backend.model.Figure;
 import backend.model.FigureGroup;
 import backend.model.Point;
 
