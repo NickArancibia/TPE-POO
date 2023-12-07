@@ -40,6 +40,7 @@ public class Rectangle extends Figure {
     public boolean isFigureInRectangle(Point topLeft, Point bottomRight){
         return this.topLeft.isPointInRectangle(topLeft, bottomRight) && this.bottomRight.isPointInRectangle(topLeft, bottomRight);
     }
+
     public double getBase(){
         return Math.abs(topLeft.getX() - bottomRight.getX());
     }

@@ -48,17 +48,19 @@ public class Ellipse extends Figure {
 
     @Override
     public void scale(double factor){
-        sMayorAxis += sMayorAxis*factor;
-        sMinorAxis += sMinorAxis*factor;
+        sMayorAxis += sMayorAxis * factor;
+        sMinorAxis += sMinorAxis * factor;
     }
     @Override
     public void flipV(){
-        centerPoint.move(0,sMinorAxis);
+        centerPoint.move(0, sMinorAxis);
     }
+
     @Override
     public void flipH(){
-        centerPoint.move(sMayorAxis,0);
+        centerPoint.move(sMayorAxis, 0);
     }
+
     @Override
     public void rotate(){
         double auxiliarAxis = sMayorAxis;

@@ -8,7 +8,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 public class FigureGroup extends ArrayList<Figure>{
-
     public FigureGroup() {
 
     }
