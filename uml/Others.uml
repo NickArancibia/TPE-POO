@@ -1,8 +1,40 @@
 @startuml
-
-class CanvasState<T extends Figure>{}
 class ArrayList<T>{}
+package backend <<Folder>> {
+ 
+class CanvasState<T extends Figure>{}
 
+
+
+class SelectionManager<T extends FigureGroup<? extends Figure>> {
+  - List<DrawableGroup> selectedGroups
+  - Supplier<T> groupFactory
+  +SelectionManager(Supplier<T> groupFactory)
+  +void setGroupFactory(Supplier<T> groupFactory) 
+  +boolean selectFiguresInRect(Collection<T> figures, Point topLeft, Point bottomRight, boolean isFilteringByTags, String filterTag)
+  + void add(T group)
+  + void clearSelection()
+  + boolean atLeastTwoSelected() 
+  + boolean noneSelected()
+  + T groupSelection()
+  + Collection<T> ungroupSelection() 
+  + Collection<T> getSelection()
+  + boolean isSelected(T group)
+  + void applyActionToSelection(Consumer<T> consumer)
+  + boolean isShadowToggled()
+  + boolean someShadowToggled()
+  + boolean isGradientToggled()
+  + boolean someGradientToggled()
+  + boolean isBevelToggled()
+  + boolean someBevelToggled()
+  -boolean isToggled(Predicate<T> toggled)
+  -boolean someToggled(Predicate<T> toggled)
+  
+}
+
+}
+
+package frontend <<Folder>> {
 ArrayList <|-- CanvasState
 
 class AppLauncher{
@@ -111,33 +143,9 @@ class ButtonsBoxPane {
 }
 
 
-class SelectionManager<T extends FigureGroup<? extends Figure>> {
-  - List<DrawableGroup> selectedGroups
-  - Supplier<T> groupFactory
-  +SelectionManager(Supplier<T> groupFactory)
-  +void setGroupFactory(Supplier<T> groupFactory) 
-  +boolean selectFiguresInRect(Collection<T> figures, Point topLeft, Point bottomRight, boolean isFilteringByTags, String filterTag)
-  + void add(T group)
-  + void clearSelection()
-  + boolean atLeastTwoSelected() 
-  + boolean noneSelected()
-  + T groupSelection()
-  + Collection<T> ungroupSelection() 
-  + Collection<T> getSelection()
-  + boolean isSelected(T group)
-  + void applyActionToSelection(Consumer<T> consumer)
-  + boolean isShadowToggled()
-  + boolean someShadowToggled()
-  + boolean isGradientToggled()
-  + boolean someGradientToggled()
-  + boolean isBevelToggled()
-  + boolean someBevelToggled()
-  -boolean isToggled(Predicate<T> toggled)
-  -boolean someToggled(Predicate<T> toggled)
-  
-}
 
-class ArrayList<E>{}
+
+
 
 SelectionManager *-- ArrayList
 PaintPane *-- CanvasState
@@ -169,5 +177,5 @@ class PaintPane {
    -Set<String> parseTags(String text)
    -String stringifyTags(Set<String> tags)
 }
-
+}
 @enduml
