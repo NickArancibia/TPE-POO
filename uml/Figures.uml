@@ -1,12 +1,14 @@
 @startuml
 abstract class Figure{
-    -String colorAsHex
+    -final String colorAsHex
     -boolean gradientToggled 
     -boolean shadowToggled 
     -boolean bevelToggled 
     -Set<String> tags
+    -final DrawManager drawManager
 
-    +Figure(String colorAsHex)
+    +Figure(String colorAsHex,DrawManager drawManager)
+    +void draw()
     +String getColorAsHex()
     +void setGradientToggled(boolean toggle)
     +boolean isGradientToggled()
@@ -17,7 +19,6 @@ abstract class Figure{
     +void setTags(Collection<String> tags)
     +boolean hasTag(String tag)
     +Set<String> getTags()
-    +boolean isFigureVisible(boolean isFilteringByTags, String tagFilter)
     +{abstract} boolean pointInFigure(Point p)
     +{abstract} void move(double deltaX, double deltaY)
     +{abstract} boolean isFigureInRectangle(Point topLeft, Point bottomRight)
@@ -35,7 +36,7 @@ class Ellipse{
     -final Point centerPoint
     -double sMayorAxis
     -double sMinorAxis
-    +Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis, String colorAsHex)
+    +Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis, String colorAsHex,DrawManager<Ellipse> drawManager)
     +Point getCenterPoint()
     +double getsMayorAxis()
     +double getsMinorAxis()
@@ -43,19 +44,16 @@ class Ellipse{
     +boolean pointInFigure(Point p)
     +void move(double deltaX, double deltaY)
     +boolean isFigureInRectangle(Point topLeft, Point bottomRight)
-    +void scaleUp()
-    +void scaleDown()
     +void flipV()
     +void flipH()
     +void rotate()
-    -void scale(double factor)
+    +void scale(double factor)
 }
 
 class Rectangle{
    -final Point topLeft
    -final Point bottomRight
-    +Rectangle(Point topLeft, Point bottomRight, String colorAsHex)
-    +Rectangle(Point topLeft, double width, double height, String colorAsHex)
+    +Rectangle(Point topLeft, Point bottomRight, String colorAsHex,DrawManager<Rectangle> drawManager)
     +Point getTopLeft() 
     +Point getBottomRight()
     +String toString()
@@ -64,14 +62,11 @@ class Rectangle{
     +boolean pointInFigure(Point p)
     +void move(double deltaX, double deltaY)
     +boolean isFigureInRectangle(Point topLeft, Point bottomRight)
-    +void scaleUp()
-    +void scaleDown()
     +void flipV()
     +void flipH()
     +void rotate()
+    +void scale(double factor)
     -void turnAround(double deltaX,double deltaY)
-    -void scale(double factor)
-
 }
 
 class Point{
@@ -87,18 +82,14 @@ class Point{
     +String toString()
 }
 
-class FigureGroup<T extends Figure> {
-    -List<T> figures
-    +FigureGroup(String colorAsHex)
+class FigureGroup{
+     
     +FigureGroup()
-    +FigureGroup(T figure)
-    +void add(T figure)
-    +void addAll(Iterable<? extends  Figure> figures)
-    +void addGroup(FigureGroup<T> figureGroup)
-    +void addAllGroups(Iterable<? extends FigureGroup<? extends Figure>> figureGroups)
-    +int size()
-    +Collection<FigureGroup<T>> ungroup(Supplier<? extends FigureGroup> groupFactory)
-    +List<T> getFigures()
+    +FigureGroup(Figure figure)
+    +void add(Figure figure)
+    +void addAllGroups(Iterable<FigureGroup> figureGroups)
+    +Collection<FigureGroup> ungroup()
+    +void draw()
     +void setGradientToggled(boolean toggle)
     +void setShadowToggled(boolean toggle)
     +void setBevelToggled(boolean toggle)
@@ -109,9 +100,9 @@ class FigureGroup<T extends Figure> {
     +boolean isBevelToggled()
     +boolean someBevelToggled()
     +void setTags(Collection<String> tags)
+    +Set<String> getTags()
     +boolean pointInFigure(Point p)
     +void move(double deltaX, double deltaY)
-    +boolean isFigureVisible(boolean isFilteringByTags, String filterTag)
     +boolean isFigureInRectangle(Point topLeft, Point bottomRight)
     +void scaleUp()
     +void scaleDown() 
@@ -119,16 +110,38 @@ class FigureGroup<T extends Figure> {
     +void flipV()
     +void rotate() 
     +String toString()
-    -void applyConsumer(Consumer<T> consumer)
-    -boolean isToggled(Predicate<T> toggled)
-    -boolean someToggled(Predicate<T> toggled)
+    +boolean hasTag(String filterTag)
+    -boolean isToggled(Predicate<Figure> toggled)
+    -boolean someToggled(Predicate<Figure> toggled)
 }
 
-FigureGroup *-- ArrayList
-Figure <|-- FigureGroup 
+class Circle{
+    +Circle(Point centerPoint, double radius, String colorAsHex, DrawManager<Ellipse> drawManager)
+    +double getRadius()
+    +String toString()
+}
+
+class Square{
++Square(Point topLeft, double size, String colorAsHex, DrawManager<Rectangle> drawManager)
++String toString()
+}
+
+interface DrawManager<T extends Figure>{
+    +void drawShape(T figure)
+    +void drawBevel(T figure)
+    +void drawGradient(T figure)
+    +void drawShadow(T figure)
+    +default void draw(T figure)
+}
+
+ArrayList <|-- FigureGroup : Figure
+Rectangle <|-- Square
+Ellipse <|-- Circle
 Figure <|-- Rectangle
 Figure <|-- Ellipse 
+
 Figure *-- HashSet
 Point *-- Rectangle
 Point *-- Ellipse
+Figure *-- DrawManager
 @enduml

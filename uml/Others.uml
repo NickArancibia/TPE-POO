@@ -1,41 +1,56 @@
 @startuml
 class ArrayList<T>{}
-package backend <<Folder>> {
+
  
-class CanvasState<T extends Figure>{}
+class CanvasState{}
 
 
 
-class SelectionManager<T extends FigureGroup<? extends Figure>> {
-  - List<DrawableGroup> selectedGroups
-  - Supplier<T> groupFactory
-  +SelectionManager(Supplier<T> groupFactory)
-  +void setGroupFactory(Supplier<T> groupFactory) 
-  +boolean selectFiguresInRect(Collection<T> figures, Point topLeft, Point bottomRight, boolean isFilteringByTags, String filterTag)
-  + void add(T group)
+class SelectionManager {
+  - List<FigureGroup> selectedGroups
+  +boolean selectFiguresInRect(Collection<Figure> figures, Point topLeft, Point bottomRight, boolean isFilteringByTags, String filterTag)
+  + void add(FigureGroup group)
   + void clearSelection()
   + boolean atLeastTwoSelected() 
   + boolean noneSelected()
-  + T groupSelection()
-  + Collection<T> ungroupSelection() 
-  + Collection<T> getSelection()
-  + boolean isSelected(T group)
-  + void applyActionToSelection(Consumer<T> consumer)
+  + FigureGroup groupSelection()
+  + Collection<FigureGroup> ungroupSelection() 
+  + Collection<FigureGroup> getSelection()
+  + boolean isSelected(FigureGroup group)
+  + void applyActionToSelection(Consumer<FigureGroup> consumer)
   + boolean isShadowToggled()
   + boolean someShadowToggled()
   + boolean isGradientToggled()
   + boolean someGradientToggled()
   + boolean isBevelToggled()
   + boolean someBevelToggled()
-  -boolean isToggled(Predicate<T> toggled)
-  -boolean someToggled(Predicate<T> toggled)
+  -boolean isToggled(Predicate<FigureGroup> toggled)
+  -boolean someToggled(Predicate<FigureGroup> toggled)
   
 }
 
+
+class RectangleDrawManager {
+    -final GraphicsContext gc
+    +RectangleDrawManager(GraphicsContext gc)
+    +void drawShadow(Rectangle figure)
+    +void drawGradient(Rectangle figure)
+    +void drawBevel(Rectangle figure)
+    +void drawShape(Rectangle figure)
+    -Color getColor(Rectangle figure)
 }
 
-package frontend <<Folder>> {
-ArrayList <|-- CanvasState
+
+class EllipseDrawManager {
+    -final GraphicsContext gc
+    +EllipseDrawManager(GraphicsContext gc)
+    +void drawShadow(Ellipse figure)
+    +void drawGradient(Ellipse figure)
+    +void drawBevel(Ellipse figure)
+    +void drawShape(Ellipse figure)
+    -Color getColor(Ellipse figure)
+}
+
 
 class AppLauncher{
 
@@ -43,20 +58,12 @@ class AppLauncher{
 +void start(Stage primaryStage)
 }
 
-AppLauncher *--CanvasState
-AppLauncher *--MainFrame
 
 class MainFrame {
 
-+MainFrame(CanvasState<DrawableGroup<? extends Figure>> canvasState)
++MainFrame(CanvasState canvasState)
 }
 
-MainFrame *-- AppMenuBar
-MainFrame *-- StatusPane
-MainFrame *-- ShapeDrawPropertiesPane
-MainFrame *-- TagFilterPane
-MainFrame *-- ButtonsBoxPane
-MainFrame *-- PaintPane
 
 class AppMenuBar {
     public AppMenuBar()
@@ -144,20 +151,9 @@ class ButtonsBoxPane {
 
 
 
-
-
-
-SelectionManager *-- ArrayList
-PaintPane *-- CanvasState
-PaintPane *-- StatusPane
-PaintPane *-- ShapeDrawPropertiesPane
-PaintPane *-- ButtonsBoxPane
-PaintPane *-- TagFilterPane
-PaintPane *-- SelectionManager 
-
 class PaintPane {
     -final double toleranceForMouseClick
-    CanvasState<DrawableGroup<? extends Figure>> canvasState
+    CanvasState canvasState
     Canvas canvas 
     GraphicsContext gc 
     Color lineColor 
@@ -170,12 +166,33 @@ class PaintPane {
  
    +PaintPane(CanvasState<DrawableGroup<? extends Figure>> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane)
    -boolean isMovingFigures(Point endPoint)
-   -<T extends Figure & Drawable> void createFigure(T figure)
-   -boolean clickOnFigure(Point eventPoint, List<DrawableGroup> figures, StringBuilder label)
+   -<T extends Figure> void createFigure(T figure)
+   -boolean clickOnFigure(Point eventPoint, List<FigureGroup> figures, StringBuilder label)
    -void redrawCanvas()
    -void clearSelectionAndRedraw()
    -Set<String> parseTags(String text)
    -String stringifyTags(Set<String> tags)
 }
-}
+
+SelectionManager *-- ArrayList
+PaintPane *-- CanvasState
+PaintPane *-- StatusPane
+PaintPane *-- ShapeDrawPropertiesPane
+PaintPane *-- ButtonsBoxPane
+PaintPane *-- TagFilterPane
+PaintPane *-- SelectionManager 
+DrawableManager <|--EllipseDrawManager
+DrawableManager <|-- RectangleDrawManager
+
+MainFrame *-- AppMenuBar
+MainFrame *-- StatusPane
+MainFrame *-- ShapeDrawPropertiesPane
+MainFrame *-- TagFilterPane
+MainFrame *-- ButtonsBoxPane
+MainFrame *-- PaintPane
+ArrayList <|-- CanvasState : <FigureGroup>
+ArrayList <|-- SelectionManager : <FigureGroup>
+AppLauncher *--CanvasState
+AppLauncher *--MainFrame
+
 @enduml
