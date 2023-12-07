@@ -5,168 +5,131 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class FigureGroup {
-    private List<Figure> figures = new ArrayList<>();
+public class FigureGroup extends ArrayList<Figure>{
 
     public FigureGroup() {
 
     }
 
     public FigureGroup(Figure figure) {
-        add(figure);
-    }
-
-    public void add(Figure figure){
-        figures.add(figure);
-    }
-
-    public void addAll(Iterable<Figure> figures){
-        for(Figure figure : figures)
-            add(figure);
-    }
-
-    public void addGroup(FigureGroup figureGroup){
-        addAll(figureGroup.figures);
+        this.add(figure);
     }
 
     public void addAllGroups(Iterable<FigureGroup> figureGroups){
         for(FigureGroup figureGroup : figureGroups)
-            addGroup(figureGroup);
+            addAll(figureGroup);
     }
 
     public Collection<FigureGroup> ungroup() {
         List<FigureGroup> out = new ArrayList<>();
-
-        for(Figure figure : figures) 
-            out.add(new FigureGroup(figure));
-
+        forEach((figure) -> out.add(new FigureGroup(figure)));
         return out;
     }
 
-    public int size(){
-        return figures.size();
-    }
-
-    public List<Figure> getFigures(){
-        return new ArrayList<>(figures);
-    }
-
-    private void applyConsumer(Consumer<Figure> consumer) {
-        for(Figure figure : figures)
-            consumer.accept(figure);
-    }
-
     public void draw() {
-        applyConsumer((figure) -> figure.draw());
+        forEach(Figure::draw);
     }
 
     public void setGradientToggled(boolean toggle) {
-        applyConsumer((figure) -> figure.setGradientToggled(toggle));
+        forEach((figure) -> figure.setGradientToggled(toggle));
     }
 
     public void setShadowToggled(boolean toggle) {
-        applyConsumer((figure) -> figure.setShadowToggled(toggle));
+        forEach((figure) -> figure.setShadowToggled(toggle));
     }
 
     public void setBevelToggled(boolean toggle) {
-        applyConsumer((figure) -> figure.setBevelToggled(toggle));
+        forEach((figure) -> figure.setBevelToggled(toggle));
     }
 
     private boolean isToggled(Predicate<Figure> toggled) {
-        for(Figure figure : figures)
+        for(Figure figure : this)
             if (!toggled.test(figure)) return false;
-
         return true;
     }
 
     private boolean someToggled(Predicate<Figure> toggled) {
         int count = 0;
-        for(Figure figure : figures)
+        for(Figure figure : this)
             if (toggled.test(figure)) count++;
-
-        return count != 0 && count != figures.size();
+        return count != 0 && count != this.size();
     }
 
     public boolean isShadowToggled() {
-        return isToggled((figure) -> figure.isShadowToggled());
+        return isToggled(Figure::isShadowToggled);
     }
 
     public boolean someShadowToggled() {
-        return someToggled((figure) -> figure.isShadowToggled());
+        return someToggled(Figure::isShadowToggled);
     }
 
     public boolean isGradientToggled() {
-        return isToggled((figure) -> figure.isGradientToggled());
+        return isToggled(Figure::isGradientToggled);
     }
 
     public boolean someGradientToggled() {
-        return someToggled((figure) -> figure.isGradientToggled());
+        return someToggled(Figure::isGradientToggled);
     }
 
     public boolean isBevelToggled() {
-        return isToggled((figure) -> figure.isBevelToggled());
+        return isToggled(Figure::isBevelToggled);
     }
 
     public boolean someBevelToggled() {
-        return someToggled((figure) -> figure.isBevelToggled());
+        return someToggled(Figure::isBevelToggled);
     }
 
     public void setTags(Collection<String> tags){
-        applyConsumer((figure) -> figure.setTags(tags));
+        forEach((figure) -> figure.setTags(tags));
     }
 
     public Set<String> getTags(){
         Set<String> tags = new HashSet<>();
-        applyConsumer((figure) -> tags.addAll(figure.getTags()));
+        forEach((figure) -> tags.addAll(figure.getTags()));
         return tags;
     }
 
     public boolean pointInFigure(Point p){
-        for(Figure figure : figures){
-            if(figure.pointInFigure(p))
-                return true;
-        }
+        for(Figure figure : this)
+            if(figure.pointInFigure(p)) return true;
         return false;
     }
 
     public void move(double deltaX, double deltaY){
-        applyConsumer((figure) -> figure.move(deltaX, deltaY));
+        forEach((figure) -> figure.move(deltaX, deltaY));
     }
 
     public boolean isFigureInRectangle(Point topLeft, Point bottomRight){
-        for(Figure figure : figures){
-            if(figure.isFigureInRectangle(topLeft, bottomRight))
-                return true;
-        }
+        for(Figure figure : this)
+            if(figure.isFigureInRectangle(topLeft, bottomRight)) return true;
         return false;
     }
 
     public void scaleUp() {
-        applyConsumer((figure) -> figure.scale(0.25));
+        forEach((figure) -> figure.scale(0.25));
     }
 
     public void scaleDown() {
-        applyConsumer((figure) -> figure.scale(-0.25));
+        forEach((figure) -> figure.scale(-0.25));
     }
 
     public void flipH() {
-        applyConsumer((figure) -> figure.flipH());
+        forEach(Figure::flipH);
     }
 
     public void flipV() {
-        applyConsumer((figure) -> figure.flipV());
+        forEach(Figure::flipV);
     }
 
     public void rotate() {
-        applyConsumer((figure) -> figure.rotate());
+        forEach(Figure::rotate);
     }
 
     public boolean isFigureVisible(boolean isFilteringByTags, String filterTag) {
         if(!isFilteringByTags) return true;
-        for(Figure figure : figures)
+        for(Figure figure : this)
             if (figure.hasTag(filterTag)) return true;
         return false;
     }
@@ -174,7 +137,7 @@ public class FigureGroup {
     @Override
     public String toString(){
         StringBuilder s = new StringBuilder();
-        applyConsumer((figure) -> s.append(figure.toString()));
+        forEach((figure) -> s.append(figure.toString()));
         return s.toString();
     }
 }
