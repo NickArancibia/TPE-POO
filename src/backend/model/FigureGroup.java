@@ -131,11 +131,4 @@ public class FigureGroup extends ArrayList<Figure>{
             if (figure.hasTag(filterTag)) return true;
         return false;
     }
-
-    @Override
-    public String toString(){
-        StringBuilder s = new StringBuilder();
-        forEach((figure) -> s.append(figure.toString()));
-        return s.toString();
-    }
 }
