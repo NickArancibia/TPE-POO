@@ -108,11 +108,11 @@ public class FigureGroup extends ArrayList<Figure>{
     }
 
     public void scaleUp() {
-        forEach((figure) -> figure.scale(0.25));
+        forEach(Figure::scaleUp);
     }
 
     public void scaleDown() {
-        forEach((figure) -> figure.scale(-0.25));
+        forEach(Figure::scaleDown);
     }
 
     public void flipH() {
