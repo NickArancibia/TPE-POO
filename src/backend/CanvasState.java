@@ -1,9 +1,9 @@
 package backend;
 
-import backend.model.Figure;
+import backend.model.FigureGroup;
 
 import java.util.ArrayList;
 
-public class CanvasState <T extends Figure> extends ArrayList<T> {
+public class CanvasState extends ArrayList<FigureGroup> {
  
 }

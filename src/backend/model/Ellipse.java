@@ -1,11 +1,13 @@
 package backend.model;
 
+import backend.DrawManager;
+
 public class Ellipse extends Figure {
     private final Point centerPoint;
     private double sMayorAxis, sMinorAxis;
 
-    public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis, String colorAsHex) {
-        super(colorAsHex);
+    public Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis, String colorAsHex, DrawManager<Ellipse> drawManager) {
+        super(colorAsHex, drawManager);
         this.centerPoint = centerPoint;
         this.sMayorAxis = sMayorAxis;
         this.sMinorAxis = sMinorAxis;

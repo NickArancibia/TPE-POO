@@ -1,8 +1,6 @@
 package frontend;
 
 import backend.CanvasState;
-import backend.model.Figure;
-import frontend.drawables.DrawableGroup;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -14,7 +12,7 @@ public class AppLauncher extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-		CanvasState<DrawableGroup<? extends Figure>> canvasState = new CanvasState<>(); // BackEnd
+		CanvasState canvasState = new CanvasState(); // BackEnd
 		MainFrame frame = new MainFrame(canvasState);
 		Scene scene = new Scene(frame);
 		primaryStage.setResizable(false);

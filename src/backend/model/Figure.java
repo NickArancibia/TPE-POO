@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import backend.DrawManager;
+
 public abstract class Figure {
     private String colorAsHex; 
 
@@ -12,8 +14,15 @@ public abstract class Figure {
     private boolean bevelToggled = false;
     private Set<String> tags = new HashSet<>();
 
-    public Figure(String colorAsHex) {
+    private final DrawManager drawManager;
+
+    public Figure(String colorAsHex, DrawManager drawManager) {
         this.colorAsHex = colorAsHex;
+        this.drawManager = drawManager;
+    }
+
+    public void draw() {
+        drawManager.draw(this);
     }
 
     public boolean isFigureVisible(boolean isFilteringByTags, String tagFilter) {

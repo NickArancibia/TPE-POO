@@ -2,58 +2,49 @@ package backend.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
-import java.util.function.Supplier;
 
-public class FigureGroup<T extends Figure> extends Figure{
-    private List<T> figures = new ArrayList<>();
-
-    public FigureGroup(String colorAsHex) {
-        super(colorAsHex);
-    }
+public class FigureGroup {
+    private List<Figure> figures = new ArrayList<>();
+    private Set<String> tags = new HashSet<>();
 
     public FigureGroup() {
-        super("#ffffff");
+
     }
 
-    public FigureGroup(T figure) {
-        super(figure.getColorAsHex());
+    public FigureGroup(Figure figure) {
         add(figure);
     }
 
-    public void add(T figure){
+    public void add(Figure figure){
         figures.add(figure);
-        getTags().addAll(figure.getTags());
+        tags.addAll(figure.getTags());
     }
 
-    @SuppressWarnings("unchecked")
-    public void addAll(Iterable<? extends  Figure> figures){
+    public void addAll(Iterable<Figure> figures){
         for(Figure figure : figures)
-            add((T)figure);
+            add(figure);
     }
 
-    public void addGroup(FigureGroup<T> figureGroup){
+    public void addGroup(FigureGroup figureGroup){
         addAll(figureGroup.figures);
-        getTags().addAll(figureGroup.getTags());
+        tags.addAll(figureGroup.getTags());
     }
 
-    @SuppressWarnings("unchecked")
-    public void addAllGroups(Iterable<? extends FigureGroup<? extends Figure>> figureGroups){
-        for(FigureGroup<? extends Figure> figureGroup : figureGroups)
-            addGroup((FigureGroup<T>) figureGroup);
+    public void addAllGroups(Iterable<FigureGroup> figureGroups){
+        for(FigureGroup figureGroup : figureGroups)
+            addGroup(figureGroup);
     }
 
-    @SuppressWarnings("all")
-    public Collection<FigureGroup<T>> ungroup(Supplier<? extends FigureGroup> groupFactory) {
-        List<FigureGroup<T>> out = new ArrayList<>();
+    public Collection<FigureGroup> ungroup() {
+        List<FigureGroup> out = new ArrayList<>();
 
-        for(T figure : getFigures()) {
-            FigureGroup<T> newGroup = groupFactory.get();
-            newGroup.add(figure);
-            out.add(newGroup);
-        }
+        for(Figure figure : figures) 
+            out.add(new FigureGroup(figure));
 
         return out;
     }
@@ -62,46 +53,46 @@ public class FigureGroup<T extends Figure> extends Figure{
         return figures.size();
     }
 
-    public List<T> getFigures(){
+    public List<Figure> getFigures(){
         return new ArrayList<>(figures);
     }
 
-    private void applyConsumer(Consumer<T> consumer) {
-        for(T figure : figures)
+    private void applyConsumer(Consumer<Figure> consumer) {
+        for(Figure figure : figures)
             consumer.accept(figure);
     }
 
-    @Override
+    public void draw() {
+        applyConsumer((figure) -> figure.draw());
+    }
+
     public void setGradientToggled(boolean toggle) {
         applyConsumer((figure) -> figure.setGradientToggled(toggle));
     }
 
-    @Override
     public void setShadowToggled(boolean toggle) {
         applyConsumer((figure) -> figure.setShadowToggled(toggle));
     }
 
-    @Override
     public void setBevelToggled(boolean toggle) {
         applyConsumer((figure) -> figure.setBevelToggled(toggle));
     }
 
-    private boolean isToggled(Predicate<T> toggled) {
-        for(T figure : figures)
+    private boolean isToggled(Predicate<Figure> toggled) {
+        for(Figure figure : figures)
             if (!toggled.test(figure)) return false;
 
         return true;
     }
 
-    private boolean someToggled(Predicate<T> toggled) {
+    private boolean someToggled(Predicate<Figure> toggled) {
         int count = 0;
-        for(T figure : figures)
+        for(Figure figure : figures)
             if (toggled.test(figure)) count++;
 
         return count != 0 && count != figures.size();
     }
 
-    @Override
     public boolean isShadowToggled() {
         return isToggled((figure) -> figure.isShadowToggled());
     }
@@ -110,7 +101,6 @@ public class FigureGroup<T extends Figure> extends Figure{
         return someToggled((figure) -> figure.isShadowToggled());
     }
 
-    @Override
     public boolean isGradientToggled() {
         return isToggled((figure) -> figure.isGradientToggled());
     }
@@ -119,7 +109,6 @@ public class FigureGroup<T extends Figure> extends Figure{
         return someToggled((figure) -> figure.isGradientToggled());
     }
 
-    @Override
     public boolean isBevelToggled() {
         return isToggled((figure) -> figure.isBevelToggled());
     }
@@ -129,25 +118,26 @@ public class FigureGroup<T extends Figure> extends Figure{
     }
 
     public void setTags(Collection<String> tags){
-        super.setTags(tags);
+        this.tags.addAll(tags);
         applyConsumer((figure) -> figure.setTags(tags));
     }
 
-    @Override
+    public Set<String> getTags(){
+        return tags;
+    }
+
     public boolean pointInFigure(Point p){
-        for(T figure : figures){
+        for(Figure figure : figures){
             if(figure.pointInFigure(p))
                 return true;
         }
         return false;
     }
 
-    @Override
     public void move(double deltaX, double deltaY){
         applyConsumer((figure) -> figure.move(deltaX, deltaY));
     }
 
-    @Override
     public boolean isFigureInRectangle(Point topLeft, Point bottomRight){
         for(Figure figure : figures){
             if(figure.isFigureInRectangle(topLeft, bottomRight))
@@ -155,30 +145,30 @@ public class FigureGroup<T extends Figure> extends Figure{
         }
         return false;
     }
-    @Override
-    public void scale(double delta) {
-        applyConsumer((figure) -> figure.scale(delta));
+
+    public void scaleUp() {
+        applyConsumer((figure) -> figure.scale(0.25));
     }
 
-    @Override
+    public void scaleDown() {
+        applyConsumer((figure) -> figure.scale(-0.25));
+    }
+
     public void flipH() {
         applyConsumer((figure) -> figure.flipH());
     }
 
-    @Override
     public void flipV() {
         applyConsumer((figure) -> figure.flipV());
     }
 
-    @Override
     public void rotate() {
         applyConsumer((figure) -> figure.rotate());
     }
 
-    @Override
     public boolean isFigureVisible(boolean isFilteringByTags, String filterTag) {
         if(!isFilteringByTags) return true;
-        for(T figure : getFigures())
+        for(Figure figure : figures)
             if (figure.hasTag(filterTag)) return true;
         return false;
     }

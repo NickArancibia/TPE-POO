@@ -11,22 +11,13 @@ import backend.model.Figure;
 import backend.model.FigureGroup;
 import backend.model.Point;
 
-public class SelectionManager<T extends FigureGroup<? extends Figure>> {
-    private Supplier<T> groupFactory;
-    private List<T> selectedGroups = new ArrayList<>();
+public class SelectionManager {
+    private List<FigureGroup> selectedGroups = new ArrayList<>();
 
-    public SelectionManager(Supplier<T> groupFactory) {
-        setGroupFactory(groupFactory);
-    }
-
-    public void setGroupFactory(Supplier<T> groupFactory) {
-        this.groupFactory = groupFactory;
-    }
-
-    public boolean selectFiguresInRect(Collection<T> figures, Point topLeft, Point bottomRight, boolean isFilteringByTags, String filterTag) {
+    public boolean selectFiguresInRect(Collection<FigureGroup> figures, Point topLeft, Point bottomRight, boolean isFilteringByTags, String filterTag) {
         clearSelection();
         boolean addedFigures = false;
-        for(T group : figures) {
+        for(FigureGroup group : figures) {
             if(group.isFigureVisible(isFilteringByTags, filterTag) && group.isFigureInRectangle(topLeft, bottomRight)) {
                 add(group);
                 addedFigures = true;
@@ -36,7 +27,7 @@ public class SelectionManager<T extends FigureGroup<? extends Figure>> {
         return addedFigures;
     }
 
-    public void add(T group) {
+    public void add(FigureGroup group) {
         if(!selectedGroups.contains(group))
             selectedGroups.add(group);
     }
@@ -53,46 +44,45 @@ public class SelectionManager<T extends FigureGroup<? extends Figure>> {
         return selectedGroups.isEmpty();
     }
 
-    public T groupSelection() {
-        T group = groupFactory.get();
+    public FigureGroup groupSelection() {
+        FigureGroup group = new FigureGroup();
         group.addAllGroups(selectedGroups);
         return group;
     }
 
-    @SuppressWarnings("unchecked")
-    public Collection<T> ungroupSelection() {
-        List<T> ungrouped = new ArrayList<>();        
+    public Collection<FigureGroup> ungroupSelection() {
+        List<FigureGroup> ungrouped = new ArrayList<>();        
 
-        for (T group : selectedGroups)  
-            ungrouped.addAll((List<T>)group.ungroup(groupFactory));
+        for (FigureGroup group : selectedGroups)  
+            ungrouped.addAll(group.ungroup());
 
         return ungrouped;
     }
 
-    public Collection<T> getSelection() {
+    public Collection<FigureGroup> getSelection() {
         return selectedGroups;
     }
 
-    public boolean isSelected(T group) {
+    public boolean isSelected(FigureGroup group) {
         return selectedGroups.contains(group);
     }
 
-    public void applyActionToSelection(Consumer<T> consumer) {
-        for (T group : selectedGroups) 
+    public void applyActionToSelection(Consumer<FigureGroup> consumer) {
+        for (FigureGroup group : selectedGroups) 
             consumer.accept(group);
     }
 
-    private boolean isToggled(Predicate<T> toggled) {
-        for (T group : selectedGroups)
+    private boolean isToggled(Predicate<FigureGroup> toggled) {
+        for (FigureGroup group : selectedGroups)
             if (!toggled.test(group))
                 return false;
 
         return true;
     }
 
-    private boolean someToggled(Predicate<T> toggled) {
+    private boolean someToggled(Predicate<FigureGroup> toggled) {
         int count = 0;
-        for (T group : selectedGroups)
+        for (FigureGroup group : selectedGroups)
             if (toggled.test(group))
                 count++;
 
