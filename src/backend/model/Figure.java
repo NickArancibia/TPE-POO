@@ -16,6 +16,10 @@ public abstract class Figure {
         this.colorAsHex = colorAsHex;
     }
 
+    public boolean isFigureVisible(boolean isFilteringByTags, String tagFilter) {
+        return !isFilteringByTags || hasTag(tagFilter);
+    }
+
     public String getColorAsHex() {
         return colorAsHex;
     }

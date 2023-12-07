@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class FigureGroup<T extends Figure> extends Figure{
     private List<T> figures = new ArrayList<>();
@@ -42,6 +43,19 @@ public class FigureGroup<T extends Figure> extends Figure{
     public void addAllGroups(Iterable<? extends FigureGroup<? extends Figure>> figureGroups){
         for(FigureGroup<? extends Figure> figureGroup : figureGroups)
             addGroup((FigureGroup<T>) figureGroup);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Collection<FigureGroup<T>> ungroup(Supplier<? extends FigureGroup> groupFactory) {
+        List<FigureGroup<T>> out = new ArrayList<>();
+
+        for(T figure : getFigures()) {
+            FigureGroup<T> newGroup = groupFactory.get();
+            newGroup.add(figure);
+            out.add(newGroup);
+        }
+
+        return out;
     }
 
     public int size(){
@@ -162,11 +176,17 @@ public class FigureGroup<T extends Figure> extends Figure{
     }
 
     @Override
+    public boolean isFigureVisible(boolean isFilteringByTags, String filterTag) {
+        if(!isFilteringByTags) return true;
+        for(T figure : getFigures())
+            if (figure.hasTag(filterTag)) return true;
+        return false;
+    }
+
+    @Override
     public String toString(){
         StringBuilder s = new StringBuilder();
         applyConsumer((figure) -> s.append(figure.toString()));
         return s.toString();
     }
-
-
 }

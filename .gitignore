@@ -1,4 +1,8 @@
 .vscode
 out
 .idea
+<<<<<<< HEAD
 TPE-POO.iml
+=======
+TPE-POO.iml
+>>>>>>> test_selection_manager_backend

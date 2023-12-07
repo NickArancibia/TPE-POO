@@ -1,8 +1,5 @@
 package frontend.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.function.Consumer;
 
 import backend.model.Figure;
@@ -27,14 +24,6 @@ public class DrawableGroup<T extends Figure & Drawable> extends FigureGroup<T> i
     private void applyConsumer(Consumer<T> consumer) {
         for(T figure : getFigures())
             consumer.accept(figure);
-    }
-
-    public Collection<DrawableGroup<T>> ungroup() {
-        List<DrawableGroup<T>> out = new ArrayList<>();
-
-        applyConsumer((figure) -> out.add(new DrawableGroup<>(figure)));
-
-        return out;
     }
 
     @Override
