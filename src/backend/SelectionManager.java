@@ -92,7 +92,7 @@ public class SelectionManager {
     }
 
     public boolean someShadowToggled() {
-        return someToggled(FigureGroup::someShadowToggled);
+        return someToggled(FigureGroup::isShadowToggled);
     }
 
     public boolean isGradientToggled() {
@@ -100,7 +100,7 @@ public class SelectionManager {
     }
 
     public boolean someGradientToggled() {
-        return someToggled(FigureGroup::someGradientToggled);
+        return someToggled(FigureGroup::isGradientToggled);
     }
 
     public boolean isBevelToggled() {
@@ -108,6 +108,6 @@ public class SelectionManager {
     }
 
     public boolean someBevelToggled() {
-        return someToggled(FigureGroup::someBevelToggled);
+        return someToggled(FigureGroup::isBevelToggled);
     }
 }
