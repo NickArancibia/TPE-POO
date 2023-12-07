@@ -108,6 +108,7 @@ public class PaintPane extends BorderPane {
                 statusPane.updateStatus("Para agrupar es necesario seleccionar 2 o más grupos");
             else{
                 canvasState.add(selectionManager.groupSelection());
+                statusPane.updateStatus(String.format("Se agrupo: %s", selectionManager.getSelection().toString()));
                 canvasState.removeAll(selectionManager.getSelection());
             }
             clearSelectionAndRedraw();
