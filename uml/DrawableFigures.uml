@@ -8,7 +8,6 @@ class DrawableGroup<T extends Figure & Drawable> {
     +DrawableGroup(Color color)
     +DrawableGroup()
     +DrawableGroup(T figure)
-    +Collection<DrawableGroup<T>> ungroup()
     +void drawFigure(GraphicsContext gc)
     +boolean isFigureVisible(TagFilterPane tagFilterPane)
     -void applyConsumer(Consumer<T> consumer)
