@@ -43,6 +43,11 @@ public class PaintPane extends BorderPane {
 
     //ButtonsPane
     ButtonsBoxPane buttonsPane;
+
+    //DrawManagers
+    RectangleDrawManager rectangleDrawManager = new RectangleDrawManager(gc);
+    EllipseDrawManager ellipseDrawManager = new EllipseDrawManager(gc);
+
     public PaintPane(CanvasState canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
         this.canvasState = canvasState;
         this.tagFilterPane = tagFilterPane;
@@ -136,18 +141,18 @@ public class PaintPane extends BorderPane {
                 return;
             }
             if (buttonsPane.getRectangleButton().isSelected()) {
-                createFigure(new Rectangle(startPoint, endPoint, buttonsPane.getFillColorPicker().getValue().toString(), new RectangleDrawManager(gc)));
+                createFigure(new Rectangle(startPoint, endPoint, buttonsPane.getFillColorPicker().getValue().toString(), rectangleDrawManager));
             } else if (buttonsPane.getCircleButton().isSelected()) {
                 double circleRadius = Math.abs(endPoint.getX() - startPoint.getX());
-                createFigure(new Circle(startPoint, circleRadius, buttonsPane.getFillColorPicker().getValue().toString(), new EllipseDrawManager(gc)));
+                createFigure(new Circle(startPoint, circleRadius, buttonsPane.getFillColorPicker().getValue().toString(), ellipseDrawManager));
             } else if (buttonsPane.getSquareButton().isSelected()) {
                 double size = Math.abs(endPoint.getX() - startPoint.getX());
-                createFigure(new Square(startPoint, size, buttonsPane.getFillColorPicker().getValue().toString(), new RectangleDrawManager(gc)));
+                createFigure(new Square(startPoint, size, buttonsPane.getFillColorPicker().getValue().toString(), rectangleDrawManager));
             } else if(buttonsPane.getEllipseButton().isSelected()) {
                 Point centerPoint = new Point(Math.abs(endPoint.getX() + startPoint.getX()) / 2, (Math.abs((endPoint.getY() + startPoint.getY())) / 2));
                 double sMayorAxis = Math.abs(endPoint.getX() - startPoint.getX());
                 double sMinorAxis = Math.abs(endPoint.getY() - startPoint.getY());
-                createFigure(new Ellipse(centerPoint, sMayorAxis, sMinorAxis, buttonsPane.getFillColorPicker().getValue().toString(), new EllipseDrawManager(gc)));
+                createFigure(new Ellipse(centerPoint, sMayorAxis, sMinorAxis, buttonsPane.getFillColorPicker().getValue().toString(), ellipseDrawManager));
             } else if (buttonsPane.getSelectionButton().isSelected()){
                 if(!isMovingFigures(endPoint)) {
                     boolean addedFigures = selectionManager.selectFiguresInRect(canvasState, startPoint, endPoint, tagFilterPane.isFiltering(), tagFilterPane.getFilterTag());
@@ -211,7 +216,7 @@ public class PaintPane extends BorderPane {
         return dist > toleranceForMouseClick && !selectionManager.noneSelected();
     }
 
-    private <T extends Figure> void createFigure(T figure){
+    private void createFigure(Figure figure){
         FigureGroup newGroup = new FigureGroup();
         newGroup.add(figure);
         newGroup.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected());
