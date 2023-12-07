@@ -27,9 +27,9 @@ public class FigureGroup<T extends Figure> extends Figure{
         getTags().addAll(figure.getTags());
     }
 
-    public void addAll(Iterable<T> figures){
-        for(T figure : figures)
-            add(figure);
+    public void addAll(Iterable<? extends Figure> figures){
+        for(Figure figure : figures)
+            add((T)figure);
     }
 
     public void addAll(FigureGroup<T> figureGroup){

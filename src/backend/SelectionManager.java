@@ -12,10 +12,10 @@ import backend.model.FigureGroup;
 import backend.model.Point;
 
 public class SelectionManager<T extends FigureGroup<? extends Figure>> {
-    private final Supplier<T> groupFactory;
+    private Supplier<T> groupFactory;
     private List<T> selectedGroups = new ArrayList<>();
 
-    SelectionManager(Supplier<T> groupFactory) {
+    public void setGroupFactory(Supplier<T> groupFactory) {
         this.groupFactory = groupFactory;
     }
 
@@ -59,7 +59,7 @@ public class SelectionManager<T extends FigureGroup<? extends Figure>> {
         List<T> ungrouped = new ArrayList<>();        
 
         for (T group : selectedGroups)  
-            ungrouped.addAll(group.ungroup());
+            ungrouped.addAll((List<T>)group.ungroup());
 
         return ungrouped;
     }

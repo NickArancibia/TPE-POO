@@ -43,6 +43,7 @@ public class PaintPane extends BorderPane {
     //ButtonsPane
     ButtonsBoxPane buttonsPane;
     public PaintPane(CanvasState<DrawableGroup<? extends Figure>> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
+        this.selectionManager.setGroupFactory(() -> new DrawableGroup<>());
         this.canvasState = canvasState;
         this.tagFilterPane = tagFilterPane;
         this.drawPropertiesPane = drawPropertiesPane;
