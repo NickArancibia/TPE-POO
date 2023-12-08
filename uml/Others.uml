@@ -30,20 +30,18 @@ class SelectionManager {
 }
 
 class AppLauncher{
-
-+{static} void main(String[] args)
-+void start(Stage primaryStage)
+ +{static} void main(String[] args)
+ +void start(Stage primaryStage)
 }
 
 
 class MainFrame {
-
-+MainFrame(CanvasState canvasState, SelectionManager selectionManager)
+ +MainFrame(CanvasState canvasState, SelectionManager selectionManager)
 }
 
 
 class AppMenuBar {
-    public AppMenuBar()
+    +AppMenuBar()
 }
 
 
@@ -64,7 +62,7 @@ class TagFilterPane{
     +RadioButton getFilterTagButton()
 }
 
- class StatusPane {
+class StatusPane {
 	-final Label statusLabel
 	+StatusPane()
 	+void updateStatus(String text)
@@ -102,12 +100,11 @@ class ButtonsBoxPane {
     -final Label tagsLabel
     -final TextArea tagsArea
     -final Button saveTagsButton
-    -Color defaultFillColor = Color.YELLOW
+    -Color defaultFillColor
     -ColorPicker fillColorPicker
     -ToggleButton[] toggleToolsArr
     -Button[] toolsArr
     +ButtonsBoxPane()
-    +void init(GraphicsContext gc)
     +Button getDeleteButton() 
     +Button getGroupButton() 
     +Button getUngroupButton() 
@@ -126,23 +123,21 @@ class ButtonsBoxPane {
     +TextArea getTagsArea() 
     +Set<String> getTagsFromTagsArea()
     +void setTags(Set<String> tags)
+    +String getFillColorPickerColorAsString()
     -{static} String stringifyTags(Set<String> tags)
 }
 
 
 
 class PaintPane {
+     Canvas canvas 
+     GraphicsContext gc  
     -final double toleranceForMouseClick
-    CanvasState canvasState
-    Canvas canvas 
-    GraphicsContext gc 
-    Color lineColor 
-    Point startPoint
-    SelectionManager selectionManager 
-    ShapeDrawPropertiesPane drawPropertiesPane
-    TagFilterPane tagFilterPane
-    StatusPane statusPane
-    ButtonsBoxPane buttonsPane
+    -final CanvasState canvasState
+    -Point startPoint
+    -final SelectionManager selectionManager 
+    -final ShapeDrawPropertiesPane drawPropertiesPane
+    -final TagFilterPane tagFilterPane
  
    +PaintPane(CanvasState canvasState, SelectionManager selectionManager, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane)
    -boolean isMovingFigures(Point endPoint)
@@ -159,7 +154,8 @@ PaintPane *-- ShapeDrawPropertiesPane
 PaintPane *-- ButtonsBoxPane
 PaintPane *-- TagFilterPane
 PaintPane *-- SelectionManager 
-
+PaintPane *-- EllipseDrawManager
+PaintPane *-- RectangleDrawManager
 
 MainFrame *-- AppMenuBar
 MainFrame *-- StatusPane
