@@ -8,7 +8,7 @@ abstract class Figure{
     -final DrawManager drawManager
 
     +Figure(String colorAsHex,DrawManager drawManager)
-    +void draw()
+    +void draw(boolean selected)
     +String getColorAsHex()
     +void setGradientToggled(boolean toggle)
     +boolean isGradientToggled()
@@ -89,7 +89,7 @@ class FigureGroup{
     +void add(Figure figure)
     +void addAllGroups(Iterable<FigureGroup> figureGroups)
     +Collection<FigureGroup> ungroup()
-    +void draw()
+    +void draw(Boolean selected)
     +void setGradientToggled(boolean toggle)
     +void setShadowToggled(boolean toggle)
     +void setBevelToggled(boolean toggle)
@@ -126,11 +126,11 @@ class Square{
 }
 
 interface DrawManager<T extends Figure>{
-    +void drawShape(T figure)
+    +void drawShape(T figure,boolean selected)
     +void drawBevel(T figure)
     +void drawGradient(T figure)
     +void drawShadow(T figure)
-    +default void draw(T figure)
+    +default void draw(T figure,boolean selected)
 }
 
 
@@ -140,7 +140,7 @@ class RectangleDrawManager {
     +void drawShadow(Rectangle figure)
     +void drawGradient(Rectangle figure)
     +void drawBevel(Rectangle figure)
-    +void drawShape(Rectangle figure)
+    +void drawShape(T figure,boolean selected)
     -Color getColor(Rectangle figure)
 }
 
@@ -151,7 +151,7 @@ class EllipseDrawManager {
     +void drawShadow(Ellipse figure)
     +void drawGradient(Ellipse figure)
     +void drawBevel(Ellipse figure)
-    +void drawShape(Ellipse figure)
+    +void drawShape(T figure,boolean selected)
     -Color getColor(Ellipse figure)
 }
 DrawManager <|--EllipseDrawManager
