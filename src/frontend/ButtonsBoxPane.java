@@ -145,6 +145,14 @@ public class ButtonsBoxPane extends BorderPane {
         return new HashSet<>(Arrays.asList(tagsArea.getText().split("[ \n]")));
     }
 
+    public void setTags(Set<String> tags){
+        tagsArea.setText(stringifyTags(tags));
+    }
+
+    private static String stringifyTags(Set<String> tags){
+        return String.join("\n", tags);
+    }
+
     public ToggleButton getSelectionButton() {
         return selectionButton;
     }
