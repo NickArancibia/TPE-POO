@@ -37,6 +37,7 @@ class Ellipse{
     -double sMayorAxis
     -double sMinorAxis
     +Ellipse(Point centerPoint, double sMayorAxis, double sMinorAxis, String colorAsHex,DrawManager<Ellipse> drawManager)
+    +Ellipse(Point from, Point to, String colorAsHex,DrawManager<Ellipse> drawManager)
     +Point getCenterPoint()
     +double getsMayorAxis()
     +double getsMinorAxis()
@@ -116,12 +117,14 @@ class FigureGroup{
 
 class Circle{
     +Circle(Point centerPoint, double radius, String colorAsHex, DrawManager<Ellipse> drawManager)
+    +Circle(Point from, Point to, String colorAsHex, DrawManager<Ellipse> drawManager)
     +double getRadius()
     +String toString()
 }
 
 class Square{
 +Square(Point topLeft, double size, String colorAsHex, DrawManager<Rectangle> drawManager)
++Square(Point from, Point to, String colorAsHex, DrawManager<Rectangle> drawManager)
 +String toString()
 }
 

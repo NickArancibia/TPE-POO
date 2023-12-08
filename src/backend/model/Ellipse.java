@@ -13,6 +13,10 @@ public class Ellipse extends Figure {
         this.sMinorAxis = sMinorAxis;
     }
 
+    public Ellipse(Point from, Point to, String colorAsHex, DrawManager<Ellipse> drawManager) {
+        this(new Point(Math.abs(to.getX() + from.getX()) / 2, Math.abs(to.getY() + from.getY()) / 2), Math.abs(to.getX() - from.getX()), Math.abs(to.getY() - from.getY()), colorAsHex, drawManager);
+    }
+
     public Point getCenterPoint() {
         return centerPoint;
     }

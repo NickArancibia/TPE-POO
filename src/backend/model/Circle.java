@@ -7,6 +7,10 @@ public class Circle extends Ellipse {
         super(centerPoint, radius, radius, colorAsHex, drawManager);
     }
 
+    public Circle(Point from, Point to, String colorAsHex, DrawManager<Ellipse> drawManager) {
+        this(from, Math.abs(to.getX() - from.getX()), colorAsHex, drawManager);
+    }
+
     public double getRadius(){
         return getsMayorAxis() / 2;
     }
