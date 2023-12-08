@@ -18,6 +18,7 @@ public abstract class Figure {
     private final DrawManager drawManager;
 
     public Figure(String colorAsHex, DrawManager drawManager) {
+        tags.add("");
         this.colorAsHex = colorAsHex;
         this.drawManager = drawManager;
     }
