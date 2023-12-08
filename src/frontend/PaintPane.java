@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 
 public class PaintPane extends BorderPane {
     // BackEnd
-    CanvasState canvasState;
+    private final CanvasState canvasState;
 
     // Canvas y relacionados
     Canvas canvas = new Canvas(800, 600);
@@ -22,31 +22,32 @@ public class PaintPane extends BorderPane {
     Color lineColor = Color.BLACK;
 
     // Dibujar una figura
-    Point startPoint;
+    private Point startPoint;
 
     // Seleccionar una figura
-    SelectionManager selectionManager = new SelectionManager();
+    private final SelectionManager selectionManager;
 
     private final double toleranceForMouseClick = 5.0;
 
     // DrawPropertiesPane
-    ShapeDrawPropertiesPane drawPropertiesPane;
+    private final ShapeDrawPropertiesPane drawPropertiesPane;
 
     // TagFilterPane
-    TagFilterPane tagFilterPane;
+    private final TagFilterPane tagFilterPane;
 
     // StatusBar
-    StatusPane statusPane;
+    private final StatusPane statusPane;
 
     //ButtonsPane
-    ButtonsBoxPane buttonsPane;
+    private final ButtonsBoxPane buttonsPane;
 
     //DrawManagers
-    RectangleDrawManager rectangleDrawManager = new RectangleDrawManager(gc);
-    EllipseDrawManager ellipseDrawManager = new EllipseDrawManager(gc);
+    private final RectangleDrawManager rectangleDrawManager = new RectangleDrawManager(gc);
+    private final EllipseDrawManager ellipseDrawManager = new EllipseDrawManager(gc);
 
-    public PaintPane(CanvasState canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
+    public PaintPane(CanvasState canvasState, SelectionManager selectionManager, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
         this.canvasState = canvasState;
+        this.selectionManager = selectionManager;
         this.tagFilterPane = tagFilterPane;
         this.drawPropertiesPane = drawPropertiesPane;
         this.statusPane = statusPane;
@@ -225,12 +226,12 @@ public class PaintPane extends BorderPane {
     private boolean clickOnFigure(Point eventPoint, List<FigureGroup> figures, StringBuilder label){
         ListIterator<FigureGroup> iter = figures.listIterator(figures.size());
         while (iter.hasPrevious()) {
-            FigureGroup figure = iter.previous(); 
-            if(figure.pointInFigure(eventPoint) && (!tagFilterPane.isFiltering() || figure.hasTag(tagFilterPane.getFilterTag()))) {
-                selectionManager.add(figure);
-                drawPropertiesPane.setState(figure.isShadowToggled(), figure.isGradientToggled(), figure.isBevelToggled());
-                drawPropertiesPane.setSomeState(figure.someShadowToggled(), figure.someGradientToggled(), figure.someBevelToggled());
-                label.append(figure.toString());
+            FigureGroup group = iter.previous(); 
+            if(group.pointInFigure(eventPoint) && (!tagFilterPane.isFiltering() || group.hasTag(tagFilterPane.getFilterTag()))) {
+                selectionManager.add(group);
+                drawPropertiesPane.setState(group.isShadowToggled(), group.isGradientToggled(), group.isBevelToggled());
+                drawPropertiesPane.setSomeState(group.someShadowToggled(), group.someGradientToggled(), group.someBevelToggled());
+                label.append(group.toString());
                 return true;
             }
         }

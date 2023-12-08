@@ -38,7 +38,7 @@ class AppLauncher{
 
 class MainFrame {
 
-+MainFrame(CanvasState canvasState)
++MainFrame(CanvasState canvasState, SelectionManager selectionManager)
 }
 
 
@@ -136,15 +136,15 @@ class PaintPane {
     GraphicsContext gc 
     Color lineColor 
     Point startPoint
-    SelectionManager<DrawableGroup<? extends Figure>> selectionManager 
+    SelectionManager selectionManager 
     ShapeDrawPropertiesPane drawPropertiesPane
     TagFilterPane tagFilterPane
     StatusPane statusPane
     ButtonsBoxPane buttonsPane
  
-   +PaintPane(CanvasState<DrawableGroup<? extends Figure>> canvasState, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane)
+   +PaintPane(CanvasState canvasState, SelectionManager selectionManager, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane)
    -boolean isMovingFigures(Point endPoint)
-   -<T extends Figure> void createFigure(T figure)
+   -void createFigure(Figure figure)
    -boolean clickOnFigure(Point eventPoint, List<FigureGroup> figures, StringBuilder label)
    -void redrawCanvas()
    -void clearSelectionAndRedraw()
@@ -169,6 +169,7 @@ MainFrame *-- PaintPane
 ArrayList <|-- CanvasState : <FigureGroup>
 
 AppLauncher *--CanvasState
+AppLauncher *--SelectionManager
 AppLauncher *--MainFrame
 
 @enduml
