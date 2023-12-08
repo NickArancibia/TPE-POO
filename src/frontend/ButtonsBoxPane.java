@@ -6,7 +6,6 @@ import java.util.Set;
 
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -76,9 +75,7 @@ public class ButtonsBoxPane extends BorderPane {
             tool.setMinWidth(90);
             tool.setCursor(Cursor.HAND);
         }
-    }
 
-    public void init(GraphicsContext gc){
         VBox buttonsBox = new VBox(5);
         buttonsBox.getChildren().addAll(toggleToolsArr);
         buttonsBox.getChildren().addAll(toolsArr);
@@ -89,7 +86,6 @@ public class ButtonsBoxPane extends BorderPane {
         buttonsBox.setPadding(new Insets(5));
         buttonsBox.setStyle("-fx-background-color: #999");
         buttonsBox.setPrefWidth(100);
-        gc.setLineWidth(1);
         setLeft(buttonsBox);
     }
 

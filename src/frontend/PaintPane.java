@@ -10,7 +10,6 @@ import frontend.drawManagers.RectangleDrawManager;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 
 public class PaintPane extends BorderPane {
     // BackEnd
@@ -43,7 +42,7 @@ public class PaintPane extends BorderPane {
         this.selectionManager = selectionManager;
         this.tagFilterPane = tagFilterPane;
         this.drawPropertiesPane = drawPropertiesPane;
-        buttonsPane.init(gc);
+        gc.setLineWidth(1);
 
         drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
             selectionManager.applyActionToSelection((group) -> group.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected()));
