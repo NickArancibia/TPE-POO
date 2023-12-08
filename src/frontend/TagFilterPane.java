@@ -51,7 +51,11 @@ public class TagFilterPane extends BorderPane{
     }
 
     public String getFilterTag(){
-        return filterTagField.getText().split(" ")[0];
+        String[] filterTag = filterTagField.getText().split(" ");
+        if(filterTag.length > 0)
+            return filterTagField.getText().split(" ")[0];
+        else
+            return "";
     }
 
     public boolean isFiltering(){
