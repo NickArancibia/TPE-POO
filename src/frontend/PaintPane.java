@@ -37,89 +37,14 @@ public class PaintPane extends BorderPane {
     private final RectangleDrawManager rectangleDrawManager = new RectangleDrawManager(gc);
     private final EllipseDrawManager ellipseDrawManager = new EllipseDrawManager(gc);
 
-    public PaintPane(CanvasState canvasState, SelectionManager selectionManager, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane) {
+    public PaintPane(CanvasState canvasState, SelectionManager selectionManager, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane, ButtonsBoxPane buttonsPane) {
         this.canvasState = canvasState;
         this.selectionManager = selectionManager;
         this.tagFilterPane = tagFilterPane;
         this.drawPropertiesPane = drawPropertiesPane;
         gc.setLineWidth(1);
 
-        drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
-            selectionManager.applyActionToSelection((group) -> group.setShadowToggled(drawPropertiesPane.getShadowCheckBox().isSelected()));
-            redrawCanvas();
-        });
-
-        drawPropertiesPane.getGradientCheckBox().setOnAction(e -> {
-            selectionManager.applyActionToSelection((group) -> group.setGradientToggled(drawPropertiesPane.getGradientCheckBox().isSelected()));
-            redrawCanvas();
-        });
-
-        drawPropertiesPane.getBevelCheckBox().setOnAction(e -> {
-            selectionManager.applyActionToSelection((group) -> group.setBevelToggled(drawPropertiesPane.getBevelCheckBox().isSelected()));
-            redrawCanvas();
-        });
-
-        tagFilterPane.getShowAllButton().setOnAction(e -> clearSelectionAndRedraw());
-        tagFilterPane.getFilterTagButton().setOnAction(e -> clearSelectionAndRedraw());
-        tagFilterPane.getFilterTagTextField().textProperty().addListener((observable, oldValue, newValue) -> redrawCanvas());
-
         canvas.setOnMousePressed(event -> startPoint = new Point(event.getX(), event.getY()));
-
-        buttonsPane.getDeleteButton().setOnAction(event -> {
-            selectionManager.getSelection().forEach(canvasState::remove);
-            clearSelectionAndRedraw();
-        });
-
-        buttonsPane.getScaleUpButton().setOnAction(event -> {
-            selectionManager.applyActionToSelection(FigureGroup::scaleUp);
-            redrawCanvas();
-        });
-
-        buttonsPane.getScaleDownButton().setOnAction(event -> {
-            selectionManager.applyActionToSelection(FigureGroup::scaleDown);
-            redrawCanvas();
-        });
-
-        buttonsPane.getFlipHButton().setOnAction(event -> {
-            selectionManager.applyActionToSelection(FigureGroup::flipH);
-            redrawCanvas();
-        });
-
-        buttonsPane.getFlipVButton().setOnAction(event -> {
-            selectionManager.applyActionToSelection(FigureGroup::flipV);
-            redrawCanvas();
-        });
-
-        buttonsPane.getRotateButton().setOnAction(event -> {
-            selectionManager.applyActionToSelection(FigureGroup::rotate);
-            redrawCanvas();
-        });
-
-        buttonsPane.getGroupButton().setOnAction(event -> {
-            if(!selectionManager.atLeastTwoSelected())
-                statusPane.updateStatus("Para agrupar es necesario seleccionar 2 o más grupos");
-            else{
-                canvasState.add(selectionManager.groupSelection());
-                statusPane.updateStatus(String.format("Se agrupo: %s", selectionManager.getSelection().toString()));
-                canvasState.removeAll(selectionManager.getSelection());
-            }
-            clearSelectionAndRedraw();
-        });
-
-        buttonsPane.getUngroupButton().setOnAction(event -> {
-            if(selectionManager.noneSelected())
-                statusPane.updateStatus("Para desagrupar primero seleccione un grupo");
-            else{
-                canvasState.removeAll(selectionManager.getSelection());
-                canvasState.addAll(selectionManager.ungroupSelection());
-            }
-            clearSelectionAndRedraw();
-        });
-
-        buttonsPane.getSaveTagsButton().setOnAction(event ->{
-            selectionManager.applyActionToSelection(group -> group.setTags(buttonsPane.getTagsFromTagsArea()));
-            clearSelectionAndRedraw();
-        });
 
         canvas.setOnMouseReleased(event -> {
             Point endPoint = new Point(event.getX(), event.getY());
@@ -194,6 +119,7 @@ public class PaintPane extends BorderPane {
                 redrawCanvas();
             }
         });
+        
         setRight(canvas);
     }
 
@@ -228,7 +154,7 @@ public class PaintPane extends BorderPane {
         return false;
     }
 
-    private void redrawCanvas() {
+    public void redrawCanvas() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for(FigureGroup group : canvasState) {
 
@@ -240,7 +166,7 @@ public class PaintPane extends BorderPane {
         }
     }
 
-    private void clearSelectionAndRedraw(){
+    public void clearSelectionAndRedraw(){
         selectionManager.clearSelection();
         redrawCanvas();
     }
