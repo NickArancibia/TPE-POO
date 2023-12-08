@@ -177,7 +177,7 @@ public class PaintPane extends BorderPane {
             if(buttonsPane.getSelectionButton().isSelected()) {
                 Point eventPoint = new Point(event.getX(), event.getY());
                 StringBuilder label = new StringBuilder("Se seleccionó: ");
-                statusPane.updateStatus(clickOnFigure(eventPoint, canvasState, label) ? label.toString() : "Ninguna figura encontrada");
+                statusPane.updateStatus(clickOnFigure(eventPoint, canvasState, label) ? label.toString() : (selectionManager.noneSelected() ? "Ninguna figura encontrada" : eventPoint.toString()));
 
                 if(selectionManager.atLeastTwoSelected()){
                     buttonsPane.getTagsArea().setDisable(true);
