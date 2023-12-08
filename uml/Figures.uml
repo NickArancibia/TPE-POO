@@ -19,14 +19,15 @@ abstract class Figure{
     +void setTags(Collection<String> tags)
     +boolean hasTag(String tag)
     +Set<String> getTags()
+    +void scaleUp()
+    +void scaleDown()
     +{abstract} boolean pointInFigure(Point p)
     +{abstract} void move(double deltaX, double deltaY)
     +{abstract} boolean isFigureInRectangle(Point topLeft, Point bottomRight)
-    +{abstract} void scaleUp()
-    +{abstract} void scaleDown()
     +{abstract} void flipV()
     +{abstract} void flipH()
     +{abstract} void rotate()
+    +{abstract} void scale(double delta)
 }
 class ArrayList<T>{}
 class HashSet<E>{}
@@ -52,8 +53,8 @@ class Ellipse{
 }
 
 class Rectangle{
-   -final Point topLeft
-   -final Point bottomRight
+    -final Point topLeft
+    -final Point bottomRight
     +Rectangle(Point topLeft, Point bottomRight, String colorAsHex,DrawManager<Rectangle> drawManager)
     +Point getTopLeft() 
     +Point getBottomRight()
@@ -123,9 +124,9 @@ class Circle{
 }
 
 class Square{
-+Square(Point topLeft, double size, String colorAsHex, DrawManager<Rectangle> drawManager)
-+Square(Point from, Point to, String colorAsHex, DrawManager<Rectangle> drawManager)
-+String toString()
+ +Square(Point topLeft, double size, String colorAsHex, DrawManager<Rectangle> drawManager)
+ +Square(Point from, Point to, String colorAsHex, DrawManager<Rectangle> drawManager)
+ +String toString()
 }
 
 interface DrawManager<T extends Figure>{
@@ -143,7 +144,7 @@ class RectangleDrawManager {
     +void drawShadow(Rectangle figure)
     +void drawGradient(Rectangle figure)
     +void drawBevel(Rectangle figure)
-    +void drawShape(T figure,boolean selected)
+    +void drawShape(Rectangle figure,boolean selected)
     -Color getColor(Rectangle figure)
 }
 
@@ -154,20 +155,20 @@ class EllipseDrawManager {
     +void drawShadow(Ellipse figure)
     +void drawGradient(Ellipse figure)
     +void drawBevel(Ellipse figure)
-    +void drawShape(T figure,boolean selected)
+    +void drawShape(Ellipse figure,boolean selected)
     -Color getColor(Ellipse figure)
 }
-DrawManager <|--EllipseDrawManager
-DrawManager<|-- RectangleDrawManager
-ArrayList <|-- FigureGroup : Figure
+DrawManager <-.. EllipseDrawManager : <Ellipse>
+DrawManager <-.. RectangleDrawManager : <Rectangle>
+ArrayList <|-- FigureGroup : <Figure>
 Rectangle <|-- Square
 Ellipse <|-- Circle
 Figure <|-- Rectangle
 Figure <|-- Ellipse 
 
 Figure *-- HashSet
-Point *-- Rectangle
-Point *-- Ellipse
+Rectangle  *-- Point
+Ellipse  *-- Point 
 Figure *-- DrawManager
- FigureGroup *-- Figure
+FigureGroup *-- Figure
 @enduml
