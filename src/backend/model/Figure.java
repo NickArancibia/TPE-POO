@@ -22,9 +22,10 @@ public abstract class Figure {
         this.drawManager = drawManager;
     }
 
-    public void draw() {
-        drawManager.draw(this);
+    public void draw(boolean selected) {
+        drawManager.draw(this,selected);
     }
+
 
     public String getColorAsHex() {
         return colorAsHex;

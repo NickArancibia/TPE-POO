@@ -62,4 +62,10 @@ public class EllipseDrawManager implements DrawManager<Ellipse> {
         gc.strokeOval(figure.getCenterPoint().getX() - (figure.getsMayorAxis() / 2), figure.getCenterPoint().getY() - (figure.getsMinorAxis() / 2), figure.getsMayorAxis(), figure.getsMinorAxis());
         gc.fillOval(figure.getCenterPoint().getX() - (figure.getsMayorAxis() / 2), figure.getCenterPoint().getY() - (figure.getsMinorAxis() / 2), figure.getsMayorAxis(), figure.getsMinorAxis());
     }
+
+    @Override
+    public void drawBorder(Ellipse figure, boolean selected) {
+        gc.setStroke(selected ? Color.RED : Color.BLACK);
+        gc.strokeOval(figure.getCenterPoint().getX() - (figure.getsMayorAxis() / 2), figure.getCenterPoint().getY() - (figure.getsMinorAxis() / 2), figure.getsMayorAxis(), figure.getsMinorAxis());
+    }
 }

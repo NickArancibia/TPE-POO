@@ -19,7 +19,6 @@ public class PaintPane extends BorderPane {
     // Canvas y relacionados
     Canvas canvas = new Canvas(800, 600);
     GraphicsContext gc = canvas.getGraphicsContext2D();
-    Color lineColor = Color.BLACK;
 
     // Dibujar una figura
     private Point startPoint;
@@ -233,10 +232,12 @@ public class PaintPane extends BorderPane {
     private void redrawCanvas() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for(FigureGroup group : canvasState) {
-            gc.setStroke(selectionManager.isSelected(group) ? Color.RED : lineColor);
+
 
             if (!tagFilterPane.isFiltering() || group.hasTag(tagFilterPane.getFilterTag()))
-                group.draw();
+                group.draw(selectionManager.isSelected(group));
+
+
         }
     }
 

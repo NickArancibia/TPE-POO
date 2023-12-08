@@ -69,4 +69,11 @@ public class RectangleDrawManager implements DrawManager<Rectangle> {
         gc.strokeRect(figure.getTopLeft().getX(), figure.getTopLeft().getY(),
                 Math.abs(figure.getTopLeft().getX() - figure.getBottomRight().getX()), Math.abs(figure.getTopLeft().getY() - figure.getBottomRight().getY()));
     }
+
+    @Override
+    public void drawBorder(Rectangle figure, boolean selected) {
+        gc.setStroke(selected ? Color.RED : Color.BLACK);
+        gc.strokeRect(figure.getTopLeft().getX(), figure.getTopLeft().getY(),
+                Math.abs(figure.getTopLeft().getX() - figure.getBottomRight().getX()), Math.abs(figure.getTopLeft().getY() - figure.getBottomRight().getY()));
+    }
 }
