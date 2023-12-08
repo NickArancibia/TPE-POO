@@ -35,12 +35,6 @@ public class PaintPane extends BorderPane {
     // TagFilterPane
     private final TagFilterPane tagFilterPane;
 
-    // StatusBar
-    private final StatusPane statusPane;
-
-    //ButtonsPane
-    private final ButtonsBoxPane buttonsPane;
-
     //DrawManagers
     private final RectangleDrawManager rectangleDrawManager = new RectangleDrawManager(gc);
     private final EllipseDrawManager ellipseDrawManager = new EllipseDrawManager(gc);
@@ -50,8 +44,6 @@ public class PaintPane extends BorderPane {
         this.selectionManager = selectionManager;
         this.tagFilterPane = tagFilterPane;
         this.drawPropertiesPane = drawPropertiesPane;
-        this.statusPane = statusPane;
-        this.buttonsPane = buttonsPane;
         buttonsPane.init(gc);
 
         drawPropertiesPane.getShadowCheckBox().setOnAction(e -> {
