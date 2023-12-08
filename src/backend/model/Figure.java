@@ -24,7 +24,7 @@ public abstract class Figure {
     }
 
     public void draw(boolean selected) {
-        drawManager.draw(this,selected);
+        drawManager.draw(this, selected);
     }
 
 

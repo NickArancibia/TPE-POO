@@ -63,12 +63,11 @@ public class RectangleDrawManager implements DrawManager<Rectangle> {
     }
 
     @Override
-    public void drawShape(Rectangle figure,boolean selected) {
+    public void drawShape(Rectangle figure, boolean selected) {
         gc.fillRect(figure.getTopLeft().getX(), figure.getTopLeft().getY(),
                 Math.abs(figure.getTopLeft().getX() - figure.getBottomRight().getX()), Math.abs(figure.getTopLeft().getY() - figure.getBottomRight().getY()));
         gc.setStroke(selected ? Color.RED : Color.BLACK);
         gc.strokeRect(figure.getTopLeft().getX(), figure.getTopLeft().getY(),
                 Math.abs(figure.getTopLeft().getX() - figure.getBottomRight().getX()), Math.abs(figure.getTopLeft().getY() - figure.getBottomRight().getY()));
     }
-
 }

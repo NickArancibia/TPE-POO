@@ -58,10 +58,9 @@ public class EllipseDrawManager implements DrawManager<Ellipse> {
     }
 
     @Override
-    public void drawShape(Ellipse figure,boolean selected) {
+    public void drawShape(Ellipse figure, boolean selected) {
         gc.fillOval(figure.getCenterPoint().getX() - (figure.getsMayorAxis() / 2), figure.getCenterPoint().getY() - (figure.getsMinorAxis() / 2), figure.getsMayorAxis(), figure.getsMinorAxis());
         gc.setStroke(selected ? Color.RED : Color.BLACK);
         gc.strokeOval(figure.getCenterPoint().getX() - (figure.getsMayorAxis() / 2), figure.getCenterPoint().getY() - (figure.getsMinorAxis() / 2), figure.getsMayorAxis(), figure.getsMinorAxis());
     }
-
 }
