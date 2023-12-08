@@ -102,8 +102,8 @@ public class PaintPane extends BorderPane {
                     buttonsPane.getTagsArea().setDisable(false);
                     buttonsPane.getSaveTagsButton().setDisable(false);
                     if(!selectionManager.noneSelected()){
-                        String text = stringifyTags(selectionManager.getSelection().iterator().next().getTags());
-                        buttonsPane.getTagsArea().setText(text);
+                        Set<String> tags = selectionManager.getSelection().iterator().next().getTags();
+                        buttonsPane.setTags(tags);
                     }
                 }
                 redrawCanvas();
@@ -157,21 +157,13 @@ public class PaintPane extends BorderPane {
     public void redrawCanvas() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         for(FigureGroup group : canvasState) {
-
-
             if (!tagFilterPane.isFiltering() || group.hasTag(tagFilterPane.getFilterTag()))
                 group.draw(selectionManager.isSelected(group));
-
-
         }
     }
 
     public void clearSelectionAndRedraw(){
         selectionManager.clearSelection();
         redrawCanvas();
-    }
-
-    private static String stringifyTags(Set<String> tags){
-        return String.join("\n", tags);
     }
 }
