@@ -4,7 +4,7 @@ import backend.DrawManager;
 
 public class Circle extends Ellipse {
     public Circle(Point centerPoint, double radius, String colorAsHex, DrawManager<Ellipse> drawManager) {
-        super(centerPoint, radius, radius, colorAsHex, drawManager);
+        super(centerPoint, radius * 2, radius * 2, colorAsHex, drawManager);
     }
 
     public Circle(Point from, Point to, String colorAsHex, DrawManager<Ellipse> drawManager) {
