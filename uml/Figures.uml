@@ -91,7 +91,7 @@ class FigureGroup{
     +void add(Figure figure)
     +void addAllGroups(Iterable<FigureGroup> figureGroups)
     +Collection<FigureGroup> ungroup()
-    +void draw(Boolean selected)
+    +void draw(boolean selected)
     +void setGradientToggled(boolean toggle)
     +void setShadowToggled(boolean toggle)
     +void setBevelToggled(boolean toggle)

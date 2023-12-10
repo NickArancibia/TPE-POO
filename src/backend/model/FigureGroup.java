@@ -27,9 +27,10 @@ public class FigureGroup extends ArrayList<Figure>{
         return out;
     }
 
-    public void draw(Boolean selected) {
+    public void draw(boolean selected) {
         forEach(figure -> figure.draw(selected));
     }
+
     public void setGradientToggled(boolean toggle) {
         forEach((figure) -> figure.setGradientToggled(toggle));
     }
