@@ -88,7 +88,6 @@ class FigureGroup{
      
     +FigureGroup()
     +FigureGroup(Figure figure)
-    +void add(Figure figure)
     +void addAllGroups(Iterable<FigureGroup> figureGroups)
     +Collection<FigureGroup> ungroup()
     +void draw(boolean selected)
