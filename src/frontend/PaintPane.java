@@ -16,8 +16,8 @@ public class PaintPane extends BorderPane {
     private final CanvasState canvasState;
 
     // Canvas y relacionados
-    Canvas canvas = new Canvas(800, 600);
-    GraphicsContext gc = canvas.getGraphicsContext2D();
+    private final Canvas canvas = new Canvas(800, 600);
+    private final GraphicsContext gc = canvas.getGraphicsContext2D();
 
     // Dibujar una figura
     private Point startPoint;
