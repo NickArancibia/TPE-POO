@@ -119,7 +119,6 @@ class ButtonsBoxPane {
     +ToggleButton getRectangleButton() 
     +ToggleButton getSelectionButton() 
     +ToggleButton getSquareButton() 
-    +String getFillColorPickerColorAsString()
     +TextArea getTagsArea() 
     +Set<String> getTagsFromTagsArea()
     +void setTags(Set<String> tags)
@@ -130,21 +129,24 @@ class ButtonsBoxPane {
 
 
 class PaintPane {
-     Canvas canvas 
-     GraphicsContext gc  
+    -final Canvas canvas 
+    -final GraphicsContext gc  
     -final double toleranceForMouseClick
     -final CanvasState canvasState
-    -Point startPoint
     -final SelectionManager selectionManager 
     -final ShapeDrawPropertiesPane drawPropertiesPane
     -final TagFilterPane tagFilterPane
- 
+    -final EllipseDrawManager
+    -final RectangleDrawManager
+    -Point startPoint
+    
    +PaintPane(CanvasState canvasState, SelectionManager selectionManager, StatusPane statusPane, ShapeDrawPropertiesPane drawPropertiesPane, TagFilterPane tagFilterPane,ButtonsBoxPane buttonsPane)
+   +void redrawCanvas()
+   +void clearSelectionAndRedraw()
    -boolean isMovingFigures(Point endPoint)
    -void createFigure(Figure figure)
    -boolean clickOnFigure(Point eventPoint, List<FigureGroup> figures, StringBuilder label)
-   -void redrawCanvas()
-   -void clearSelectionAndRedraw()
+  
 }
 
 SelectionManager *-- ArrayList
